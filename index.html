@@ -1042,7 +1042,17 @@ async function callGAS(action, payload = {}) {
 
 // ===== DEMO MODE (localStorage mock) =====
 async function demoGAS(action, payload) {
-  const getDB = () => { try { return JSON.parse(localStorage.getItem('seDB') || JSON.stringify({
+  // Reset old cached DB to get correct password
+  const storedDB = localStorage.getItem('seDB');
+  if (storedDB) {
+    try {
+      const parsed = JSON.parse(storedDB);
+      if (!parsed.settings || parsed.settings.mgrPass !== 'admin123') {
+        localStorage.removeItem('seDB');
+      }
+    } catch(e) { localStorage.removeItem('seDB'); }
+  }
+  const defaultDB = {
     settings: { mgrId:'100', mgrPass:'admin123', mgrName:'مدير النظام' },
     employees: [
       { empId:'1001', name:'أحمد محمد', phone:'0511111111', dept:'العمليات', shift:'صباحية', role:'مشرف', status:'نشط', note:'' },
@@ -1051,7 +1061,11 @@ async function demoGAS(action, payload) {
       { empId:'1004', name:'ماجد سلطان', phone:'0544444444', dept:'الصيانة', shift:'مسائية', role:'موظف', status:'نشط', note:'' },
       { empId:'1005', name:'عمر ناصر', phone:'0555555555', dept:'الأمن', shift:'ليلية', role:'موظف', status:'نشط', note:'' },
     ]
-  }));
+  };
+  const getDB = () => {
+    try { return JSON.parse(localStorage.getItem('seDB') || JSON.stringify(defaultDB)); }
+    catch(e) { return defaultDB; }
+  };
   const saveDB = db => localStorage.setItem('seDB', JSON.stringify(db));
   const db = getDB();
 
