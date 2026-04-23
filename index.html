@@ -36,12 +36,12 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 /* LOGIN */
 #loginPage{min-height:100vh;display:none;align-items:center;justify-content:center;padding:20px;position:relative;z-index:1;}
 #loginPage.active{display:flex;}
-.login-card{background:var(–surface);border:1px solid var(–border);border-radius:var(–r);padding:44px 38px;width:100%;max-width:460px;box-shadow:var(–shadow);animation:fadeUp .5s ease;}
+.login-card{background:var(–surface);border:1px solid var(–border);border-radius:var(–r);padding:36px 28px;width:100%;max-width:460px;box-shadow:var(–shadow);animation:fadeUp .5s ease;}
 .login-logo{text-align:center;margin-bottom:28px;}
 .login-logo h1{font-size:18px;font-weight:800;margin-top:12px;}
 .login-logo p{font-size:13px;color:var(–text2);margin-top:3px;}
-.login-tabs{display:flex;gap:4px;background:var(–bg2);border-radius:var(–r);padding:4px;margin-bottom:24px;}
-.login-tab{flex:1;padding:10px;text-align:center;border-radius:calc(var(–r) - 4px);cursor:pointer;font-size:13px;font-weight:700;color:var(–text2);transition:var(–tr);border:none;background:transparent;font-family:‘Cairo’,sans-serif;}
+.login-tabs{display:flex;gap:4px;background:var(–bg2);border-radius:var(–r);padding:4px;margin-bottom:24px;overflow:hidden;}
+.login-tab{flex:1;padding:9px 6px;text-align:center;border-radius:calc(var(–r) - 4px);cursor:pointer;font-size:13px;font-weight:700;color:var(–text2);transition:var(–tr);border:none;background:transparent;font-family:‘Cairo’,sans-serif;white-space:nowrap;}
 .login-tab.active{background:var(–primary);color:#fff;}
 .form-group{margin-bottom:18px;}
 .form-group label{display:block;font-size:13px;font-weight:700;color:var(–text2);margin-bottom:7px;}
@@ -123,7 +123,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .sl{font-size:12px;color:var(–text2);margin-top:2px;}
 
 /* SHIFT CARDS */
-.shg{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:13px;margin-bottom:16px;}
+.shg{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:14px;}
 .shc{border-radius:var(–r);padding:18px;position:relative;overflow:hidden;transition:var(–tr);}
 .shc:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.2);}
 .shc::before{content:’’;position:absolute;top:-25px;left:-25px;width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.07);}
@@ -142,7 +142,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .ol-card{background:var(–surface);border:1px solid var(–border);border-radius:var(–r);padding:18px;margin-bottom:16px;}
 .ol-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
 .ol-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(–success);animation:blink 1s infinite;margin-left:5px;}
-.ol-list{display:flex;flex-wrap:wrap;gap:7px;}
+.ol-list{display:flex;flex-wrap:wrap;gap:7px;max-height:260px;overflow-y:auto;}
 .ol-chip{display:flex;align-items:center;gap:7px;background:var(–surface2);border:1px solid var(–border);border-radius:var(–rp);padding:6px 11px;}
 .ol-av{width:25px;height:25px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;}
 
@@ -1001,6 +1001,18 @@ function updateTop(){
   // Also update userMenu if open
   const mn=document.getElementById('userMenuInfo');if(mn)mn.textContent=dispName;
   const mr=document.getElementById('userMenuRole');if(mr)mr.textContent=dispRole;
+  // Update brand date bar
+  const topDate=document.getElementById('topBrandDate');
+  if(topDate){
+    const nd=new Date();
+    const nhij=toHijri(nd);
+    const _hMs=['محرم','صفر','ربيع الأول','ربيع الثاني','جمادى الأولى','جمادى الآخرة','رجب','شعبان','رمضان','شوال','ذو القعدة','ذو الحجة'];
+    const _aDs=['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+    const _aMs=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+    const _hMn=_hMs[Math.min(Math.max(nhij.m-1,0),11)]||'';
+    topDate.innerHTML='<span>'+_aDs[nd.getDay()]+' '+nd.getDate()+' '+_aMs[nd.getMonth()]+' '+nd.getFullYear()+'م</span>'
+      +'<br><span style="color:var(--text3)">'+nhij.d+' '+_hMn+' '+nhij.y+'هـ | '+dispRole+'</span>';
+  }
 }
 
 
@@ -1017,7 +1029,11 @@ function buildDash(){
     if(me) welcomeName=me.name;
   }
   document.getElementById('dWelcome').textContent='مرحباً، '+welcomeName+' 👋';
-  document.getElementById('dDate').textContent=d.toLocaleDateString('ar-SA',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const dhij=toHijri(d);
+  const dhMs=['محرم','صفر','ربيع الأول','ربيع الثاني','جمادى الأولى','جمادى الآخرة','رجب','شعبان','رمضان','شوال','ذو القعدة','ذو الحجة'];
+  const dhDs=['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  const dhMn=dhMs[Math.min(Math.max(dhij.m-1,0),11)]||'';
+  document.getElementById('dDate').textContent=dhDs[d.getDay()]+', '+d.getDate()+' '+['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'][d.getMonth()]+' '+d.getFullYear()+' | '+dhij.d+' '+dhMn+' '+dhij.y+'هـ';
   const el=document.getElementById('dContent');
   if(VR==='مدير')el.innerHTML=mgrDash();
   else if(VR==='مشرف')el.innerHTML=supDash();
@@ -1091,12 +1107,19 @@ function mgrDash(){
   </div>
 
   <!-- ONLINE + CENTERS ROW -->
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:14px">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:14px">
     <!-- Online -->
     <div class="ol-card" style="margin:0">
       <div class="ol-hd"><h3 style="font-size:14px;font-weight:800">المتواجدون الآن <span class="ol-dot"></span></h3><span style="font-size:12px;color:var(--text2)">${onl.length} مستخدم</span></div>
-      <div class="ol-list">
-        ${onl.map((e,i)=>`<div class="ol-chip"><div class="ol-av" style="background:${cols[i%5]}">${e.name.charAt(0)}</div><div><div style="font-size:12px;font-weight:700">${e.name}</div><div style="font-size:10px;color:var(--text2)">${shTag(e.shift)}</div></div></div>`).join('')}
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+        ${onl.map((e,i)=>`<div style="display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:8px 10px;overflow:hidden">
+          <div class="ol-av" style="background:${cols[i%5]};flex-shrink:0;width:28px;height:28px;font-size:11px">${e.name.charAt(0)}</div>
+          <div style="min-width:0">
+            <div style="font-size:11px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.name}</div>
+            <div style="font-size:10px;color:var(--text2)">${shTag(e.shift)}</div>
+          </div>
+        </div>`).join('')}
+        ${tot>5?`<div style="grid-column:1/-1;text-align:center;font-size:11px;color:var(--text3);padding:4px">+${tot-5} آخرون</div>`:''}
       </div>
     </div>
     <!-- Centers -->
@@ -1120,10 +1143,10 @@ function mgrDash(){
       <span>مستخدم: ${pct}%</span><span style="color:${pct>80?'var(--danger)':'var(--success)'}">متبقي: ${(20000-usage).toLocaleString('ar-SA')} طلب ${pct>80?'⚠️':'✅'}</span>
     </div>
     <!-- Week cards -->
-    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">
-      ${wkDays.map((d,i)=>`<div style="text-align:center;background:var(--surface2);border-radius:10px;padding:8px 4px;border:1px solid var(--border)">
-        <div style="font-size:13px;font-weight:900;color:var(--primary)">${wkData[i]}</div>
-        <div style="font-size:10px;color:var(--text2);margin-top:2px">${d}</div>
+    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:4px">
+      ${wkDays.map((d,i)=>`<div style="text-align:center;background:var(--surface2);border-radius:10px;padding:8px 10px;border:1px solid var(--border);flex-shrink:0;min-width:64px">
+        <div style="font-size:14px;font-weight:900;color:var(--primary)">${wkData[i]}</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:2px;white-space:nowrap">${d}</div>
       </div>`).join('')}
     </div>
   </div>`;
@@ -1169,7 +1192,7 @@ function supDash(){
     <div class="sc"><div class="si si-o">⭐</div><div><div class="sv">${se.filter(e=>e.role==='مشرف').length}</div><div class="sl">مشرفون</div></div></div>
     <div class="sc"><div class="si si-p">${todayIcon}</div><div><div class="sv" style="font-size:14px">${todayStatus}</div><div class="sl">وضع اليوم</div></div></div>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:14px">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:14px">
     <div class="card" style="margin:0">
       <div class="card-hd"><h3>🏢 المناطق والمراكز - ${SHNAMES[ms]||ms}</h3></div>
       <div class="card-bd" style="padding:0"><div class="tw"><table>
@@ -1488,17 +1511,24 @@ function getShiftStatus(shift, date) {
 
 // Simple Hijri approximation
 function toHijri(date) {
-  const JD = Math.floor((date.getTime() / 86400000) + 2440587.5);
-  let l = JD - 1948440 + 10632;
-  const n = Math.floor((l - 1) / 10631);
-  l -= 10631 * n + 354;
-  const j = Math.floor((10985 - l) / 5316) * Math.floor(50 * l / 17719) + Math.floor(l / 5670) * Math.floor(43 * l / 15238);
-  l -= Math.floor((30 - j) / 15) * Math.floor(17719 * j / 50) + Math.floor(j / 16) * Math.floor(15238 * j / 43);
-  const d = l + 29;
-  const m = Math.floor((59 * (j + 1)) / 1972);
-  const y = 30 * n + j - 29;
-  const hMonth = m - Math.floor(m / 13);
-  return { d, m: hMonth, y };
+  // Reliable Gregorian to Hijri conversion
+  const year=date.getFullYear(), month=date.getMonth()+1, day=date.getDate();
+  const jd = Math.floor(367*year) - Math.floor(7*(year+Math.floor((month+9)/12))/4)
+    + Math.floor(275*month/9) + day + 1721013.5;
+  const z = jd - 1948439.5;
+  const a = Math.floor(z / 10631);
+  let rem = z - 10631 * a;
+  const j = Math.floor(rem / 354.3671);
+  rem = rem - Math.floor(j * 354.3671 + 0.5);
+  const mLens = [30,29,30,29,30,29,30,29,30,29,30,j%30===1||j%30===5||j%30===7||j%30===10?30:29];
+  let nday = Math.max(1, Math.floor(rem));
+  let hm = 1;
+  for(let i=0;i<12;i++){
+    if(nday<=mLens[i]){hm=i+1;break;}
+    nday-=mLens[i];
+  }
+  const hy = 30*a + j + 1;
+  return { d:Math.max(1,nday), m:hm, y:Math.floor(hy) };
 }
 
 const AR_DAYS = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
@@ -2127,7 +2157,10 @@ function toggleUserMenu(){
     const aD=['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
     const aM=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
     const mi=document.getElementById('userMenuDate');
-    if(mi) mi.innerHTML=aD[d.getDay()]+' '+d.getDate()+' '+aM[d.getMonth()]+' '+d.getFullYear()+'م<br>'+hij.d+' '+hM[hij.m-1]+' '+hij.y+'هـ';
+    if(mi){
+      const hMN=hM[Math.min(Math.max(hij.m-1,0),11)];
+      mi.innerHTML=aD[d.getDay()]+' '+d.getDate()+' '+aM[d.getMonth()]+' '+d.getFullYear()+'م<br>'+hij.d+' '+(hMN||'')+'  '+hij.y+'هـ';
+    }
     const mn=document.getElementById('userMenuInfo');if(mn)mn.textContent=document.getElementById('topName').textContent;
     const mr=document.getElementById('userMenuRole');if(mr)mr.textContent=document.getElementById('topRole').textContent;
   } else {
