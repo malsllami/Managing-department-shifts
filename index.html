@@ -232,6 +232,31 @@ select.finp{-webkit-appearance:none;}
 #toast.info{color:var(--primary);}
 
 @media(max-width:768px){.sidebar{display:none;}.fgrid{grid-template-columns:1fr;}.sg{grid-template-columns:1fr 1fr;}.shg{grid-template-columns:1fr 1fr;}}
+
+/* CALENDAR */
+.cal-day{border-radius:10px;padding:6px 4px;min-height:80px;background:var(--surface2);border:1px solid var(--border);transition:var(--tr);position:relative;overflow:hidden;}
+.cal-day:hover{border-color:var(--primary);}
+.cal-day.today{border-color:var(--danger);border-width:2px;background:rgba(239,68,68,.06);}
+.cal-day.other-month{opacity:.35;}
+.cal-day-num{font-size:12px;font-weight:800;margin-bottom:4px;color:var(--text2);}
+.cal-day.today .cal-day-num{color:var(--danger);}
+.cal-day-hij{font-size:9px;color:var(--text3);margin-bottom:3px;}
+.cal-shift-tag{display:block;font-size:9px;font-weight:700;border-radius:6px;padding:2px 4px;margin-bottom:2px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cs-morning{background:rgba(0,149,217,.18);color:#0095D9;}
+.cs-evening{background:rgba(139,92,246,.18);color:#8B5CF6;}
+.cs-off{background:rgba(0,200,150,.12);color:var(--success);}
+.cal-dh{text-align:center;font-size:11px;font-weight:800;color:var(--text2);padding:6px 0;}
+/* Mini table */
+.mini-sch{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-top:14px;}
+.mini-sch-hd{padding:13px 18px;border-bottom:1px solid var(--border);font-size:14px;font-weight:800;}
+.mini-cycle{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;padding:14px;}
+.mc-cell{border-radius:8px;padding:8px 4px;text-align:center;}
+.mc-cell .mc-n{font-size:14px;font-weight:900;}
+.mc-cell .mc-l{font-size:9px;font-weight:700;margin-top:2px;}
+.mc-morning{background:rgba(0,149,217,.15);color:#0095D9;border:1px solid rgba(0,149,217,.25);}
+.mc-evening{background:rgba(139,92,246,.15);color:#8B5CF6;border:1px solid rgba(139,92,246,.25);}
+.mc-off{background:rgba(0,200,150,.1);color:var(--success);border:1px solid rgba(0,200,150,.2);}
+
 </style>
 </head>
 <body class="dark">
@@ -311,6 +336,7 @@ select.finp{-webkit-appearance:none;}
       <div class="nav-item active" onclick="showPage('db')" id="nav-db"><span class="ni">📊</span>لوحة التحكم</div>
       <div class="nav-item" onclick="showPage('emp')" id="nav-emp" style="display:none"><span class="ni">👥</span>الموظفون</div>
       <div class="nav-item" onclick="showPage('sh')" id="nav-sh" style="display:none"><span class="ni">📋</span>وردية المشرف</div>
+      <div class="nav-item" onclick="showPage('cal')" id="nav-cal"><span class="ni">📅</span>تقويم الورديات</div>
       <div class="nav-item" onclick="showPage('prof')" id="nav-prof"><span class="ni">👤</span>ملفي الشخصي</div>
       <div class="sb-sec" id="sSec" style="display:none">الإعدادات</div>
       <div class="nav-item" onclick="showPage('set')" id="nav-set" style="display:none"><span class="ni">⚙️</span>إعدادات النظام</div>
@@ -400,6 +426,50 @@ select.finp{-webkit-appearance:none;}
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- CALENDAR PAGE -->
+      <div id="page-cal" class="page" style="display:none">
+        <div class="ph"><h2>📅 تقويم الورديات</h2><p>جدول دوام الورديات الأربع — يومين صباح | يومين مساء | أربعة أيام إجازة</p></div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px">
+          <div style="display:flex;align-items:center;gap:7px">
+            <label style="font-size:13px;font-weight:700;color:var(--text2)">الشهر:</label>
+            <select id="calMonth" class="finp" style="width:120px;padding:8px 10px" onchange="renderCalendar()">
+              <option value="0">يناير</option><option value="1">فبراير</option><option value="2">مارس</option>
+              <option value="3">أبريل</option><option value="4">مايو</option><option value="5">يونيو</option>
+              <option value="6">يوليو</option><option value="7">أغسطس</option><option value="8">سبتمبر</option>
+              <option value="9">أكتوبر</option><option value="10">نوفمبر</option><option value="11">ديسمبر</option>
+            </select>
+          </div>
+          <div style="display:flex;align-items:center;gap:7px">
+            <label style="font-size:13px;font-weight:700;color:var(--text2)">السنة:</label>
+            <select id="calYear" class="finp" style="width:95px;padding:8px 10px" onchange="renderCalendar()"></select>
+          </div>
+          <div style="display:flex;align-items:center;gap:7px">
+            <label style="font-size:13px;font-weight:700;color:var(--text2)">الوردية:</label>
+            <select id="calFilter" class="finp" style="width:130px;padding:8px 10px" onchange="renderCalendar()">
+              <option value="all">جميع الورديات</option>
+              <option value="أ">وردية أ فقط</option>
+              <option value="ب">وردية ب فقط</option>
+              <option value="ج">وردية ج فقط</option>
+              <option value="د">وردية د فقط</option>
+            </select>
+          </div>
+          <button class="btn btn-sec btn-sm" onclick="goToday()">📍 اليوم</button>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-right:auto">
+            <span style="background:rgba(0,149,217,.15);color:#0095D9;border:1px solid rgba(0,149,217,.3);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700">🌅 صباح 7ص-7م</span>
+            <span style="background:rgba(139,92,246,.15);color:#8B5CF6;border:1px solid rgba(139,92,246,.3);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700">🌙 مساء 7م-7ص</span>
+            <span style="background:rgba(0,200,150,.12);color:var(--success);border:1px solid rgba(0,200,150,.2);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700">🏖️ إجازة</span>
+          </div>
+        </div>
+        <div class="card" id="calCard">
+          <div class="card-hd" style="font-size:15px;font-weight:800"><span id="calTitle">-</span></div>
+          <div class="card-bd" style="padding:10px">
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px" id="calDayHeaders"></div>
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px" id="calGrid"></div>
+          </div>
+        </div>
+        <div id="miniSchedule"></div>
       </div>
 
     </div>
@@ -722,7 +792,7 @@ async function saveSets(){const id=document.getElementById('sMId').value.trim(),
 async function initSheets(){toast('⏳ جاري التهيئة...','info');const r=await gas('initSheets',{});toast(r.ok?'✅ تمت التهيئة':'⚠️ '+(r.error||''),r.ok?'success':'error');}
 
 // NAV
-function showPage(pg){document.querySelectorAll('.page').forEach(p=>p.style.display='none');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));const pe=document.getElementById('page-'+pg);if(pe)pe.style.display='block';const ne=document.getElementById('nav-'+pg);if(ne)ne.classList.add('active');if(pg==='emp')renderEmpTbl();if(pg==='sh')renderShTbl();if(pg==='prof')showProf();if(pg==='set')loadSets();}
+function showPage(pg){document.querySelectorAll('.page').forEach(p=>p.style.display='none');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));const pe=document.getElementById('page-'+pg);if(pe)pe.style.display='block';const ne=document.getElementById('nav-'+pg);if(ne)ne.classList.add('active');if(pg==='emp')renderEmpTbl();if(pg==='sh')renderShTbl();if(pg==='prof')showProf();if(pg==='set')loadSets();if(pg==='cal')initCalendar();}
 
 // UTILS
 function openM(id){document.getElementById(id).classList.add('active');}
@@ -796,6 +866,188 @@ function switchRole(r){
   sessionStorage.setItem('seU',JSON.stringify(U));
   buildSidebar();updateTop();buildDash();showPage('db');
   toast('تم التبديل إلى: '+r,'info');
+}
+
+
+// =============================================
+// SHIFT CALENDAR LOGIC
+// =============================================
+// Reference: Thursday 23 April 2026
+// وردية ب: index 0 (1st morning)
+// وردية ج: index 2 (1st evening)
+// وردية د: index 4 (1st off)
+// وردية أ: index 6 (3rd off)
+// Cycle: صباح صباح مساء مساء أوف أوف أوف أوف (8 days)
+
+const CAL_REF = new Date(2026, 3, 23); // April 23, 2026 (month is 0-indexed)
+const CYCLE8 = ['صباح','صباح','مساء','مساء','أوف','أوف','أوف','أوف'];
+const SHIFT_OFF = {'أ':6,'ب':0,'ج':2,'د':4};
+const SHIFT_COLORS = {'أ':'sh-a','ب':'sh-b','ج':'sh-c','د':'sh-d'};
+const SHIFT_CARD_C = {'أ':'#0095D9','ب':'#8B5CF6','ج':'#F59E0B','د':'#EF4444'};
+
+function getShiftStatus(shift, date) {
+  const ms = CAL_REF.getTime();
+  const ds = date.getTime();
+  const diffDays = Math.round((ds - ms) / 86400000);
+  const idx = ((SHIFT_OFF[shift] + diffDays) % 8 + 8) % 8;
+  return CYCLE8[idx]; // 'صباح' | 'مساء' | 'أوف'
+}
+
+// Simple Hijri approximation
+function toHijri(date) {
+  const JD = Math.floor((date.getTime() / 86400000) + 2440587.5);
+  let l = JD - 1948440 + 10632;
+  const n = Math.floor((l - 1) / 10631);
+  l -= 10631 * n + 354;
+  const j = Math.floor((10985 - l) / 5316) * Math.floor(50 * l / 17719) + Math.floor(l / 5670) * Math.floor(43 * l / 15238);
+  l -= Math.floor((30 - j) / 15) * Math.floor(17719 * j / 50) + Math.floor(j / 16) * Math.floor(15238 * j / 43);
+  const d = l + 29;
+  const m = Math.floor((59 * (j + 1)) / 1972);
+  const y = 30 * n + j - 29;
+  const hMonth = m - Math.floor(m / 13);
+  return { d, m: hMonth, y };
+}
+
+const AR_DAYS = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+const AR_MONTHS = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+const H_MONTHS = ['محرم','صفر','ربيع الأول','ربيع الثاني','جمادى الأولى','جمادى الآخرة','رجب','شعبان','رمضان','شوال','ذو القعدة','ذو الحجة'];
+
+function initCalendar() {
+  const now = new Date();
+  const yearSel = document.getElementById('calYear');
+  if(!yearSel) return;
+  yearSel.innerHTML = '';
+  for(let y = 2024; y <= 2030; y++) {
+    const opt = document.createElement('option');
+    opt.value = y; opt.textContent = y;
+    if(y === now.getFullYear()) opt.selected = true;
+    yearSel.appendChild(opt);
+  }
+  document.getElementById('calMonth').value = now.getMonth();
+  renderCalendar();
+}
+
+function goToday() {
+  const now = new Date();
+  document.getElementById('calMonth').value = now.getMonth();
+  document.getElementById('calYear').value = now.getFullYear();
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const month = parseInt(document.getElementById('calMonth').value);
+  const year = parseInt(document.getElementById('calYear').value);
+  const filter = document.getElementById('calFilter').value; // 'all' or shift letter
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  // Title
+  document.getElementById('calTitle').textContent = AR_MONTHS[month] + ' ' + year;
+
+  // Day headers (Sun=0 ... Sat=6)
+  const dh = document.getElementById('calDayHeaders');
+  dh.innerHTML = AR_DAYS.map(d => `<div class="cal-dh">${d}</div>`).join('');
+
+  // First day of month
+  const firstDay = new Date(year, month, 1);
+  const startDow = firstDay.getDay(); // 0=Sun
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  const grid = document.getElementById('calGrid');
+  let html = '';
+
+  // Leading empty cells
+  for(let i = 0; i < startDow; i++) {
+    // Previous month days
+    const prevDay = new Date(year, month, -startDow + i + 1);
+    html += buildDayCell(prevDay, today, filter, true);
+  }
+  // This month
+  for(let d = 1; d <= daysInMonth; d++) {
+    const day = new Date(year, month, d);
+    html += buildDayCell(day, today, filter, false);
+  }
+  // Trailing cells
+  const total = startDow + daysInMonth;
+  const trailing = total % 7 === 0 ? 0 : 7 - (total % 7);
+  for(let i = 1; i <= trailing; i++) {
+    const nextDay = new Date(year, month + 1, i);
+    html += buildDayCell(nextDay, today, filter, true);
+  }
+
+  grid.innerHTML = html;
+
+  // Mini schedule
+  renderMiniSchedule(filter, month, year);
+}
+
+function buildDayCell(day, today, filter, otherMonth) {
+  const isToday = day.getTime() === today.getTime();
+  const hij = toHijri(day);
+  const shifts = filter === 'all' ? ['أ','ب','ج','د'] : [filter];
+
+  let shiftTags = '';
+  shifts.forEach(sh => {
+    const status = getShiftStatus(sh, day);
+    const cls = status === 'صباح' ? 'cs-morning' : status === 'مساء' ? 'cs-evening' : 'cs-off';
+    const icon = status === 'صباح' ? '🌅' : status === 'مساء' ? '🌙' : '🏖️';
+    const label = filter === 'all' ? `${sh}: ${status}` : `${icon} ${status}`;
+    shiftTags += `<span class="cal-shift-tag ${cls}">${label}</span>`;
+  });
+
+  return `<div class="cal-day${isToday?' today':''}${otherMonth?' other-month':''}">
+    <div class="cal-day-num">${day.getDate()}</div>
+    <div class="cal-day-hij">${hij.d} ${H_MONTHS[hij.m-1]||''}</div>
+    ${shiftTags}
+  </div>`;
+}
+
+function renderMiniSchedule(filter, month, year) {
+  const el = document.getElementById('miniSchedule');
+  if(!el) return;
+
+  const shifts = filter === 'all' ? ['أ','ب','ج','د'] : [filter];
+
+  let html = '';
+  shifts.forEach(sh => {
+    // Show the 8-day cycle
+    const cycleOff = SHIFT_OFF[sh];
+    // Find next cycle start from today
+    const today = new Date(); today.setHours(0,0,0,0);
+    const diffToRef = Math.round((today.getTime() - CAL_REF.getTime()) / 86400000);
+    const posInCycle = ((cycleOff + diffToRef) % 8 + 8) % 8;
+    const daysToStart = (8 - posInCycle) % 8;
+    const cycleStart = new Date(today.getTime() + daysToStart * 86400000);
+
+    let cells = '';
+    for(let i = 0; i < 8; i++) {
+      const d = new Date(cycleStart.getTime() + i * 86400000);
+      const status = CYCLE8[i];
+      const cls = status === 'صباح' ? 'mc-morning' : status === 'مساء' ? 'mc-evening' : 'mc-off';
+      const icon = status === 'صباح' ? '🌅' : status === 'مساء' ? '🌙' : '🏖️';
+      const isT = d.getTime() === today.getTime();
+      cells += `<div class="mc-cell ${cls}" style="${isT?'outline:2px solid var(--danger);':''}">
+        <div class="mc-n">${icon}</div>
+        <div class="mc-l">${AR_DAYS[d.getDay()].substring(0,3)}</div>
+        <div class="mc-l">${d.getDate()}</div>
+      </div>`;
+    }
+
+    const col = SHIFT_CARD_C[sh];
+    html += `<div class="mini-sch">
+      <div class="mini-sch-hd" style="border-right:4px solid ${col};padding-right:14px">
+        <span style="color:${col}">●</span> دورة وردية ${sh} القادمة
+        <span style="font-size:11px;font-weight:400;color:var(--text2);margin-right:8px">تبدأ ${cycleStart.getDate()} ${AR_MONTHS[cycleStart.getMonth()]}</span>
+      </div>
+      <div style="padding:10px 14px 4px;font-size:11px;color:var(--text2);display:flex;gap:16px">
+        <span>يومان صباح <b style="color:#0095D9">(7ص - 7م)</b></span>
+        <span>يومان مساء <b style="color:#8B5CF6">(7م - 7ص)</b></span>
+        <span>أربعة أيام إجازة</span>
+      </div>
+      <div class="mini-cycle">${cells}</div>
+    </div>`;
+  });
+
+  el.innerHTML = html;
 }
 
 window.onload=()=>{
