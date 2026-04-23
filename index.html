@@ -268,6 +268,13 @@ select.finp{-webkit-appearance:none;}
 }
 tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 3px solid var(--warning); }
 
+
+/* FORM TABS STICKY */
+.ftb{padding:9px 18px;border-radius:16px;border:none;cursor:pointer;font-size:13px;font-weight:700;font-family:'Cairo',sans-serif;transition:all .25s;}
+.ftb.on{background:var(--primary);color:#fff;}
+.ftb.off{background:transparent;color:var(--text2);}
+.ftb.off:hover{color:var(--text);}
+
 </style>
 </head>
 <body class="dark">
@@ -443,75 +450,138 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
 
       <!-- FORMS PAGE -->
       <div id="page-forms" class="page" style="display:none">
-        <div class="ph"><h2>📝 النماذج</h2><p>إجازات - ساعات إضافية - البيانات الوظيفية</p></div>
+        <div class="ph"><h2>📝 النماذج</h2><p>إجازات · ساعات إضافية · البيانات الوظيفية</p></div>
 
-        <!-- TABS -->
-        <div style="display:flex;gap:4px;background:var(--bg2);border-radius:20px;padding:4px;margin-bottom:18px;width:fit-content">
-          <button class="form-tab active" onclick="switchFormTab('leave')" id="ftab-leave" style="padding:9px 18px;border-radius:16px;border:none;cursor:pointer;font-size:13px;font-weight:700;font-family:Cairo,sans-serif;transition:all .25s;background:var(--primary);color:#fff">🏖️ الإجازات</button>
-          <button class="form-tab" onclick="switchFormTab('extra')" id="ftab-extra" style="padding:9px 18px;border-radius:16px;border:none;cursor:pointer;font-size:13px;font-weight:700;font-family:Cairo,sans-serif;transition:all .25s;background:transparent;color:var(--text2)">⏰ ساعات إضافية</button>
-          <button class="form-tab" onclick="switchFormTab('info')" id="ftab-info" style="padding:9px 18px;border-radius:16px;border:none;cursor:pointer;font-size:13px;font-weight:700;font-family:Cairo,sans-serif;transition:all .25s;background:transparent;color:var(--text2)">🗂️ البيانات الوظيفية</button>
+        <!-- STICKY TABS -->
+        <div id="formTabsBar" style="position:sticky;top:0;z-index:50;background:var(--bg);padding:8px 0 10px;margin-bottom:14px">
+          <div style="display:flex;gap:4px;background:var(--bg2);border-radius:20px;padding:4px;width:fit-content">
+            <button onclick="switchFormTab('leave')" id="ftab-leave" class="ftb on">🏖️ الإجازات</button>
+            <button onclick="switchFormTab('extra')" id="ftab-extra" class="ftb off">⏰ ساعات إضافية</button>
+            <button onclick="switchFormTab('info')"  id="ftab-info"  class="ftb off">🗂️ البيانات الوظيفية</button>
+          </div>
         </div>
 
-        <!-- LEAVE FORM -->
+        <!-- ===== LEAVE SECTION ===== -->
         <div id="fsec-leave">
-          <div class="card" style="max-width:600px">
+          <!-- Employee info bar (auto-filled for employees) -->
+          <div id="leaveEmpBar" style="display:none;background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 16px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:14px;align-items:center">
+            <span style="font-size:13px;font-weight:700" id="leEmpName"></span>
+            <span style="font-size:12px;color:var(--text2)" id="leEmpId"></span>
+            <span id="leEmpShift" class="sht sh-a"></span>
+            <span style="font-size:12px;color:var(--text2)" id="leEmpRegion"></span>
+            <span style="font-size:12px;color:var(--text2)" id="leEmpCenter"></span>
+          </div>
+          <div class="card" style="max-width:680px">
             <div class="card-hd"><h3>🏖️ طلب إجازة</h3></div>
             <div class="card-bd">
               <div id="leaveAl" class="al"></div>
-              <div class="fgrid">
-                <div class="form-group full"><label>الموظف <span>*</span></label>
-                  <select id="fLeaveEmp" class="finp"><option value="">-- اختر الموظف --</option></select></div>
-                <div class="form-group"><label>نوع الإجازة <span>*</span></label>
-                  <select id="fLeaveType" class="finp">
-                    <option value="سنوية">سنوية</option>
-                    <option value="مرضية">مرضية</option>
-                    <option value="طارئة">طارئة</option>
-                    <option value="أمومة">أمومة / أبوة</option>
-                    <option value="بدون راتب">بدون راتب</option>
-                    <option value="أخرى">أخرى</option>
-                  </select></div>
-                <div class="form-group"><label>عدد الأيام <span>*</span></label>
-                  <input type="number" id="fLeaveDays" class="finp" placeholder="عدد الأيام" min="1"></div>
-                <div class="form-group"><label>تاريخ البداية <span>*</span></label>
-                  <input type="date" id="fLeaveStart" class="finp"></div>
-                <div class="form-group"><label>تاريخ النهاية</label>
-                  <input type="date" id="fLeaveEnd" class="finp" readonly style="opacity:.7"></div>
-                <div class="form-group full"><label>ملاحظات</label>
-                  <input type="text" id="fLeaveNote" class="finp" placeholder="سبب الإجازة أو ملاحظات..."></div>
+              <!-- Emp selector (managers/supervisors only) -->
+              <div id="leaveEmpSelectWrap" class="form-group" style="display:none">
+                <label>الموظف <span>*</span></label>
+                <select id="fLeaveEmp" class="finp" onchange="onLeaveEmpChange()"><option value="">-- اختر الموظف --</option></select>
               </div>
+              <!-- Leave balances -->
+              <div id="leaveBalances" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;padding:10px 14px;background:var(--bg2);border-radius:var(--rsm)">
+                <span style="font-size:12px;font-weight:700;color:var(--text2);width:100%;margin-bottom:2px">📊 أرصدة الإجازات:</span>
+                <div style="display:flex;flex-wrap:wrap;gap:8px" id="balancesRow">
+                  <span style="font-size:12px;color:var(--text3)">اختر موظفاً لعرض الأرصدة</span>
+                </div>
+              </div>
+              <div class="fgrid">
+                <div class="form-group">
+                  <label>نوع الإجازة <span>*</span></label>
+                  <div style="display:flex;gap:6px">
+                    <select id="fLeaveType" class="finp" style="flex:1" onchange="onLeaveTypeChange()">
+                      <option value="سنوية">سنوية</option>
+                      <option value="مجدولة">مجدولة</option>
+                      <option value="مرضية">مرضية</option>
+                      <option value="وفاة">وفاة</option>
+                      <option value="زواج">زواج</option>
+                      <option value="مولود">مولود</option>
+                      <option value="اختبارات">اختبارات</option>
+                      <option value="دورة عمل">دورة عمل</option>
+                    </select>
+                    <button class="btn btn-sec btn-sm" onclick="addLeaveType()" title="إضافة نوع جديد" style="flex-shrink:0;border-radius:12px;padding:0 10px">➕</button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>تاريخ البداية <span>*</span></label>
+                  <input type="date" id="fLeaveStart" class="finp" onchange="calcLeaveDays()">
+                </div>
+                <div class="form-group">
+                  <label>تاريخ النهاية <span>*</span></label>
+                  <input type="date" id="fLeaveEnd" class="finp" onchange="calcLeaveDays()">
+                </div>
+                <div class="form-group">
+                  <label>مدة الإجازة (تلقائي)</label>
+                  <input type="text" id="fLeaveDays" class="finp" readonly style="opacity:.75;background:var(--bg2)" placeholder="تُحسب تلقائياً">
+                </div>
+                <div class="form-group full">
+                  <label>ملاحظات</label>
+                  <input type="text" id="fLeaveNote" class="finp" placeholder="سبب الإجازة أو ملاحظات...">
+                </div>
+              </div>
+              <!-- Balance deduction preview -->
+              <div id="leaveDeductPreview" style="display:none;padding:10px 14px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:var(--rsm);margin-bottom:12px;font-size:13px;font-weight:700;color:var(--danger)"></div>
               <button class="btn btn-primary btn-full" onclick="saveLeave()">💾 حفظ الطلب</button>
             </div>
           </div>
-          <div class="card" style="margin-top:14px" id="leaveListCard">
+          <!-- Balance editor (for manager/supervisor) -->
+          <div id="leaveBalanceEditor" class="card" style="max-width:680px;margin-top:14px;display:none">
+            <div class="card-hd"><h3>💰 تعديل أرصدة الإجازات</h3></div>
+            <div class="card-bd">
+              <div class="fgrid">
+                <div class="form-group"><label>رصيد سنوية (بالنظام)</label><input type="number" id="balAnnual" class="finp" min="0"></div>
+                <div class="form-group"><label>رصيد مجدولة (بالمشرف)</label><input type="number" id="balScheduled" class="finp" min="0"></div>
+              </div>
+              <button class="btn btn-sec" onclick="saveBalances()" style="border-radius:var(--rp)">💾 حفظ الأرصدة</button>
+            </div>
+          </div>
+          <div class="card" style="margin-top:14px">
             <div class="card-hd"><h3>سجل الإجازات</h3></div>
             <div class="card-bd" style="padding:0"><div class="tw"><table>
-              <thead><tr><th>الموظف</th><th>نوع الإجازة</th><th>عدد الأيام</th><th>من</th><th>إلى</th><th>ملاحظات</th><th>حذف</th></tr></thead>
+              <thead><tr><th>الموظف</th><th>نوع الإجازة</th><th>من</th><th>إلى</th><th>الأيام</th><th>ملاحظات</th><th>حذف</th></tr></thead>
               <tbody id="leaveTb"><tr><td colspan="7" class="no-data">لا يوجد طلبات</td></tr></tbody>
             </table></div></div>
           </div>
         </div>
 
-        <!-- EXTRA HOURS FORM -->
+        <!-- ===== EXTRA HOURS SECTION ===== -->
         <div id="fsec-extra" style="display:none">
-          <div class="card" style="max-width:600px">
+          <div id="extraEmpBar" style="display:none;background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 16px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:14px;align-items:center">
+            <span style="font-size:13px;font-weight:700" id="exEmpName"></span>
+            <span style="font-size:12px;color:var(--text2)" id="exEmpId"></span>
+            <span id="exEmpShift" class="sht sh-a"></span>
+          </div>
+          <div class="card" style="max-width:680px">
             <div class="card-hd"><h3>⏰ ساعات العمل الإضافية</h3></div>
             <div class="card-bd">
               <div id="extraAl" class="al"></div>
+              <div id="extraEmpSelectWrap" class="form-group" style="display:none">
+                <label>الموظف <span>*</span></label>
+                <select id="fExtraEmp" class="finp"><option value="">-- اختر الموظف --</option></select>
+              </div>
               <div class="fgrid">
-                <div class="form-group full"><label>الموظف <span>*</span></label>
-                  <select id="fExtraEmp" class="finp"><option value="">-- اختر الموظف --</option></select></div>
-                <div class="form-group"><label>التاريخ <span>*</span></label>
-                  <input type="date" id="fExtraDate" class="finp"></div>
-                <div class="form-group"><label>عدد الساعات <span>*</span></label>
-                  <input type="number" id="fExtraHrs" class="finp" placeholder="مثال: 3" min="0.5" step="0.5"></div>
-                <div class="form-group"><label>نوع الإضافي</label>
+                <div class="form-group">
+                  <label>التاريخ <span>*</span></label>
+                  <input type="date" id="fExtraDate" class="finp">
+                </div>
+                <div class="form-group">
+                  <label>عدد الساعات <span>*</span></label>
+                  <input type="number" id="fExtraHrs" class="finp" placeholder="مثال: 3 أو 0.5 أو 0.25" min="0.25" max="24" step="0.25" inputmode="decimal" oninput="this.value=this.value.replace(/[^0-9.]/g,'');if(parseFloat(this.value)>24)this.value=24">
+                </div>
+                <div class="form-group">
+                  <label>نوع الإضافي</label>
                   <select id="fExtraType" class="finp">
                     <option value="عادي">عادي</option>
                     <option value="عطلة">عطلة رسمية</option>
-                    <option value="إجازة">في يوم إجازة</option>
-                  </select></div>
-                <div class="form-group full"><label>ملاحظات</label>
-                  <input type="text" id="fExtraNote" class="finp" placeholder="وصف مهمة الإضافي..."></div>
+                    <option value="في يوم إجازة">في يوم إجازة</option>
+                  </select>
+                </div>
+                <div class="form-group full">
+                  <label>ملاحظات</label>
+                  <input type="text" id="fExtraNote" class="finp" placeholder="وصف مهمة الإضافي...">
+                </div>
               </div>
               <button class="btn btn-primary btn-full" onclick="saveExtra()">💾 حفظ</button>
             </div>
@@ -525,31 +595,80 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
           </div>
         </div>
 
-        <!-- INFO FORM -->
+        <!-- ===== INFO SECTION ===== -->
         <div id="fsec-info" style="display:none">
-          <div class="card" style="max-width:600px">
+          <div id="infoEmpBar" style="display:none;background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 16px;margin-bottom:14px">
+            <span style="font-size:13px;font-weight:700" id="infBarName"></span>
+          </div>
+          <div class="card" style="max-width:720px">
             <div class="card-hd"><h3>🗂️ البيانات الوظيفية الإضافية</h3></div>
             <div class="card-bd">
               <div id="infoAl" class="al"></div>
-              <div class="form-group"><label>الموظف <span>*</span></label>
-                <select id="fInfoEmp" class="finp"><option value="">-- اختر الموظف --</option></select></div>
-              <div class="fgrid" style="margin-top:4px">
-                <div class="form-group"><label>المنطقة</label>
-                  <input type="text" id="fInfoRegion" class="finp" placeholder="مثال: الرياض"></div>
-                <div class="form-group"><label>المركز</label>
-                  <input type="text" id="fInfoCenter" class="finp" placeholder="مثال: مركز الملك عبدالله"></div>
-                <div class="form-group"><label>رقم السيارة</label>
-                  <input type="text" id="fInfoCar" class="finp" placeholder="رقم اللوحة"></div>
-                <div class="form-group"><label>مقاس الجاكيت</label>
-                  <select id="fInfoJacket" class="finp"><option value="">--</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>XXXL</option></select></div>
-                <div class="form-group"><label>مقاس البنطلون</label>
-                  <input type="text" id="fInfoPants" class="finp" placeholder="مثال: 32"></div>
-                <div class="form-group"><label>مقاس الحذاء</label>
-                  <input type="text" id="fInfoShoes" class="finp" placeholder="مثال: 43"></div>
-                <div class="form-group"><label>عدد البدل</label>
-                  <input type="number" id="fInfoSuits" class="finp" placeholder="عدد" min="0"></div>
-                <div class="form-group"><label>عدد الأحذية</label>
-                  <input type="number" id="fInfoShoeQty" class="finp" placeholder="عدد" min="0"></div>
+              <div id="infoEmpSelectWrap" class="form-group" style="display:none">
+                <label>الموظف <span>*</span></label>
+                <select id="fInfoEmp" class="finp" onchange="onInfoEmpChange()"><option value="">-- اختر الموظف --</option></select>
+              </div>
+              <div class="fgrid">
+                <div class="form-group">
+                  <label>المنطقة</label>
+                  <select id="fInfoRegion" class="finp">
+                    <option value="">-- اختر --</option>
+                    <option value="شمال">شمال</option>
+                    <option value="وسط">وسط</option>
+                    <option value="جنوب">جنوب</option>
+                    <option value="غرب">غرب</option>
+                    <option value="شرق">شرق</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>المركز</label>
+                  <input type="text" id="fInfoCenter" class="finp" placeholder="اسم المركز">
+                </div>
+                <div class="form-group">
+                  <label>رقم السيارة</label>
+                  <input type="text" id="fInfoCar" class="finp" placeholder="رقم اللوحة">
+                </div>
+              </div>
+
+              <div class="dv" style="margin:10px 0 14px"></div>
+              <p style="font-size:12px;font-weight:800;color:var(--text2);margin-bottom:10px">👕 مقاسات الملابس والتجهيزات</p>
+              <div class="fgrid">
+                <div class="form-group">
+                  <label>قميص CAT 2 (مقاس)</label>
+                  <select id="fInfoShirt2" class="finp">
+                    <option value="">--</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>XXXL</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>قميص CAT 2 (عدد)</label>
+                  <input type="number" id="fInfoShirt2Qty" class="finp" placeholder="0" min="0">
+                </div>
+                <div class="form-group">
+                  <label>بنطلون CAT 2 (مقاس)</label>
+                  <input type="text" id="fInfoPants2" class="finp" placeholder="مثال: 32">
+                </div>
+                <div class="form-group">
+                  <label>بنطلون CAT 2 (عدد)</label>
+                  <input type="number" id="fInfoPants2Qty" class="finp" placeholder="0" min="0">
+                </div>
+                <div class="form-group">
+                  <label>بدلة CAT 4 (مقاس)</label>
+                  <select id="fInfoSuit4" class="finp">
+                    <option value="">--</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>XXXL</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>بدلة CAT 4 (عدد)</label>
+                  <input type="number" id="fInfoSuit4Qty" class="finp" placeholder="0" min="0">
+                </div>
+                <div class="form-group">
+                  <label>مقاس الحذاء</label>
+                  <input type="text" id="fInfoShoes" class="finp" placeholder="مثال: 43">
+                </div>
+                <div class="form-group">
+                  <label>عدد الأحذية</label>
+                  <input type="number" id="fInfoShoeQty" class="finp" placeholder="0" min="0">
+                </div>
               </div>
               <button class="btn btn-primary btn-full" onclick="saveInfo()" style="margin-top:6px">💾 حفظ البيانات</button>
             </div>
@@ -557,7 +676,7 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
           <div class="card" style="margin-top:14px">
             <div class="card-hd"><h3>جدول البيانات الوظيفية</h3></div>
             <div class="card-bd" style="padding:0"><div class="tw"><table>
-              <thead><tr><th>الموظف</th><th>المنطقة</th><th>المركز</th><th>السيارة</th><th>جاكيت</th><th>بنطلون</th><th>حذاء</th><th>بدل</th><th>تعديل</th></tr></thead>
+              <thead><tr><th>الموظف</th><th>المنطقة</th><th>المركز</th><th>السيارة</th><th>قميص CAT2</th><th>بنطلون CAT2</th><th>بدلة CAT4</th><th>حذاء</th><th>تعديل</th></tr></thead>
               <tbody id="infoTb"><tr><td colspan="9" class="no-data">لا يوجد بيانات</td></tr></tbody>
             </table></div></div>
           </div>
@@ -953,7 +1072,7 @@ async function saveSets(){const id=document.getElementById('sMId').value.trim(),
 async function initSheets(){toast('⏳ جاري التهيئة...','info');const r=await gas('initSheets',{});toast(r.ok?'✅ تمت التهيئة':'⚠️ '+(r.error||''),r.ok?'success':'error');}
 
 // NAV
-function showPage(pg){document.querySelectorAll('.page').forEach(p=>p.style.display='none');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));const pe=document.getElementById('page-'+pg);if(pe)pe.style.display='block';const ne=document.getElementById('nav-'+pg);if(ne)ne.classList.add('active');if(pg==='emp')renderEmpTbl();if(pg==='sh')renderShTbl();if(pg==='prof')showProf();if(pg==='set')loadSets();if(pg==='cal')initCalendar();if(pg==='forms'){fillEmpSelects();renderLeaveTable();renderExtraTable();renderInfoTable();}}
+function showPage(pg){document.querySelectorAll('.page').forEach(p=>p.style.display='none');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));const pe=document.getElementById('page-'+pg);if(pe)pe.style.display='block';const ne=document.getElementById('nav-'+pg);if(ne)ne.classList.add('active');if(pg==='emp')renderEmpTbl();if(pg==='sh')renderShTbl();if(pg==='prof')showProf();if(pg==='set')loadSets();if(pg==='cal')initCalendar();if(pg==='forms'){loadCustomLeaveTypes();initFormTab('leave');}}
 
 // UTILS
 function openM(id){document.getElementById(id).classList.add('active');}
@@ -1270,95 +1389,229 @@ function renderMonthlyStats(filter, month, year) {
 // ============================================================
 // FORMS - LEAVE, EXTRA HOURS, EMPLOYEE INFO
 // ============================================================
-function switchFormTab(tab) {
+
+// ---- HELPERS ----
+function isMgrOrSup(){ return VR==='مدير' || VR==='مشرف'; }
+function getCurrentEmpId(){
+  if(isMgrOrSup()) return null; // uses selector
+  if(VR==='موظف' && U.role==='مدير' && U.mgrEmpId) return U.mgrEmpId;
+  return U.empId;
+}
+function getCurrentEmpObj(){
+  const id = getCurrentEmpId();
+  if(!id) return null;
+  return emps.find(e=>String(e.empId)===String(id)) || U;
+}
+
+function switchFormTab(tab){
   ['leave','extra','info'].forEach(t=>{
-    document.getElementById('fsec-'+t).style.display = t===tab ? 'block' : 'none';
-    const btn = document.getElementById('ftab-'+t);
-    if(btn){btn.style.background=t===tab?'var(--primary)':'transparent';btn.style.color=t===tab?'#fff':'var(--text2)';}
+    document.getElementById('fsec-'+t).style.display=t===tab?'block':'none';
+    const b=document.getElementById('ftab-'+t);
+    if(b){b.className='ftb '+(t===tab?'on':'off');}
   });
-  if(tab==='leave'||tab==='extra'||tab==='info') fillEmpSelects();
+  initFormTab(tab);
 }
 
-function fillEmpSelects() {
-  const ids = ['fLeaveEmp','fExtraEmp','fInfoEmp'];
-  ids.forEach(id=>{
-    const sel=document.getElementById(id); if(!sel)return;
-    const cur=sel.value;
-    sel.innerHTML='<option value="">-- اختر الموظف --</option>';
-    emps.forEach(e=>{ const o=document.createElement('option');o.value=e.empId;o.textContent=e.name+' ('+e.empId+')';sel.appendChild(o);});
-    sel.value=cur;
-  });
-}
-
-// Auto-calc leave end date
-document.addEventListener('change', function(e){
-  if(e.target.id==='fLeaveStart'||e.target.id==='fLeaveDays'){
-    const start=document.getElementById('fLeaveStart').value;
-    const days=parseInt(document.getElementById('fLeaveDays').value)||0;
-    if(start&&days>0){
-      const d=new Date(start); d.setDate(d.getDate()+days-1);
-      document.getElementById('fLeaveEnd').value=d.toISOString().split('T')[0];
-    }
+function initFormTab(tab){
+  const mgr = isMgrOrSup();
+  if(tab==='leave'){
+    const sw=document.getElementById('leaveEmpSelectWrap'); if(sw) sw.style.display=mgr?'block':'none';
+    const bar=document.getElementById('leaveEmpBar'); if(bar) bar.style.display=mgr?'none':'flex';
+    const ed=document.getElementById('leaveBalanceEditor'); if(ed) ed.style.display=mgr?'block':'none';
+    if(mgr) fillSelect('fLeaveEmp');
+    else { autoFillLeaveBar(); loadBalancesDisplay(getCurrentEmpId()); }
+    renderLeaveTable();
   }
-});
+  if(tab==='extra'){
+    const sw=document.getElementById('extraEmpSelectWrap'); if(sw) sw.style.display=mgr?'block':'none';
+    const bar=document.getElementById('extraEmpBar'); if(bar) bar.style.display=mgr?'none':'flex';
+    if(mgr) fillSelect('fExtraEmp');
+    else autoFillExtraBar();
+    renderExtraTable();
+  }
+  if(tab==='info'){
+    const sw=document.getElementById('infoEmpSelectWrap'); if(sw) sw.style.display=mgr?'block':'none';
+    const bar=document.getElementById('infoEmpBar'); if(bar) bar.style.display=mgr?'none':'flex';
+    if(mgr) fillSelect('fInfoEmp');
+    else { autoFillInfoBar(); loadInfoEditForEmp(getCurrentEmpId()); }
+    renderInfoTable();
+  }
+}
+
+function fillSelect(id){
+  const sel=document.getElementById(id); if(!sel)return;
+  const cur=sel.value;
+  sel.innerHTML='<option value="">-- اختر الموظف --</option>';
+  emps.forEach(e=>{const o=document.createElement('option');o.value=e.empId;o.textContent=e.name+' ('+e.empId+')';sel.appendChild(o);});
+  sel.value=cur;
+}
+function fillEmpSelects(){ fillSelect('fLeaveEmp');fillSelect('fExtraEmp');fillSelect('fInfoEmp'); }
+
+// ---- AUTO-FILL BARS (employee mode) ----
+function autoFillLeaveBar(){
+  const e=getCurrentEmpObj(); if(!e) return;
+  const info=getInfos().find(x=>x.empId===String(e.empId))||{};
+  setText('leEmpName','👤 '+e.name);
+  setText('leEmpId','رقم: '+e.empId);
+  const shEl=document.getElementById('leEmpShift');
+  if(shEl){shEl.textContent=SHNAMES[e.shift]||e.shift||'-';shEl.className='sht '+(SHK[e.shift]||'sh-a');}
+  setText('leEmpRegion',info.region?'📍 '+info.region:'');
+  setText('leEmpCenter',info.center?'🏢 '+info.center:'');
+}
+function autoFillExtraBar(){
+  const e=getCurrentEmpObj(); if(!e) return;
+  setText('exEmpName','👤 '+e.name);
+  setText('exEmpId','رقم: '+e.empId);
+  const shEl=document.getElementById('exEmpShift');
+  if(shEl){shEl.textContent=SHNAMES[e.shift]||e.shift||'-';shEl.className='sht '+(SHK[e.shift]||'sh-a');}
+}
+function autoFillInfoBar(){
+  const e=getCurrentEmpObj(); if(!e) return;
+  setText('infBarName','👤 '+e.name+' — رقم: '+e.empId);
+  loadInfoEditForEmp(e.empId);
+}
+function setText(id,txt){const el=document.getElementById(id);if(el)el.textContent=txt;}
+
+// ---- LEAVE BALANCES ----
+function getBalances(empId){ try{return JSON.parse(localStorage.getItem('seBAL_'+empId)||'{"annual":0,"scheduled":0}');}catch(e){return{annual:0,scheduled:0};} }
+function saveBalanceData(empId,data){ localStorage.setItem('seBAL_'+empId,JSON.stringify(data)); }
+
+function onLeaveEmpChange(){
+  const id=document.getElementById('fLeaveEmp').value;
+  if(id) loadBalancesDisplay(id);
+  if(id&&isMgrOrSup()){ const sd=document.getElementById('balAnnual');const ss=document.getElementById('balScheduled');const b=getBalances(id);if(sd)sd.value=b.annual;if(ss)ss.value=b.scheduled; }
+}
+function loadBalancesDisplay(empId){
+  if(!empId) return;
+  const b=getBalances(empId);
+  const row=document.getElementById('balancesRow');
+  if(!row) return;
+  row.innerHTML=`
+    <span style="background:rgba(0,200,150,.12);color:var(--success);border:1px solid rgba(0,200,150,.25);padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700">
+      📅 سنوية: <b>${b.annual}</b> يوم
+    </span>
+    <span style="background:rgba(0,149,217,.12);color:var(--primary);border:1px solid var(--border);padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700">
+      📋 مجدولة: <b>${b.scheduled}</b> يوم
+    </span>`;
+}
+function saveBalances(){
+  const id=isMgrOrSup()?document.getElementById('fLeaveEmp').value:getCurrentEmpId();
+  if(!id){toast('اختر موظفاً أولاً','info');return;}
+  const an=parseFloat(document.getElementById('balAnnual').value)||0;
+  const sc=parseFloat(document.getElementById('balScheduled').value)||0;
+  saveBalanceData(id,{annual:an,scheduled:sc});
+  loadBalancesDisplay(id);
+  toast('✅ تم حفظ الأرصدة','success');
+}
+function onLeaveTypeChange(){ calcLeaveDays(); }
+function calcLeaveDays(){
+  const s=document.getElementById('fLeaveStart').value;
+  const e=document.getElementById('fLeaveEnd').value;
+  const fd=document.getElementById('fLeaveDays');
+  if(s&&e){
+    const diff=Math.round((new Date(e)-new Date(s))/86400000)+1;
+    if(diff>0&&fd) fd.value=diff+' يوم';
+    else if(fd) fd.value='';
+    // Show deduction preview
+    const type=document.getElementById('fLeaveType').value;
+    const empId=isMgrOrSup()?document.getElementById('fLeaveEmp').value:getCurrentEmpId();
+    const dp=document.getElementById('leaveDeductPreview');
+    if(dp&&empId&&diff>0){
+      const b=getBalances(empId);
+      let msg='',warn=false;
+      if(type==='سنوية'){const rem=b.annual-diff;warn=rem<0;msg=`رصيد سنوية: ${b.annual} يوم ← بعد الخصم: ${rem} يوم${warn?' ⚠️ تجاوز الرصيد':''}`;}
+      else if(type==='مجدولة'){const rem=b.scheduled-diff;warn=rem<0;msg=`رصيد مجدولة: ${b.scheduled} يوم ← بعد الخصم: ${rem} يوم${warn?' ⚠️ تجاوز الرصيد':''}`;}
+      if(msg){dp.style.display='block';dp.textContent=msg;dp.style.background=warn?'rgba(239,68,68,.08)':'rgba(0,200,150,.08)';dp.style.color=warn?'var(--danger)':'var(--success)';}
+      else dp.style.display='none';
+    }
+  } else if(fd) fd.value='';
+}
+
+// Add custom leave type
+function addLeaveType(){
+  const name=prompt('اسم نوع الإجازة الجديد:');
+  if(!name||!name.trim())return;
+  const sel=document.getElementById('fLeaveType');
+  const o=document.createElement('option');o.value=name.trim();o.textContent=name.trim();sel.appendChild(o);
+  sel.value=name.trim();
+  // Save custom types
+  const types=JSON.parse(localStorage.getItem('seLeaveTypes')||'[]');
+  types.push(name.trim());
+  localStorage.setItem('seLeaveTypes',JSON.stringify(types));
+  toast('✅ تم إضافة نوع الإجازة','success');
+}
+function loadCustomLeaveTypes(){
+  const sel=document.getElementById('fLeaveType');if(!sel)return;
+  const types=JSON.parse(localStorage.getItem('seLeaveTypes')||'[]');
+  types.forEach(t=>{if(![...sel.options].find(o=>o.value===t)){const o=document.createElement('option');o.value=t;o.textContent=t;sel.appendChild(o);}});
+}
 
 // ---- LEAVES ----
 function getLeaves(){try{return JSON.parse(localStorage.getItem('seLeaves')||'[]');}catch(e){return[];}}
 function saveLeaves(arr){localStorage.setItem('seLeaves',JSON.stringify(arr));}
 
 function saveLeave(){
-  const emp=document.getElementById('fLeaveEmp').value;
+  const empId=isMgrOrSup()?document.getElementById('fLeaveEmp').value:getCurrentEmpId();
   const type=document.getElementById('fLeaveType').value;
-  const days=document.getElementById('fLeaveDays').value;
   const start=document.getElementById('fLeaveStart').value;
   const end=document.getElementById('fLeaveEnd').value;
+  const daysStr=document.getElementById('fLeaveDays').value;
   const note=document.getElementById('fLeaveNote').value.trim();
-  if(!emp||!days||!start){showAl('leaveAl','d','يرجى ملء الحقول المطلوبة');return;}
-  const empObj=emps.find(e=>String(e.empId)===String(emp));
+  if(!empId){showAl('leaveAl','d','يرجى اختيار الموظف');return;}
+  if(!start||!end){showAl('leaveAl','d','يرجى تحديد تاريخ البداية والنهاية');return;}
+  const days=Math.round((new Date(end)-new Date(start))/86400000)+1;
+  const empObj=emps.find(e=>String(e.empId)===String(empId));
+  const info=getInfos().find(x=>x.empId===String(empId))||{};
   const arr=getLeaves();
-  arr.unshift({id:Date.now(),empId:emp,empName:empObj?empObj.name:emp,type,days,start,end,note,createdAt:new Date().toISOString()});
+  arr.unshift({id:Date.now(),empId,empName:empObj?empObj.name:empId,empShift:empObj?empObj.shift:'',region:info.region||'',center:info.center||'',type,start,end,days,note});
   saveLeaves(arr);
+  // Deduct from balance
+  if(type==='سنوية'||type==='مجدولة'){
+    const b=getBalances(empId);
+    if(type==='سنوية') b.annual=Math.max(0,b.annual-days);
+    else b.scheduled=Math.max(0,b.scheduled-days);
+    saveBalanceData(empId,b);
+    loadBalancesDisplay(empId);
+  }
   showAl('leaveAl','s','✅ تم حفظ طلب الإجازة');
   renderLeaveTable();
-  ['fLeaveEmp','fLeaveDays','fLeaveStart','fLeaveEnd','fLeaveNote'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['fLeaveStart','fLeaveEnd','fLeaveDays','fLeaveNote'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('leaveDeductPreview').style.display='none';
 }
 
 function renderLeaveTable(){
   const tb=document.getElementById('leaveTb');if(!tb)return;
   const arr=getLeaves();
-  tb.innerHTML=arr.length?arr.map((l,i)=>`<tr>
-    <td><b>${l.empName}</b></td><td>${l.type}</td><td>${l.days} يوم</td>
-    <td>${l.start}</td><td>${l.end||'-'}</td><td>${l.note||'-'}</td>
+  tb.innerHTML=arr.length?arr.map(l=>`<tr>
+    <td><b>${l.empName}</b>${l.region?'<br><small style="color:var(--text3)">'+l.region+(l.center?' / '+l.center:'')+'</small>':''}</td>
+    <td>${l.type}</td><td>${l.start}</td><td>${l.end||'-'}</td>
+    <td><b>${l.days}</b> يوم</td><td>${l.note||'-'}</td>
     <td><button class="btn btn-dng btn-sm" onclick="deleteLeave(${l.id})">🗑️</button></td>
   </tr>`).join(''):'<tr><td colspan="7" class="no-data">لا يوجد طلبات</td></tr>';
 }
-
-function deleteLeave(id){
-  if(!confirm('حذف هذا الطلب؟'))return;
-  saveLeaves(getLeaves().filter(l=>l.id!==id));
-  renderLeaveTable();
-}
+function deleteLeave(id){if(!confirm('حذف؟'))return;saveLeaves(getLeaves().filter(l=>l.id!==id));renderLeaveTable();}
 
 // ---- EXTRA HOURS ----
 function getExtras(){try{return JSON.parse(localStorage.getItem('seExtras')||'[]');}catch(e){return[];}}
 function saveExtras(arr){localStorage.setItem('seExtras',JSON.stringify(arr));}
 
 function saveExtra(){
-  const emp=document.getElementById('fExtraEmp').value;
+  const empId=isMgrOrSup()?document.getElementById('fExtraEmp').value:getCurrentEmpId();
   const date=document.getElementById('fExtraDate').value;
-  const hrs=document.getElementById('fExtraHrs').value;
+  const hrsRaw=document.getElementById('fExtraHrs').value;
   const type=document.getElementById('fExtraType').value;
   const note=document.getElementById('fExtraNote').value.trim();
-  if(!emp||!date||!hrs){showAl('extraAl','d','يرجى ملء الحقول المطلوبة');return;}
-  const empObj=emps.find(e=>String(e.empId)===String(emp));
+  if(!empId||!date||!hrsRaw){showAl('extraAl','d','يرجى ملء الحقول المطلوبة');return;}
+  const hrs=parseFloat(hrsRaw);
+  if(isNaN(hrs)||hrs<=0){showAl('extraAl','d','يرجى إدخال عدد ساعات صحيح (مثال: 3 أو 0.5 أو 0.25)');return;}
+  const empObj=emps.find(e=>String(e.empId)===String(empId));
   const arr=getExtras();
-  arr.unshift({id:Date.now(),empId:emp,empName:empObj?empObj.name:emp,date,hrs,type,note});
+  arr.unshift({id:Date.now(),empId,empName:empObj?empObj.name:empId,date,hrs,type,note});
   saveExtras(arr);
   showAl('extraAl','s','✅ تم حفظ الساعات الإضافية');
   renderExtraTable();
-  ['fExtraEmp','fExtraDate','fExtraHrs','fExtraNote'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['fExtraDate','fExtraHrs','fExtraNote'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
 }
-
 function renderExtraTable(){
   const tb=document.getElementById('extraTb');if(!tb)return;
   const arr=getExtras();
@@ -1368,65 +1621,68 @@ function renderExtraTable(){
     <td><button class="btn btn-dng btn-sm" onclick="deleteExtra(${x.id})">🗑️</button></td>
   </tr>`).join(''):'<tr><td colspan="6" class="no-data">لا يوجد سجلات</td></tr>';
 }
-
-function deleteExtra(id){
-  if(!confirm('حذف؟'))return;
-  saveExtras(getExtras().filter(x=>x.id!==id));
-  renderExtraTable();
-}
+function deleteExtra(id){if(!confirm('حذف؟'))return;saveExtras(getExtras().filter(x=>x.id!==id));renderExtraTable();}
 
 // ---- EMP INFO ----
 function getInfos(){try{return JSON.parse(localStorage.getItem('seInfos')||'[]');}catch(e){return[];}}
 function saveInfos(arr){localStorage.setItem('seInfos',JSON.stringify(arr));}
 
+function onInfoEmpChange(){
+  const id=document.getElementById('fInfoEmp').value;
+  if(id) loadInfoEditForEmp(id);
+}
+function loadInfoEditForEmp(empId){
+  if(!empId)return;
+  const x=getInfos().find(i=>String(i.empId)===String(empId));
+  if(!x)return;
+  const fields={fInfoRegion:x.region,fInfoCenter:x.center,fInfoCar:x.car,
+    fInfoShirt2:x.shirt2,fInfoShirt2Qty:x.shirt2Qty,fInfoPants2:x.pants2,fInfoPants2Qty:x.pants2Qty,
+    fInfoSuit4:x.suit4,fInfoSuit4Qty:x.suit4Qty,fInfoShoes:x.shoes,fInfoShoeQty:x.shoeQty};
+  Object.entries(fields).forEach(([id,val])=>{const el=document.getElementById(id);if(el)el.value=val||'';});
+}
 function saveInfo(){
-  const emp=document.getElementById('fInfoEmp').value;
-  if(!emp){showAl('infoAl','d','يرجى اختيار الموظف');return;}
-  const empObj=emps.find(e=>String(e.empId)===String(emp));
-  const data={
-    empId:emp, empName:empObj?empObj.name:emp,
-    region:document.getElementById('fInfoRegion').value.trim(),
+  const empId=isMgrOrSup()?document.getElementById('fInfoEmp').value:getCurrentEmpId();
+  if(!empId){showAl('infoAl','d','يرجى اختيار الموظف');return;}
+  const empObj=emps.find(e=>String(e.empId)===String(empId));
+  const data={empId:String(empId),empName:empObj?empObj.name:empId,
+    region:document.getElementById('fInfoRegion').value,
     center:document.getElementById('fInfoCenter').value.trim(),
     car:document.getElementById('fInfoCar').value.trim(),
-    jacket:document.getElementById('fInfoJacket').value,
-    pants:document.getElementById('fInfoPants').value.trim(),
+    shirt2:document.getElementById('fInfoShirt2').value,
+    shirt2Qty:document.getElementById('fInfoShirt2Qty').value,
+    pants2:document.getElementById('fInfoPants2').value.trim(),
+    pants2Qty:document.getElementById('fInfoPants2Qty').value,
+    suit4:document.getElementById('fInfoSuit4').value,
+    suit4Qty:document.getElementById('fInfoSuit4Qty').value,
     shoes:document.getElementById('fInfoShoes').value.trim(),
-    suits:document.getElementById('fInfoSuits').value,
     shoeQty:document.getElementById('fInfoShoeQty').value
   };
   const arr=getInfos();
-  const idx=arr.findIndex(x=>x.empId===emp);
+  const idx=arr.findIndex(x=>String(x.empId)===String(empId));
   if(idx>=0) arr[idx]={...arr[idx],...data};
   else arr.push(data);
   saveInfos(arr);
   showAl('infoAl','s','✅ تم حفظ البيانات الوظيفية');
   renderInfoTable();
+  // Refresh leave bar region/center
+  if(!isMgrOrSup()) autoFillLeaveBar();
 }
-
 function renderInfoTable(){
   const tb=document.getElementById('infoTb');if(!tb)return;
   const arr=getInfos();
   tb.innerHTML=arr.length?arr.map(x=>`<tr>
     <td><b>${x.empName}</b></td><td>${x.region||'-'}</td><td>${x.center||'-'}</td>
-    <td>${x.car||'-'}</td><td>${x.jacket||'-'}</td><td>${x.pants||'-'}</td>
-    <td>${x.shoes||'-'} (${x.shoeQty||0})</td><td>${x.suits||0}</td>
+    <td>${x.car||'-'}</td>
+    <td>${x.shirt2||'-'} (${x.shirt2Qty||0})</td>
+    <td>${x.pants2||'-'} (${x.pants2Qty||0})</td>
+    <td>${x.suit4||'-'} (${x.suit4Qty||0})</td>
+    <td>${x.shoes||'-'} (${x.shoeQty||0})</td>
     <td><button class="btn btn-sec btn-sm" onclick="loadInfoEdit('${x.empId}')">✏️</button></td>
   </tr>`).join(''):'<tr><td colspan="9" class="no-data">لا يوجد بيانات</td></tr>';
 }
-
 function loadInfoEdit(empId){
-  document.getElementById('fInfoEmp').value=empId;
-  const x=getInfos().find(i=>i.empId===empId);
-  if(x){
-    document.getElementById('fInfoRegion').value=x.region||'';
-    document.getElementById('fInfoCenter').value=x.center||'';
-    document.getElementById('fInfoCar').value=x.car||'';
-    document.getElementById('fInfoJacket').value=x.jacket||'';
-    document.getElementById('fInfoPants').value=x.pants||'';
-    document.getElementById('fInfoShoes').value=x.shoes||'';
-    document.getElementById('fInfoSuits').value=x.suits||'';
-    document.getElementById('fInfoShoeQty').value=x.shoeQty||'';
-  }
+  if(isMgrOrSup()) document.getElementById('fInfoEmp').value=empId;
+  loadInfoEditForEmp(empId);
   document.getElementById('fsec-info').scrollIntoView({behavior:'smooth'});
 }
 
