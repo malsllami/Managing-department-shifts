@@ -135,11 +135,11 @@
 
   /* EYE TOGGLE */
   .eye-btn {
-    position:absolute; left:12px; top:50%; transform:translateY(-50%);
+    position:absolute; left:10px; top:50%; transform:translateY(-50%);
     background:none; border:none; cursor:pointer;
-    color:var(--text3); padding:6px; border-radius:8px;
+    color:var(--text3); padding:5px; border-radius:8px;
     display:flex; align-items:center; justify-content:center;
-    transition:all 0.2s; line-height:0;
+    transition:all 0.2s; line-height:0; z-index:2;
   }
   .eye-btn:hover { color:var(--primary); }
   .eye-icon { width:18px; height:18px; display:block; }
@@ -1041,9 +1041,9 @@ async function callGAS(action, payload = {}) {
 }
 
 // ===== DEMO MODE (localStorage mock) =====
-function demoGAS(action, payload) {
-  const getDB = () => JSON.parse(localStorage.getItem('seDB') || JSON.stringify({
-    settings: { mgrId:'100', mgrPass:'0500000000', mgrName:'مدير النظام' },
+async function demoGAS(action, payload) {
+  const getDB = () => { try { return JSON.parse(localStorage.getItem('seDB') || JSON.stringify({
+    settings: { mgrId:'100', mgrPass:'admin123', mgrName:'مدير النظام' },
     employees: [
       { empId:'1001', name:'أحمد محمد', phone:'0511111111', dept:'العمليات', shift:'صباحية', role:'مشرف', status:'نشط', note:'' },
       { empId:'1002', name:'سعد خالد', phone:'0522222222', dept:'العمليات', shift:'صباحية', role:'موظف', status:'نشط', note:'' },
@@ -1578,8 +1578,9 @@ function setLoading(btnId, loading) {
     btn.innerHTML = '<div class="spinner"></div>';
   } else {
     btn.disabled = false;
-    btn.innerHTML = btnId.includes('login') ? '<span>تسجيل الدخول</span>' :
-                    btnId.includes('Mgr') ? '<span>دخول المدير</span>' : '💾 حفظ';
+    if (btnId === 'loginEmpBtn') btn.innerHTML = '<span>تسجيل الدخول</span>';
+    else if (btnId === 'loginMgrBtn') btn.innerHTML = '<span>دخول المدير</span>';
+    else btn.innerHTML = '💾 حفظ';
   }
 }
 
