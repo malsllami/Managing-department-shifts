@@ -802,12 +802,30 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
 <!-- MODAL PROFILE EDIT -->
 <div class="mo" id="mProf">
   <div class="modal">
-    <div class="m-hd"><h3>تعديل الملف الشخصي</h3><button class="btn-x" onclick="closeM('mProf')">✕</button></div>
+    <div class="m-hd"><h3>✏️ تعديل الملف الشخصي</h3><button class="btn-x" onclick="closeM('mProf')">✕</button></div>
     <div class="m-bd">
       <div id="mProfAl" class="al"></div>
-      <div class="form-group"><label>الاسم الكامل <span>*</span></label><input type="text" id="pNm" class="finp"></div>
-      <div class="form-group"><label>رقم الجوال</label><input type="text" id="pPh" class="finp" oninput="norm(this)"></div>
-      <div class="form-group"><label>القسم</label><input type="text" id="pDp" class="finp"></div>
+      <div class="fgrid">
+        <div class="form-group full"><label>الاسم الكامل <span>*</span></label><input type="text" id="pNm" class="finp"></div>
+        <div class="form-group"><label>رقم الجوال (كلمة المرور)</label><input type="text" id="pPh" class="finp" oninput="norm(this)"></div>
+        <div class="form-group"><label>القسم</label><input type="text" id="pDp" class="finp"></div>
+        <div class="form-group" id="pShiftWrap">
+          <label>الوردية</label>
+          <select id="pSh" class="finp">
+            <option value="أ">وردية أ</option>
+            <option value="ب">وردية ب</option>
+            <option value="ج">وردية ج</option>
+            <option value="د">وردية د</option>
+          </select>
+        </div>
+        <div class="form-group" id="pRoleWrap" style="display:none">
+          <label>الدور</label>
+          <select id="pRl" class="finp">
+            <option value="موظف">موظف</option>
+            <option value="مشرف">مشرف</option>
+          </select>
+        </div>
+      </div>
     </div>
     <div class="m-ft"><button class="btn btn-sec" onclick="closeM('mProf')">إلغاء</button><button class="btn btn-primary" style="width:auto" onclick="saveProf()">💾 حفظ</button></div>
   </div>
@@ -1091,7 +1109,76 @@ function drawWeekChart(){
   const counts=[45,62,38,71,55,83,13];const mx=Math.max(...counts);
   el.innerHTML=days.map((d,i)=>`<div class="wk-day"><div class="wk-bw"><div class="wk-b ${counts[i]>0?'on':''}" style="height:${Math.round((counts[i]/mx)*44)}px"></div></div><div class="wk-lbl">${d}</div><div class="wk-n">${counts[i]}</div></div>`).join('');
 }
-function supDash(){const ms=U.shift,se=emps.filter(e=>e.shift===ms&&String(e.empId)!==String(U.empId));return`<div class="sg"><div class="sc"><div class="si si-b">👥</div><div><div class="sv">${se.length}</div><div class="sl">موظفو ${SHNAMES[ms]||ms}</div></div></div><div class="sc"><div class="si si-g">✅</div><div><div class="sv">${se.filter(e=>e.status==='نشط').length}</div><div class="sl">النشطون</div></div></div></div><div class="card"><div class="card-hd"><h3>موظفو ${SHNAMES[ms]||ms}</h3></div><div class="card-bd"><div class="tw"><table><thead><tr><th>رقم الوظيفي</th><th>الاسم</th><th>الجوال</th><th>الحالة</th></tr></thead><tbody>${se.length?se.map(e=>`<tr><td><b>${e.empId}</b></td><td>${e.name}</td><td>${e.phone}</td><td>${stBadge(e.status)}</td></tr>`).join(''):'<tr><td colspan="4" class="no-data">لا يوجد موظفون</td></tr>'}</tbody></table></div></div></div>`;}
+function supDash(){
+  const ms=U.shift;
+  const se=emps.filter(e=>e.shift===ms&&String(e.empId)!==String(U.empId));
+  const infos=getInfos();
+  // Centers table for supervisor's shift
+  const centerMap={};
+  se.forEach(e=>{
+    const inf=infos.find(x=>String(x.empId)===String(e.empId))||{};
+    const key=inf.center||'غير محدد';
+    const reg=inf.region||'-';
+    if(!centerMap[key])centerMap[key]={name:key,region:reg,emps:[]};
+    centerMap[key].emps.push(e);
+  });
+  const centerRows=Object.values(centerMap).map(cc=>`<tr>
+    <td>${cc.region}</td>
+    <td><b>${cc.name}</b></td>
+    <td>${cc.emps.length}</td>
+    <td>${cc.emps.map(e=>'<span style="font-size:12px;margin-left:4px">'+e.name+'</span>').join('')}</td>
+  </tr>`).join('');
+  const todayStatus=getShiftStatus(ms,new Date());
+  const todayIcon=todayStatus==='صباح'?'🌅':todayStatus==='مساء'?'🌙':'🏖️';
+  return `
+  <div class="sg">
+    <div class="sc"><div class="si si-b">👥</div><div><div class="sv">${se.length}</div><div class="sl">موظفو ${SHNAMES[ms]||ms}</div></div></div>
+    <div class="sc"><div class="si si-g">✅</div><div><div class="sv">${se.filter(e=>e.status==='نشط').length}</div><div class="sl">النشطون</div></div></div>
+    <div class="sc"><div class="si si-o">⭐</div><div><div class="sv">${se.filter(e=>e.role==='مشرف').length}</div><div class="sl">مشرفون</div></div></div>
+    <div class="sc"><div class="si si-p">${todayIcon}</div><div><div class="sv" style="font-size:14px">${todayStatus}</div><div class="sl">وضع اليوم</div></div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+    <div class="card" style="margin:0">
+      <div class="card-hd"><h3>🏢 المناطق والمراكز - ${SHNAMES[ms]||ms}</h3></div>
+      <div class="card-bd" style="padding:0"><div class="tw"><table>
+        <thead><tr><th>المنطقة</th><th>المركز</th><th>العدد</th><th>الفنيون</th></tr></thead>
+        <tbody>${centerRows||'<tr><td colspan="4" class="no-data">أضف بيانات المراكز من النماذج</td></tr>'}</tbody>
+      </table></div></div>
+    </div>
+    <div class="card" style="margin:0">
+      <div class="card-hd"><h3>📊 إحصائيات الوردية</h3></div>
+      <div class="card-bd">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          ${se.map(e=>{
+            const inf=infos.find(x=>String(x.empId)===String(e.empId))||{};
+            const b=getBalances(e.empId);
+            return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">'
+              +'<div><span style="font-size:13px;font-weight:700">'+e.name+'</span>'
+              +(inf.center?'<br><span style="font-size:10px;color:var(--text3)">'+inf.center+'</span>':'')+'</div>'
+              +'<div style="display:flex;gap:6px;align-items:center">'
+              +(e.role==='مشرف'?'<span class="badge b-sup">⭐</span>':'')
+              +'<span style="font-size:11px;color:var(--success)">س:'+b.annual+'</span>'
+              +'<span style="font-size:11px;color:var(--primary)">م:'+b.scheduled+'</span>'
+              +'</div></div>';
+          }).join('')}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><h3>👥 موظفو ${SHNAMES[ms]||ms}</h3><button class="btn btn-primary btn-sm" style="width:auto" onclick="showPage('sh')">إدارة الوردية</button></div>
+    <div class="card-bd" style="padding:0"><div class="tw"><table>
+      <thead><tr><th>رقم الوظيفي</th><th>الاسم</th><th>الجوال</th><th>المركز</th><th>الدور</th><th>الحالة</th></tr></thead>
+      <tbody>${se.length?se.map(e=>{
+        const inf=infos.find(x=>String(x.empId)===String(e.empId))||{};
+        return '<tr><td><b>'+e.empId+'</b></td><td>'+e.name+'</td><td>'+e.phone+'</td>'
+          +'<td>'+(inf.center||'-')+'</td>'
+          +'<td>'+(e.role==='مشرف'?'<span class="badge b-sup">⭐ مشرف</span>':'موظف')+'</td>'
+          +'<td>'+stBadge(e.status)+'</td></tr>';
+      }).join(''):'<tr><td colspan="6" class="no-data">لا يوجد موظفون</td></tr>'}</tbody>
+    </table></div></div>
+  </div>`;
+}
 function empDash(){
   // When manager views as employee, show employee data
   let dispU = U;
@@ -1114,7 +1201,37 @@ function renderEmpTbl(){const tb=document.getElementById('empTb');if(!tb)return;
     return `<tr ${rowClass}><td><b>${e.empId}</b></td><td>${e.name}</td><td dir="ltr">${e.phone}</td><td>${e.dept||'-'}</td><td>${shTag(e.shift)}</td><td>${e.role==='مشرف'?'<span class="badge b-sup">⭐ مشرف</span>':'موظف'}</td><td>${stBadge(e.status)}</td><td style="white-space:nowrap">${transferBtn}<button class="btn btn-sec btn-sm" onclick="editEmp(${i})">✏️</button> <button class="btn btn-dng btn-sm" onclick="delEmp(${i})">🗑️</button></td></tr>`;
   }).join('');}
 function filterEmp(){const q=document.getElementById('empSrch').value.toLowerCase();document.querySelectorAll('#empTb tr').forEach(r=>r.style.display=r.textContent.toLowerCase().includes(q)?'':'none');}
-function renderShTbl(){const tb=document.getElementById('shTb');if(!tb||VR!=='مشرف')return;const ms=U.shift,se=emps.filter(e=>e.shift===ms&&String(e.empId)!==String(U.empId));document.getElementById('shTitle').textContent='موظفو '+(SHNAMES[ms]||ms);document.getElementById('supLbl').textContent=SHNAMES[ms]||ms;tb.innerHTML=se.length?se.map(e=>`<tr><td><b>${e.empId}</b></td><td>${e.name}</td><td>${e.phone}</td><td>${stBadge(e.status)}</td><td>${e.role==='مشرف'?'<span class="badge b-sup">⭐ مشرف</span>':'موظف'}</td><td><button class="btn btn-sec btn-sm" onclick="editShEmp('${e.empId}')">✏️</button> ${e.role==='موظف'?`<button class="btn btn-sm" style="background:rgba(139,92,246,.15);color:#8B5CF6;border:1px solid rgba(139,92,246,.3)" onclick="promoteEmp('${e.empId}')">⬆️ ترقية</button>`:"<button class=\"btn btn-dng btn-sm\" onclick=\"demoteEmp('\""+ e.empId +"\"')\">⬇️ تنزيل</button>"}</td></tr>`).join(''):'<tr><td colspan="6" class="no-data">لا يوجد موظفون</td></tr>';}  
+function renderShTbl(){
+  const tb=document.getElementById('shTb');
+  if(!tb||VR!=='مشرف')return;
+  const ms=U.shift;
+  const se=emps.filter(e=>e.shift===ms && String(e.empId)!==String(U.empId));
+  const shTitleEl=document.getElementById('shTitle');
+  if(shTitleEl) shTitleEl.textContent='موظفو '+(SHNAMES[ms]||ms);
+  const supLblEl=document.getElementById('supLbl');
+  if(supLblEl) supLblEl.textContent=SHNAMES[ms]||ms;
+  if(!se.length){
+    tb.innerHTML='<tr><td colspan="6" class="no-data">لا يوجد موظفون في ورديتك</td></tr>';
+    return;
+  }
+  const rows=[];
+  se.forEach(function(e){
+    const isSup=e.role==='مشرف';
+    const eid=String(e.empId);
+    const promBtn='<button class="btn btn-sm" style="background:rgba(139,92,246,.15);color:#8B5CF6;border:1px solid rgba(139,92,246,.3);border-radius:20px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif" onclick="promoteEmp(&quot;'+eid+'&quot;)">⬆️ ترقية</button>';
+    const demBtn='<button class="btn btn-dng btn-sm" onclick="demoteEmp(&quot;'+eid+'&quot;)">⬇️ تنزيل</button>';
+    const editBtn='<button class="btn btn-sec btn-sm" onclick="editShEmp(&quot;'+eid+'&quot;)">✏️</button>';
+    rows.push('<tr>'
+      +'<td><b>'+e.empId+'</b></td>'
+      +'<td>'+e.name+'</td>'
+      +'<td>'+e.phone+'</td>'
+      +'<td>'+stBadge(e.status)+'</td>'
+      +'<td>'+(isSup?'<span class="badge b-sup">⭐ مشرف</span>':'موظف')+'</td>'
+      +'<td>'+editBtn+' '+(isSup?demBtn:promBtn)+'</td>'
+      +'</tr>');
+  });
+  tb.innerHTML=rows.join('');
+}  
 function filterSh(){const q=document.getElementById('shSrch').value.toLowerCase();document.querySelectorAll('#shTb tr').forEach(r=>r.style.display=r.textContent.toLowerCase().includes(q)?'':'none');}
 
 // ADD/EDIT EMP
@@ -1156,29 +1273,68 @@ function showProf(){
 }
 function openEditProf(){
   let editU = U;
+  // Manager viewing as employee → edit employee record
   if(VR==='موظف' && U.role==='مدير' && U.mgrEmpId){
     const me = emps.find(e=>String(e.empId)===String(U.mgrEmpId));
     if(me) editU = me;
   }
-  document.getElementById('pNm').value=editU.name;
+  // Supervisor editing self → also get from emps for fresh data
+  if(U.role==='مشرف'){
+    const me=emps.find(e=>String(e.empId)===String(U.empId));
+    if(me) editU=me;
+  }
+  document.getElementById('pNm').value=editU.name||'';
   document.getElementById('pPh').value=editU.phone||'';
   document.getElementById('pDp').value=editU.dept||'';
+  const psh=document.getElementById('pSh');if(psh) psh.value=editU.shift||'أ';
+  // Show role field only for manager editing employees, not self
+  const prlWrap=document.getElementById('pRoleWrap');
+  const prl=document.getElementById('pRl');
+  const showRole = VR==='مدير' && editU.empId!==U.empId;
+  if(prlWrap) prlWrap.style.display=showRole?'block':'none';
+  if(prl && showRole) prl.value=editU.role||'موظف';
+  // Shift field: managers can change any, employee/supervisor can change own
+  const pshWrap=document.getElementById('pShiftWrap');
+  if(pshWrap) pshWrap.style.display='block'; // always show
   hideAl('mProfAl');openM('mProf');
 }
 async function saveProf(){
-  const nm=document.getElementById('pNm').value.trim(),ph=document.getElementById('pPh').value.trim(),dp=document.getElementById('pDp').value.trim();
+  const nm=document.getElementById('pNm').value.trim();
+  const ph=document.getElementById('pPh').value.trim();
+  const dp=document.getElementById('pDp').value.trim();
+  const sh=document.getElementById('pSh')?document.getElementById('pSh').value:'';
+  const rl=document.getElementById('pRl')?document.getElementById('pRl').value:null;
   if(!nm){showAl('mProfAl','d','الاسم مطلوب');return;}
-  // When manager views as employee, update employee record (not manager record)
+
+  // Determine target employee to update
   let targetEmp = U;
   const isMgrAsEmp = VR==='موظف' && U.role==='مدير' && U.mgrEmpId;
+  const isSup = U.role==='مشرف';
+
   if(isMgrAsEmp){
     const me = emps.find(e=>String(e.empId)===String(U.mgrEmpId));
     if(me) targetEmp = me;
+  } else if(isSup){
+    const me = emps.find(e=>String(e.empId)===String(U.empId));
+    if(me) targetEmp = me;
   }
-  const r=await gas('updateEmployee',{empId:targetEmp.empId,name:nm,phone:ph,dept:dp,shift:targetEmp.shift,role:targetEmp.role,status:targetEmp.status||'نشط',note:targetEmp.note||'',originalEmpId:targetEmp.empId});
+
+  const newShift = sh || targetEmp.shift;
+  const newRole = (rl && VR==='مدير') ? rl : targetEmp.role;
+
+  const r=await gas('updateEmployee',{
+    empId:targetEmp.empId,name:nm,phone:ph,dept:dp,
+    shift:newShift,role:newRole,
+    status:targetEmp.status||'نشط',note:targetEmp.note||'',
+    originalEmpId:targetEmp.empId
+  });
   if(!r.ok){showAl('mProfAl','d',r.error||'خطأ');return;}
-  // Update U only if editing own manager record
-  if(!isMgrAsEmp){U={...U,name:nm,phone:ph,dept:dp};sessionStorage.setItem('seU',JSON.stringify(U));}
+
+  // Update session if editing own record
+  if(!isMgrAsEmp){
+    U={...U,name:nm,phone:ph,dept:dp,shift:newShift};
+    sessionStorage.setItem('seU',JSON.stringify(U));
+  }
   closeM('mProf');toast('✅ تم تحديث البيانات','success');
   updateTop();await loadAll();showProf();
 }
@@ -1555,11 +1711,21 @@ function initFormTab(tab){
 }
 
 function fillSelect(id){
-  const sel=document.getElementById(id); if(!sel)return;
+  const sel=document.getElementById(id);
+  if(!sel) return;
   const cur=sel.value;
   sel.innerHTML='<option value="">-- اختر الموظف --</option>';
-  emps.forEach(e=>{const o=document.createElement('option');o.value=e.empId;o.textContent=e.name+' ('+e.empId+')';sel.appendChild(o);});
-  sel.value=cur;
+  // Supervisor sees only their shift employees (not themselves); manager sees all
+  const list = (VR==='مشرف')
+    ? emps.filter(function(e){ return e.shift===U.shift && String(e.empId)!==String(U.empId); })
+    : emps;
+  list.forEach(function(e){
+    const o=document.createElement('option');
+    o.value=e.empId;
+    o.textContent=e.name+' ('+e.empId+')';
+    sel.appendChild(o);
+  });
+  if(cur) sel.value=cur;
 }
 function fillEmpSelects(){ fillSelect('fLeaveEmp');fillSelect('fExtraEmp');fillSelect('fInfoEmp'); }
 
