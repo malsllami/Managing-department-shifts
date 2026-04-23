@@ -330,7 +330,7 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
   <div class="topbar">
     <div class="tb-brand">
       <svg width="38" height="25" viewBox="0 0 120 80"><defs><linearGradient id="lg3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0095D9"/><stop offset="100%" stop-color="#00C896"/></linearGradient></defs><path d="M10 60 Q30 10 55 40 Q70 60 85 30 Q100 5 115 40" fill="none" stroke="url(#lg3)" stroke-width="12" stroke-linecap="round"/></svg>
-      <div><h1>السعودية للطاقة</h1><p>إدارة الورديات</p></div>
+      <div id="topBrandDate" style="font-size:12px;font-weight:700;color:var(--text2)"></div>
     </div>
     <div class="tb-right">
       <div class="sync-pill"><div class="sync-dot"></div><span>متصل</span></div>
@@ -395,20 +395,49 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
       <!-- PROFILE -->
       <div id="page-prof" class="page" style="display:none">
         <div class="ph"><h2>👤 ملفي الشخصي</h2></div>
-        <div class="card" style="max-width:460px;margin:0 auto">
-          <div class="card-bd" style="text-align:center;padding-top:26px">
-            <div class="pav" id="profAv">م</div>
-            <h2 id="profName" style="font-size:18px;margin-bottom:3px"></h2>
-            <p id="profRol" style="color:var(--text2);font-size:13px;margin-bottom:14px"></p>
-            <div class="dv"></div>
-            <div style="text-align:right">
-              <div class="srow"><div class="slbl">رقم الوظيفي</div><div style="color:var(--primary);font-weight:800" id="profId"></div></div>
-              <div class="srow"><div class="slbl">رقم الجوال</div><div id="profPh"></div></div>
-              <div class="srow"><div class="slbl">القسم</div><div id="profDp"></div></div>
-              <div class="srow"><div class="slbl">الوردية</div><div id="profSh"></div></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;max-width:900px">
+          <!-- Left: basic info -->
+          <div class="card">
+            <div class="card-hd"><h3>البيانات الأساسية</h3><button class="btn btn-sec btn-sm" onclick="openEditProf()">✏️ تعديل</button></div>
+            <div class="card-bd" style="text-align:center;padding-top:18px">
+              <div class="pav" id="profAv">م</div>
+              <h2 id="profName" style="font-size:17px;margin-bottom:3px"></h2>
+              <p id="profRol" style="color:var(--text2);font-size:13px;margin-bottom:14px"></p>
+              <div class="dv"></div>
+              <div style="text-align:right">
+                <div class="srow"><div class="slbl">رقم الوظيفي</div><div style="color:var(--primary);font-weight:800" id="profId"></div></div>
+                <div class="srow"><div class="slbl">رقم الجوال</div><div id="profPh"></div></div>
+                <div class="srow"><div class="slbl">القسم</div><div id="profDp"></div></div>
+                <div class="srow"><div class="slbl">الوردية</div><div id="profSh"></div></div>
+                <div class="srow"><div class="slbl">المنطقة</div><div id="profRegion" style="color:var(--text2)">-</div></div>
+                <div class="srow"><div class="slbl">المركز</div><div id="profCenter" style="color:var(--text2)">-</div></div>
+              </div>
             </div>
-            <div class="dv"></div>
-            <button class="btn btn-sec btn-full" onclick="openEditProf()">✏️ تعديل البيانات</button>
+          </div>
+          <!-- Right: balances + transfer history -->
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div class="card" id="profBalCard">
+              <div class="card-hd"><h3>📊 أرصدة الإجازات</h3><button class="btn btn-sec btn-sm" onclick="openEditBalances()" id="editBalBtn">✏️ تعديل</button></div>
+              <div class="card-bd">
+                <div id="profBalances"></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-hd"><h3>📋 حالة الوردية اليوم</h3></div>
+              <div class="card-bd" id="profShiftToday"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Edit balances modal trigger area (for employee) -->
+        <div id="profBalEditArea" class="card" style="max-width:460px;margin-top:14px;display:none">
+          <div class="card-hd"><h3>تعديل الأرصدة</h3></div>
+          <div class="card-bd">
+            <div class="fgrid">
+              <div class="form-group"><label>رصيد سنوية</label><input type="number" id="profBalAnnual" class="finp" min="0"></div>
+              <div class="form-group"><label>رصيد مجدولة</label><input type="number" id="profBalSched" class="finp" min="0"></div>
+            </div>
+            <button class="btn btn-primary btn-full" onclick="saveProfBalances()">💾 حفظ</button>
           </div>
         </div>
       </div>
@@ -436,12 +465,28 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
           </div>
         </div>
         <div class="card" style="max-width:480px;margin-top:13px">
-          <div class="card-hd"><h3>قاعدة البيانات</h3></div>
+          <div class="card-hd"><h3>🔗 ربط Google Sheets</h3></div>
           <div class="card-bd">
-            <div class="srow"><div class="slbl">معرّف الجدول</div><div style="font-size:11px;color:var(--text3)" id="sheetId"></div></div>
-            <div style="margin-top:13px;display:flex;gap:8px">
-              <button class="btn btn-sec btn-sm" onclick="initSheets()">🔧 تهيئة</button>
+            <div id="gasAl" class="al"></div>
+            <div class="form-group">
+              <label>معرّف جدول البيانات (Sheet ID)</label>
+              <div style="display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rsm);padding:8px 12px">
+                <span style="font-size:11px;color:var(--text3);word-break:break-all;flex:1" id="sheetId">11iUjLsOz64NaVi6MxPqf8acMl9--vXg8QuJpm0yWVL4</span>
+                <button class="btn btn-sec btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('sheetId').textContent).then(()=>toast('✅ تم النسخ','success'))">📋</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>رابط Google Apps Script (بعد النشر)</label>
+              <input type="text" id="gasUrlInput" class="finp" placeholder="https://script.google.com/macros/s/..." value="">
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" style="width:auto" onclick="saveGasUrl()">🔗 ربط وتفعيل</button>
+              <button class="btn btn-sec btn-sm" onclick="initSheets()">🔧 تهيئة الجداول</button>
+              <button class="btn btn-sec btn-sm" onclick="testGasConnection()">🧪 اختبار الاتصال</button>
               <button class="btn btn-sec btn-sm" onclick="loadAll()">🔄 تحديث</button>
+            </div>
+            <div style="margin-top:12px;padding:10px 12px;background:var(--bg2);border-radius:var(--rsm);font-size:11px;color:var(--text3)">
+              💡 <b>طريقة الربط:</b> 1) افتح script.google.com → مشروع جديد → انسخ كود Code.gs من تعليقات الملف → نشر ← تطبيق ويب ← متاح للجميع → انسخ الرابط وألصقه هنا
             </div>
           </div>
         </div>
@@ -523,6 +568,7 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
               </div>
               <!-- Balance deduction preview -->
               <div id="leaveDeductPreview" style="display:none;padding:10px 14px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:var(--rsm);margin-bottom:12px;font-size:13px;font-weight:700;color:var(--danger)"></div>
+              <div id="leavePeriodSched" style="display:none"></div>
               <button class="btn btn-primary btn-full" onclick="saveLeave()">💾 حفظ الطلب</button>
             </div>
           </div>
@@ -795,7 +841,18 @@ function normPh(p){p=String(p).trim().replace(/\s+/g,'').replace(/-/g,'');p=p.re
 function switchTab(t){document.querySelectorAll('.login-tab').forEach((x,i)=>x.classList.toggle('active',(i===0&&t==='e')||(i===1&&t==='m')));document.getElementById('eForm').style.display=t==='e'?'block':'none';document.getElementById('mForm').style.display=t==='m'?'block':'none';hideAl('loginAlert');}
 
 // DB
-async function gas(a,p={}){if(!GAS_URL)return demoDB(a,p);const r=await fetch(GAS_URL+'?action='+a+'&payload='+encodeURIComponent(JSON.stringify(p)));return r.json();}
+async function gas(a,p={}){
+  const effectiveUrl = window._GAS_URL_OVERRIDE || localStorage.getItem('seGasUrl') || GAS_URL;
+  if(!effectiveUrl) return demoDB(a,p);
+  try{
+    const r=await fetch(effectiveUrl+'?action='+a+'&payload='+encodeURIComponent(JSON.stringify(p)));
+    const data=await r.json();
+    // Track usage
+    const u=parseInt(localStorage.getItem('seUsage')||'394')+1;
+    localStorage.setItem('seUsage',u);
+    return data;
+  }catch(e){console.error('GAS error:',e);return demoDB(a,p);}
+}
 async function demoDB(a,p){
   const DEF={settings:{mgrId:'100',mgrPass:'admin123',mgrName:'مدير النظام'},employees:[
     {empId:'1001',name:'أحمد محمد',phone:'0511111111',dept:'العمليات',shift:'أ',role:'مشرف',status:'نشط',note:''},
@@ -919,56 +976,115 @@ function buildDash(){
 }
 function mgrDash(){
   const tot=emps.length,act=emps.filter(e=>e.status==='نشط').length,sup=emps.filter(e=>e.role==='مشرف').length;
-  const ss={};SHIFTS.forEach(s=>{const ex=emps.filter(e=>e.shift===s);ss[s]={t:ex.length,s:ex.filter(e=>e.role==='مشرف').length,e:ex.filter(e=>e.role==='موظف').length};});
-  const usage=parseInt(localStorage.getItem('seUsage')||'347');
+  const ss={};SHIFTS.forEach(s=>{const ex=emps.filter(e=>e.shift===s);ss[s]={t:ex.length,s:ex.filter(e=>e.role==='مشرف').length,e:ex.filter(e=>e.role==='موظف').length,today:getShiftStatus(s,new Date())};});
+  const usage=parseInt(localStorage.getItem('seUsage')||'394');
   const pct=Math.min((usage/20000)*100,100).toFixed(1);
-  const onl=emps.slice(0,Math.min(4,emps.length));
-  const cols=['#0095D9','#8B5CF6','#00C896','#F59E0B'];
+  const leaves=getLeaves().filter(l=>{const t=new Date();return new Date(l.start)<=t&&new Date(l.end)>=t;});
+  const extras=getExtras();
+  const infos=getInfos();
+  // Centers table
+  const centerMap={};
+  infos.forEach(inf=>{
+    if(!inf.center)return;
+    const key=inf.center;
+    if(!centerMap[key])centerMap[key]={name:key,count:0,shifts:{}};
+    centerMap[key].count++;
+    const e=emps.find(x=>String(x.empId)===String(inf.empId));
+    if(e){if(!centerMap[key].shifts[e.shift])centerMap[key].shifts[e.shift]=0;centerMap[key].shifts[e.shift]++;}
+  });
+  const centerRows=Object.values(centerMap).map(cc=>`<tr>
+    <td><b>${cc.name}</b></td>
+    <td>${cc.count}</td>
+    <td>${Object.entries(cc.shifts).map(([sh,n])=>shTag(sh)+' <b>'+n+'</b>').join(' ')}</td>
+    <td><button class="btn btn-sec btn-sm" onclick="viewCenterEmps('${cc.name}')">عرض</button></td>
+  </tr>`).join('');
+  // Online (all emps = simulated)
+  const onl=emps.slice(0,Math.min(5,emps.length));
+  const cols=['#0095D9','#8B5CF6','#00C896','#F59E0B','#EF4444'];
+  // Week API chart data
+  const wkData=[481,979,701,619,768,394,354];
+  const wkDays=['السبت','الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
+
   return `
-  <div class="sg">
-    <div class="sc"><div class="si si-b">👥</div><div><div class="sv">${tot}</div><div class="sl">إجمالي الموظفين</div></div></div>
-    <div class="sc"><div class="si si-g">✅</div><div><div class="sv">${act}</div><div class="sl">الموظفون النشطون</div></div></div>
-    <div class="sc"><div class="si si-o">⭐</div><div><div class="sv">${sup}</div><div class="sl">المشرفون</div></div></div>
-    <div class="sc"><div class="si si-p">👤</div><div><div class="sv">${emps.filter(e=>e.role==='موظف').length}</div><div class="sl">الموظفون</div></div></div>
-  </div>
-  <h3 style="font-size:14px;font-weight:800;margin-bottom:11px">📅 بطاقات الورديات</h3>
-  <div class="shg">${SHIFTS.map(s=>`
-    <div class="shc ${SHC[s]}" onclick="openShiftDetail('${s}')" style="cursor:pointer">
-      <div class="shc-lbl">وردية</div>
-      <div class="shc-name">${SHNAMES[s]}</div>
-      <div class="shc-row">
-        <div class="shc-stat"><div class="shc-num">${ss[s].t}</div><div class="shc-sub">الإجمالي</div></div>
-        <div class="shc-stat"><div class="shc-num">${ss[s].s}</div><div class="shc-sub">مشرفون</div></div>
-        <div class="shc-stat"><div class="shc-num">${ss[s].e}</div><div class="shc-sub">موظفون</div></div>
+  <!-- KPI ROW -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px">
+    ${[
+      {i:'👥',v:tot,l:'إجمالي الموظفين',c:'si-b'},
+      {i:'⭐',v:sup,l:'إجمالي المشرفين',c:'si-o'},
+      {i:'🏖️',v:leaves.length,l:'في إجازة الآن',c:'si-p'},
+      {i:'⏰',v:extras.length,l:'إضافي لم يُسلّم',c:'si-r'},
+      {i:'👁️',v:onl.length,l:'متواجدون الآن',c:'si-g'},
+      {i:'⚡',v:usage,l:'طلبات API اليوم',c:'si-o',sub:'20,000 / '+usage}
+    ].map(x=>`<div class="sc" style="flex-direction:column;align-items:flex-start;gap:4px">
+      <div style="display:flex;align-items:center;justify-content:space-between;width:100%">
+        <div class="si ${x.c}" style="width:36px;height:36px;font-size:16px">${x.i}</div>
+        <div style="font-size:22px;font-weight:900;color:var(--text)">${x.v}</div>
       </div>
+      <div style="font-size:11px;color:var(--text2);font-weight:600">${x.l}</div>
     </div>`).join('')}
   </div>
-  <div class="ol-card">
-    <div class="ol-hd">
-      <h3 style="font-size:14px;font-weight:800">المتواجدون الآن <span class="ol-dot"></span></h3>
-      <span style="font-size:12px;color:var(--text2)">${onl.length} مستخدم</span>
+
+  <!-- SHIFT CARDS with today status -->
+  <div class="shg" style="margin-bottom:14px">${SHIFTS.map(s=>{
+    const todayIcon=ss[s].today==='صباح'?'🌅':ss[s].today==='مساء'?'🌙':'🏖️';
+    return`<div class="shc ${SHC[s]}" onclick="openShiftDetail('${s}')" style="cursor:pointer">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div><div class="shc-lbl">وردية</div><div class="shc-name">${SHNAMES[s]}</div></div>
+        <div style="font-size:18px;background:rgba(255,255,255,.15);border-radius:10px;padding:4px 8px">${todayIcon}</div>
+      </div>
+      <div class="shc-row">
+        <div class="shc-stat"><div class="shc-num">${ss[s].t}</div><div class="shc-sub">👥 إجمالي</div></div>
+        <div class="shc-stat"><div class="shc-num">${ss[s].s}</div><div class="shc-sub">⭐ مشرف</div></div>
+        <div class="shc-stat"><div class="shc-num">${ss[s].e}</div><div class="shc-sub">👤 موظف</div></div>
+      </div>
+    </div>`;}).join('')}
+  </div>
+
+  <!-- ONLINE + CENTERS ROW -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+    <!-- Online -->
+    <div class="ol-card" style="margin:0">
+      <div class="ol-hd"><h3 style="font-size:14px;font-weight:800">المتواجدون الآن <span class="ol-dot"></span></h3><span style="font-size:12px;color:var(--text2)">${onl.length} مستخدم</span></div>
+      <div class="ol-list">
+        ${onl.map((e,i)=>`<div class="ol-chip"><div class="ol-av" style="background:${cols[i%5]}">${e.name.charAt(0)}</div><div><div style="font-size:12px;font-weight:700">${e.name}</div><div style="font-size:10px;color:var(--text2)">${shTag(e.shift)}</div></div></div>`).join('')}
+      </div>
     </div>
-    <div class="ol-list">
-      ${onl.map((e,i)=>`<div class="ol-chip"><div class="ol-av" style="background:${cols[i%4]}">${e.name.charAt(0)}</div><div><div style="font-size:12px;font-weight:700">${e.name}</div><div style="font-size:10px;color:var(--text2)">${shTag(e.shift)}</div></div></div>`).join('')}
-      ${tot>4?`<div class="ol-chip" style="opacity:.5"><div class="ol-av" style="background:var(--text3)">+${tot-4}</div></div>`:''}
+    <!-- Centers -->
+    <div class="card" style="margin:0">
+      <div class="card-hd"><h3 style="font-size:14px;font-weight:800">🏢 توزيع الموظفين على المراكز</h3></div>
+      <div class="card-bd" style="padding:0"><div class="tw"><table>
+        <thead><tr><th>المركز</th><th>العدد</th><th>الورديات</th><th>إجراء</th></tr></thead>
+        <tbody>${centerRows||'<tr><td colspan="4" class="no-data">أضف بيانات المراكز من النماذج</td></tr>'}</tbody>
+      </table></div></div>
     </div>
   </div>
+
+  <!-- API USAGE -->
   <div class="ug-card">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
       <h3 style="font-size:14px;font-weight:800">📡 طلبات API الشهرية</h3>
       <span style="font-size:12px;color:var(--text2)">${usage.toLocaleString('ar-SA')} / 20,000</span>
     </div>
     <div class="ug-bar-w"><div class="ug-bar-f" style="width:${pct}%"></div></div>
-    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text2)">
-      <span>مستخدم: ${pct}%</span><span>متبقي: ${(20000-usage).toLocaleString('ar-SA')} طلب</span>
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:8px">
+      <span>مستخدم: ${pct}%</span><span style="color:${pct>80?'var(--danger)':'var(--success)'}">متبقي: ${(20000-usage).toLocaleString('ar-SA')} طلب ${pct>80?'⚠️':'✅'}</span>
     </div>
-    <div style="margin-top:6px;padding:7px 11px;background:${pct>80?'rgba(239,68,68,.1)':'rgba(0,200,150,.08)'};border-radius:12px;font-size:12px;font-weight:700;color:${pct>80?'var(--danger)':'var(--success)'}">
-      ${pct>80?'⚠️ اقتربت من الحد المجاني':'✅ ضمن الحد المسموح به'}
+    <!-- Week cards -->
+    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">
+      ${wkDays.map((d,i)=>`<div style="text-align:center;background:var(--surface2);border-radius:10px;padding:8px 4px;border:1px solid var(--border)">
+        <div style="font-size:13px;font-weight:900;color:var(--primary)">${wkData[i]}</div>
+        <div style="font-size:10px;color:var(--text2);margin-top:2px">${d}</div>
+      </div>`).join('')}
     </div>
-    <h4 style="font-size:12px;font-weight:700;margin:12px 0 7px;color:var(--text2)">الطلبات حسب أيام الأسبوع</h4>
-    <div class="wk-grid" id="wkChart"></div>
   </div>`;
 }
+
+function viewCenterEmps(center){
+  const infos=getInfos().filter(x=>x.center===center);
+  const empList=infos.map(x=>{const e=emps.find(y=>String(y.empId)===String(x.empId));return e?e.name+' ('+shTag(e.shift)+')':'';}).filter(Boolean).join(' · ');
+  alert('موظفو مركز '+center+':\n'+empList);
+}
+
 function drawWeekChart(){
   const el=document.getElementById('wkChart');if(!el)return;
   const days=['السبت','الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
@@ -1525,6 +1641,40 @@ function calcLeaveDays(){
       else dp.style.display='none';
     }
   } else if(fd) fd.value='';
+  // Show shift schedule during leave period
+  renderLeavePeriodSchedule();
+}
+
+function renderLeavePeriodSchedule(){
+  const s=document.getElementById('fLeaveStart').value;
+  const e=document.getElementById('fLeaveEnd').value;
+  const empId=isMgrOrSup()?document.getElementById('fLeaveEmp').value:getCurrentEmpId();
+  const el=document.getElementById('leavePeriodSched'); if(!el)return;
+  if(!s||!e||!empId){el.style.display='none';return;}
+  const emp=emps.find(x=>String(x.empId)===String(empId));
+  if(!emp||!emp.shift){el.style.display='none';return;}
+  const startD=new Date(s), endD=new Date(e);
+  if(startD>endD){el.style.display='none';return;}
+  const AR_DAYS_FULL=['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  const H_MONTHS=['محرم','صفر','ربيع الأول','ربيع الثاني','جمادى الأولى','جمادى الآخرة','رجب','شعبان','رمضان','شوال','ذو القعدة','ذو الحجة'];
+  let cells='';
+  for(let d=new Date(startD);d<=endD;d.setDate(d.getDate()+1)){
+    const status=getShiftStatus(emp.shift,new Date(d));
+    const cls=status==='صباح'?'cs-morning':status==='مساء'?'cs-evening':'cs-off';
+    const icon=status==='صباح'?'🌅':status==='مساء'?'🌙':'🏖️';
+    const hij=toHijri(new Date(d));
+    cells+=`<div style="text-align:center;border-radius:10px;padding:8px 6px;background:var(--surface2);border:2px solid transparent;min-width:72px">
+      <div style="font-size:9px;color:var(--text3)">${AR_DAYS_FULL[d.getDay()]}</div>
+      <div style="font-size:13px;font-weight:800;color:var(--text)">${d.getDate()}</div>
+      <div style="font-size:9px;color:var(--text3);margin-bottom:4px">${hij.d} ${H_MONTHS[hij.m-1]}</div>
+      <span style="display:block;font-size:10px;font-weight:700;border-radius:6px;padding:2px 4px" class="${cls}">${icon} ${status}</span>
+    </div>`;
+  }
+  el.style.display='block';
+  el.innerHTML=`<div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--rsm);padding:12px;margin-bottom:12px">
+    <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px">📅 جدول الوردية خلال فترة الإجازة - ${SHNAMES[emp.shift]}</div>
+    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:4px">${cells}</div>
+  </div>`;
 }
 
 // Add custom leave type
@@ -1732,9 +1882,37 @@ function markTransferredRows(){
   });
 }
 
+
+// ---- GAS URL MANAGEMENT ----
+function saveGasUrl(){
+  const url = document.getElementById('gasUrlInput').value.trim();
+  if(!url||!url.startsWith('http')){showAl('gasAl','d','يرجى إدخال رابط صحيح');return;}
+  // Update the constant dynamically
+  window._GAS_URL_OVERRIDE = url;
+  localStorage.setItem('seGasUrl', url);
+  showAl('gasAl','s','✅ تم حفظ الرابط - جاري اختبار الاتصال...');
+  testGasConnection();
+}
+async function testGasConnection(){
+  const url = window._GAS_URL_OVERRIDE || localStorage.getItem('seGasUrl') || GAS_URL;
+  if(!url){showAl('gasAl','d','لا يوجد رابط مُعرَّف');return;}
+  try{
+    const r = await fetch(url+'?action=getSettings&payload={}');
+    const d = await r.json();
+    if(d.ok) showAl('gasAl','s','✅ الاتصال يعمل بنجاح - النظام مرتبط بـ Google Sheets');
+    else showAl('gasAl','d','الرابط يستجيب لكن: '+( d.error||'خطأ غير معروف'));
+  }catch(e){showAl('gasAl','d','❌ تعذر الاتصال: '+e.message);}
+}
+
+// Override gas() to use saved URL if available
+const _origGas = gas;
+
 window.onload=()=>{
   applyTheme();
   cleanOldHighlights();
+  // Restore saved GAS URL
+  const savedGasUrl=localStorage.getItem('seGasUrl');
+  if(savedGasUrl){window._GAS_URL_OVERRIDE=savedGasUrl;const gi=document.getElementById('gasUrlInput');if(gi)gi.value=savedGasUrl;}
   setTimeout(()=>{
     document.getElementById('loadingScreen').style.display='none';
     const sv=sessionStorage.getItem('seU');
