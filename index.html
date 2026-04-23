@@ -127,6 +127,7 @@
     border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(0,149,217,0.1);
   }
+  .input-wrap input[style]:focus { border-color: var(--primary) !important; box-shadow: 0 0 0 3px rgba(0,149,217,0.1) !important; }
   .input-wrap .icon {
     position:absolute; left:12px; top:50%; transform:translateY(-50%);
     color:var(--text3); font-size:16px; pointer-events:none;
@@ -136,13 +137,14 @@
   .eye-btn {
     position:absolute; left:12px; top:50%; transform:translateY(-50%);
     background:none; border:none; cursor:pointer;
-    color:var(--text3); padding:4px; border-radius:8px;
+    color:var(--text3); padding:6px; border-radius:8px;
     display:flex; align-items:center; justify-content:center;
-    transition:all 0.2s;
+    transition:all 0.2s; line-height:0;
   }
-  .eye-btn:hover { color:var(--primary); background:rgba(0,149,217,0.1); }
-  .eye-icon { width:18px; height:18px; }
-  .eye-icon.hidden-eye .ball { display:none; }
+  .eye-btn:hover { color:var(--primary); }
+  .eye-icon { width:18px; height:18px; display:block; }
+  .pass-icon { position:absolute; right:14px; top:50%; transform:translateY(-50%); color:var(--text3); line-height:0; pointer-events:none; }
+  .pass-icon svg { width:17px; height:17px; display:block; }
 
   .input-wrap input.has-icon { padding-left:40px; }
 
@@ -537,16 +539,22 @@
     <div id="employeeLoginForm">
       <div class="form-group">
         <label>رقم الوظيفي <span>*</span></label>
-        <div class="input-wrap">
-          <span class="icon">🪪</span>
-          <input type="text" id="loginEmpId" class="has-icon" placeholder="أدخل رقم الوظيفي" oninput="normalizeArabicNum(this)">
+        <div class="input-wrap" style="position:relative">
+          <span class="pass-icon" style="right:14px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M16 12H8M12 8v8"/></svg>
+          </span>
+          <input type="text" id="loginEmpId" placeholder="أدخل رقم الوظيفي" oninput="normalizeArabicNum(this)"
+            style="width:100%;padding:12px 44px 12px 16px;background:var(--dark2);border:1px solid var(--border);border-radius:16px;color:var(--text);font-size:14px;font-family:Cairo,sans-serif;outline:none;transition:all 0.3s">
         </div>
       </div>
       <div class="form-group">
         <label>كلمة المرور <span>*</span></label>
-        <div class="input-wrap">
-          <span class="icon">🔒</span>
-          <input type="password" id="loginEmpPass" class="has-icon" placeholder="أدخل كلمة المرور" style="padding-left:80px">
+        <div class="input-wrap" style="position:relative">
+          <span class="pass-icon" style="right:14px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </span>
+          <input type="password" id="loginEmpPass" placeholder="أدخل كلمة المرور"
+            style="width:100%;padding:12px 44px 12px 44px;background:var(--dark2);border:1px solid var(--border);border-radius:16px;color:var(--text);font-size:14px;font-family:Cairo,sans-serif;outline:none;transition:all 0.3s">
           <button type="button" class="eye-btn" onclick="togglePass('loginEmpPass',this)" title="إظهار/إخفاء">
             <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           </button>
@@ -560,16 +568,22 @@
     <div id="managerLoginForm" style="display:none">
       <div class="form-group">
         <label>رقم دخول المدير <span>*</span></label>
-        <div class="input-wrap">
-          <span class="icon">👑</span>
-          <input type="text" id="loginMgrId" class="has-icon" placeholder="أدخل رقم المدير" oninput="normalizeArabicNum(this)">
+        <div class="input-wrap" style="position:relative">
+          <span class="pass-icon" style="right:14px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2"><path d="M3 18l3-9 6 4 6-4 3 9H3z"/><circle cx="12" cy="5" r="2" fill="var(--warning)" stroke="none"/></svg>
+          </span>
+          <input type="text" id="loginMgrId" placeholder="أدخل رقم المدير" oninput="normalizeArabicNum(this)"
+            style="width:100%;padding:12px 44px 12px 16px;background:var(--dark2);border:1px solid var(--border);border-radius:16px;color:var(--text);font-size:14px;font-family:Cairo,sans-serif;outline:none;transition:all 0.3s">
         </div>
       </div>
       <div class="form-group">
         <label>كلمة المرور <span>*</span></label>
-        <div class="input-wrap">
-          <span class="icon">🔒</span>
-          <input type="password" id="loginMgrPass" class="has-icon" placeholder="أدخل كلمة المرور" style="padding-left:80px">
+        <div class="input-wrap" style="position:relative">
+          <span class="pass-icon" style="right:14px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </span>
+          <input type="password" id="loginMgrPass" placeholder="أدخل كلمة المرور"
+            style="width:100%;padding:12px 44px 12px 44px;background:var(--dark2);border:1px solid var(--border);border-radius:16px;color:var(--text);font-size:14px;font-family:Cairo,sans-serif;outline:none;transition:all 0.3s">
           <button type="button" class="eye-btn" onclick="togglePass('loginMgrPass',this)" title="إظهار/إخفاء">
             <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           </button>
