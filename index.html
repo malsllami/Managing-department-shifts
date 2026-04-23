@@ -514,7 +514,8 @@ async function loginMgr(){
   const r=await gas('getSettings');
   if(!r.ok){showAl('loginAlert','d','خطأ في الاتصال');setLd('mBtn',false);return;}
   if(String(id)!==String(r.data.mgrId)||pw!==r.data.mgrPass){showAl('loginAlert','d','بيانات المدير غير صحيحة');setLd('mBtn',false);return;}
-  U={empId:r.data.mgrId,name:r.data.mgrName||'مدير النظام',role:'مدير',viewRole:'مدير',phone:'',dept:'الإدارة',shift:'-'};
+  const savedMgrEmpId = localStorage.getItem('seMgrEmpId')||'';
+  U={empId:r.data.mgrId,name:r.data.mgrName||'مدير النظام',role:'مدير',viewRole:'مدير',phone:'',dept:'الإدارة',shift:'-',mgrEmpId:savedMgrEmpId};
   VR='مدير';sessionStorage.setItem('seU',JSON.stringify(U));
   await loadAll();setLd('mBtn',false);startApp();
 }
@@ -523,14 +524,26 @@ async function loginMgr(){
 function startApp(){document.getElementById('loginPage').classList.remove('active');document.getElementById('mainApp').classList.add('active');buildSidebar();updateTop();buildDash();showPage('db');if(VR!=='موظف')loadAll();}
 function buildSidebar(){
   const r=VR;
-  document.getElementById('nav-emp').style.display=r==='مدير'?'flex':'none';
-  document.getElementById('nav-sh').style.display=r==='مشرف'?'flex':'none';
-  document.getElementById('nav-set').style.display=r==='مدير'?'flex':'none';
-  document.getElementById('sSec').style.display=r==='مدير'?'block':'none';
+  // Base role is the ORIGINAL role (مدير/مشرف/موظف), not the view role
+  const baseRole = U.role;
+  const hasMgrEmp = baseRole==='مدير' && U.mgrEmpId;
+  const isSup = baseRole==='مشرف';
+
+  // Sidebar nav: always based on original role, BUT if manager views as employee hide manager items
+  if(baseRole==='مدير'){
+    document.getElementById('nav-emp').style.display=r==='مدير'?'flex':'none';
+    document.getElementById('nav-set').style.display=r==='مدير'?'flex':'none';
+    document.getElementById('sSec').style.display=r==='مدير'?'block':'none';
+    document.getElementById('nav-sh').style.display='none';
+  } else {
+    document.getElementById('nav-emp').style.display='none';
+    document.getElementById('nav-sh').style.display=r==='مشرف'?'flex':'none';
+    document.getElementById('nav-set').style.display='none';
+    document.getElementById('sSec').style.display='none';
+  }
+
+  // Role switch bar
   const rsb=document.getElementById('rsBar');
-  // Show role bar for supervisor OR manager-with-employee-account
-  const hasMgrEmp = U.role==='مدير' && U.mgrEmpId;
-  const isSup = U.role==='مشرف';
   rsb.style.display=(isSup||hasMgrEmp)?'flex':'none';
   const rsM=document.getElementById('rsM'),rsS=document.getElementById('rsS'),rsE=document.getElementById('rsE');
   if(hasMgrEmp){
@@ -558,7 +571,7 @@ function updateTop(){
 
 
 async function loadAll(){const r=await gas('getEmployees');if(r.ok)emps=r.data;renderEmpTbl();renderShTbl();buildDash();if(VR==='مدير')loadSets();}
-async function loadSets(){const r=await gas('getSettings');if(r.ok){const si=document.getElementById('sMId');if(si)si.value=r.data.mgrId||'';const sn=document.getElementById('sMNm');if(sn)sn.value=r.data.mgrName||'';const sd=document.getElementById('sheetId');if(sd)sd.textContent=SHEET_ID;const me=document.getElementById('sMgrEmpId');if(me&&U.mgrEmpId)me.value=U.mgrEmpId;}}
+async function loadSets(){const r=await gas('getSettings');if(r.ok){const si=document.getElementById('sMId');if(si)si.value=r.data.mgrId||'';const sn=document.getElementById('sMNm');if(sn)sn.value=r.data.mgrName||'';const sd=document.getElementById('sheetId');if(sd)sd.textContent=SHEET_ID;const me=document.getElementById('sMgrEmpId');if(me){const saved=U.mgrEmpId||localStorage.getItem('seMgrEmpId')||'';me.value=saved;if(saved&&!U.mgrEmpId){U.mgrEmpId=saved;sessionStorage.setItem('seU',JSON.stringify(U));}}}}
 
 // DASHBOARD
 function buildDash(){
@@ -660,9 +673,49 @@ async function saveEmp(){
 async function delEmp(i){const e=emps[i];if(!e)return;if(!confirm('حذف: '+e.name+'؟'))return;const r=await gas('deleteEmployee',{empId:e.empId});if(r.ok){toast('🗑️ تم الحذف','error');await loadAll();}else toast('خطأ: '+(r.error||''),'error');}
 
 // PROFILE
-function showProf(){const u=U;document.getElementById('profAv').textContent=u.name.charAt(0);document.getElementById('profName').textContent=u.name;document.getElementById('profRol').textContent=VR==='مدير'?'👑 مدير النظام':VR==='مشرف'?'⭐ مشرف':'👤 موظف';document.getElementById('profId').textContent=u.empId;document.getElementById('profPh').textContent=u.phone||'-';document.getElementById('profDp').textContent=u.dept||'-';document.getElementById('profSh').textContent=SHNAMES[u.shift]||u.shift||'-';}
-function openEditProf(){document.getElementById('pNm').value=U.name;document.getElementById('pPh').value=U.phone||'';document.getElementById('pDp').value=U.dept||'';hideAl('mProfAl');openM('mProf');}
-async function saveProf(){const nm=document.getElementById('pNm').value.trim(),ph=document.getElementById('pPh').value.trim(),dp=document.getElementById('pDp').value.trim();if(!nm){showAl('mProfAl','d','الاسم مطلوب');return;}const r=await gas('updateEmployee',{empId:U.empId,name:nm,phone:ph,dept:dp,shift:U.shift,role:U.role,status:U.status||'نشط',note:U.note||'',originalEmpId:U.empId});if(!r.ok){showAl('mProfAl','d',r.error||'خطأ');return;}U={...U,name:nm,phone:ph,dept:dp};sessionStorage.setItem('seU',JSON.stringify(U));closeM('mProf');toast('✅ تم تحديث البيانات','success');updateTop();showProf();await loadAll();}
+function showProf(){
+  // When manager is viewing as employee, show EMPLOYEE data
+  let dispU = U;
+  if(VR==='موظف' && U.role==='مدير' && U.mgrEmpId){
+    const me = emps.find(e=>String(e.empId)===String(U.mgrEmpId));
+    if(me) dispU = me;
+  }
+  document.getElementById('profAv').textContent=dispU.name.charAt(0);
+  document.getElementById('profName').textContent=dispU.name;
+  document.getElementById('profRol').textContent=VR==='مدير'?'👑 مدير النظام':VR==='مشرف'?'⭐ مشرف':'👤 موظف';
+  document.getElementById('profId').textContent=dispU.empId;
+  document.getElementById('profPh').textContent=dispU.phone||'-';
+  document.getElementById('profDp').textContent=dispU.dept||'-';
+  document.getElementById('profSh').textContent=SHNAMES[dispU.shift]||dispU.shift||'-';
+}
+function openEditProf(){
+  let editU = U;
+  if(VR==='موظف' && U.role==='مدير' && U.mgrEmpId){
+    const me = emps.find(e=>String(e.empId)===String(U.mgrEmpId));
+    if(me) editU = me;
+  }
+  document.getElementById('pNm').value=editU.name;
+  document.getElementById('pPh').value=editU.phone||'';
+  document.getElementById('pDp').value=editU.dept||'';
+  hideAl('mProfAl');openM('mProf');
+}
+async function saveProf(){
+  const nm=document.getElementById('pNm').value.trim(),ph=document.getElementById('pPh').value.trim(),dp=document.getElementById('pDp').value.trim();
+  if(!nm){showAl('mProfAl','d','الاسم مطلوب');return;}
+  // When manager views as employee, update employee record (not manager record)
+  let targetEmp = U;
+  const isMgrAsEmp = VR==='موظف' && U.role==='مدير' && U.mgrEmpId;
+  if(isMgrAsEmp){
+    const me = emps.find(e=>String(e.empId)===String(U.mgrEmpId));
+    if(me) targetEmp = me;
+  }
+  const r=await gas('updateEmployee',{empId:targetEmp.empId,name:nm,phone:ph,dept:dp,shift:targetEmp.shift,role:targetEmp.role,status:targetEmp.status||'نشط',note:targetEmp.note||'',originalEmpId:targetEmp.empId});
+  if(!r.ok){showAl('mProfAl','d',r.error||'خطأ');return;}
+  // Update U only if editing own manager record
+  if(!isMgrAsEmp){U={...U,name:nm,phone:ph,dept:dp};sessionStorage.setItem('seU',JSON.stringify(U));}
+  closeM('mProf');toast('✅ تم تحديث البيانات','success');
+  updateTop();await loadAll();showProf();
+}
 
 // SETTINGS
 async function saveSets(){const id=document.getElementById('sMId').value.trim(),pw=document.getElementById('sMPw').value.trim(),nm=document.getElementById('sMNm').value.trim();if(!id){showAl('setAl','d','رقم دخول المدير مطلوب');return;}const pay={mgrId:id,mgrName:nm};if(pw)pay.mgrPass=pw;const r=await gas('saveSettings',pay);if(r.ok){showAl('setAl','s','✅ تم حفظ الإعدادات');if(nm){U.name=nm;updateTop();}}else showAl('setAl','d',r.error||'خطأ');}
@@ -725,7 +778,9 @@ function saveMgrEmpLink(){
   const e=emps.find(x=>String(x.empId)===String(eid));
   if(!e){showAl('mgrEmpAl','d','رقم الوظيفي غير موجود في قائمة الموظفين');return;}
   U.mgrEmpId=eid;
+  // Save in BOTH session AND local storage so it persists after logout
   sessionStorage.setItem('seU',JSON.stringify(U));
+  localStorage.setItem('seMgrEmpId', eid);
   showAl('mgrEmpAl','s','✅ تم ربط الحساب - يمكنك التنقل الآن');
   buildSidebar();
 }
