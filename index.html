@@ -1627,7 +1627,7 @@ async function empDashAsync(){
           <td><b>${x.hrs}</b> ساعة</td>
           <td>${x.type}</td>
           <td><button class="btn btn-sm" style="border-radius:var(--rp);padding:4px 8px;font-size:11px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;background:${x.received?'rgba(0,200,150,.15)':'rgba(239,68,68,.1)'};color:${x.received?'var(--success)':'var(--danger)'};border:1px solid ${x.received?'rgba(0,200,150,.3)':'rgba(239,68,68,.25)'}" onclick="toggleExtraReceived('${x.id}',this)">${x.received?'✅ مُستلم':'⏳ لم يُستلم'}</button></td>
-          <td><button class="btn btn-sec btn-sm" style="padding:3px 7px;font-size:11px" onclick="showPage('forms');switchFormTab('extra');editExtraRow('${x.id}')">✏️</button></td>
+          <td><button class="btn btn-sec btn-sm" style="padding:3px 7px;font-size:11px" onclick="switchFormTab('extra');editExtraRow('${x.id}')">✏️</button></td>
         </tr>`).join(''):'<tr><td colspan="5" class="no-data">لا يوجد سجلات</td></tr>'}</tbody>
       </table></div>
       <div style="padding:10px 16px"><button class="btn btn-primary btn-sm" style="width:auto" onclick="showPage('forms');switchFormTab('extra')">➕ إضافة ساعات</button></div>
@@ -2540,7 +2540,7 @@ async function renderLeaveTable(){
     </tr>`;
   }).join(''):'<tr><td colspan="7" class="no-data">لا يوجد طلبات</td></tr>';
 }
-async function deleteLeave(id){if(!confirm('حذف طلب الإجازة؟'))return;
+async function deleteLeave(id){if(!confirm('هل تريد حذف طلب الإجازة؟'))return;
   const gasUrl4=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
   if(gasUrl4){const r=await gas('اجازة_حذف',{id:String(id)});if(!r.ok){toast('خطأ: '+(r.error||''),'error');return;}}
   else{saveLeaves(getLeaves().filter(l=>l.id!==id));}
@@ -2563,7 +2563,7 @@ function saveExtra(){
   const type=document.getElementById('fExtraType').value;
   const note=document.getElementById('fExtraNote').value.trim();
   const received=false;
-  const isEditing=!!_editingExtraId;
+  const isEditing=false; // editing now done inline via saveExtraEdit
   if(!empId||!date||!hrsRaw){showAl('extraAl','d','يرجى ملء الحقول المطلوبة');return;}
   const hrs=parseFloat(hrsRaw.replace(',','.'));
   if(isNaN(hrs)||hrs<=0){showAl('extraAl','d','يرجى إدخال عدد ساعات صحيح (مثال: 3 أو 1.5 أو 0.5)');return;}
@@ -2603,7 +2603,7 @@ async function renderExtraTable(){
   tb.innerHTML=arr.length?arr.map(x=>{
     const rec=x.received||false;
     const recBtn=`<button class="btn btn-sm" style="border-radius:var(--rp);padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;background:${rec?'rgba(0,200,150,.15)':'rgba(239,68,68,.1)'};color:${rec?'var(--success)':'var(--danger)'};border:1px solid ${rec?'rgba(0,200,150,.3)':'rgba(239,68,68,.25)'}" onclick="toggleExtraReceived('${x.id}',this)">${rec?'✅ مُستلم':'⏳ لم يُستلم'}</button>`;
-    return `<tr>
+    return `<tr data-eid="${x.id}">
       <td><b>${x.empName}</b></td>
       <td>${fmtAr(x.date)}</td>
       <td><b>${x.hrs}</b> ساعة</td>
@@ -2611,8 +2611,8 @@ async function renderExtraTable(){
       <td>${recBtn}</td>
       <td>${x.note||'-'}</td>
       <td style="white-space:nowrap">
-        <button class="btn btn-sec btn-sm" onclick="editExtraRow('${x.id}')" title="تعديل">✏️</button>
-        <button class="btn btn-dng btn-sm" onclick="deleteExtra('${x.id}')" style="margin-right:2px">🗑️</button>
+        <button class="btn btn-sec btn-sm" style="padding:5px 9px" onclick="editExtraRow('${x.id}')" title="تعديل">✏️</button>
+        <button class="btn btn-dng btn-sm" style="margin-right:2px" onclick="if(confirm('حذف هذا السجل؟'))deleteExtra('${x.id}')">🗑️</button>
       </td>
     </tr>`;
   }).join(''):'<tr><td colspan="7" class="no-data">لا يوجد سجلات</td></tr>';
@@ -3163,23 +3163,72 @@ async function syncComprehensiveSheet(){
 
 
 function editExtraRow(id){
+  // Close any open edit rows
+  document.querySelectorAll('[id^="xedit_"]').forEach(el=>el.remove());
   const arr=getExtras();
   const x=arr.find(i=>String(i.id)===String(id));
   if(!x) return;
-  // Fill form with existing data
-  if(isMgrOrSup()) { const sel=document.getElementById('fExtraEmp'); if(sel) sel.value=x.empId; }
-  const fDate=document.getElementById('fExtraDate'); if(fDate) fDate.value=x.date?x.date.split('T')[0]:x.date;
-  const fHrs=document.getElementById('fExtraHrs'); if(fHrs) fHrs.value=x.hrs;
-  const fType=document.getElementById('fExtraType'); if(fType) fType.value=x.type;
-  const fNote=document.getElementById('fExtraNote'); if(fNote) fNote.value=x.note||'';
-  // Delete old entry so save creates new
-  deleteExtra(id);
-  // Scroll to form
-  const sec=document.getElementById('fsec-extra'); if(sec) sec.scrollIntoView({behavior:'smooth'});
-  toast('✏️ تم تحميل البيانات - عدّل ثم احفظ','info');
+
+  // Find the row in the table
+  const allRows=document.querySelectorAll('#extraTb tr[data-eid]');
+  let tRow=null;
+  allRows.forEach(r=>{ if(r.getAttribute('data-eid')===String(id)) tRow=r; });
+  if(!tRow){
+    // fallback: try by index - find row with this id text
+    document.querySelectorAll('#extraTb tr').forEach(r=>{
+      if(r.innerHTML.includes("'"+id+"'") || r.innerHTML.includes('"'+id+'"')) tRow=r;
+    });
+  }
+  if(!tRow) return;
+
+  const dateVal=fmtISO(x.date);
+  const editRow=document.createElement('tr');
+  editRow.id='xedit_'+id;
+  editRow.style.cssText='background:rgba(245,158,11,.08);border:none';
+  const typeOpts=['عادي','عطلة رسمية','في يوم إجازة'].map(t=>`<option ${x.type===t?'selected':''}>${t}</option>`).join('');
+  editRow.innerHTML=`<td colspan="7" style="padding:10px 12px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:8px">
+      <div><label style="font-size:11px;color:var(--text2);font-weight:700;display:block;margin-bottom:3px">التاريخ</label>
+        <input type="date" id="xe_date_${id}" value="${dateVal}" class="finp" style="padding:8px 10px;width:100%"></div>
+      <div><label style="font-size:11px;color:var(--text2);font-weight:700;display:block;margin-bottom:3px">الساعات</label>
+        <input type="text" id="xe_hrs_${id}" value="${x.hrs}" class="finp" style="padding:8px 10px;width:100%"></div>
+      <div><label style="font-size:11px;color:var(--text2);font-weight:700;display:block;margin-bottom:3px">نوع الإضافي</label>
+        <select id="xe_type_${id}" class="finp" style="padding:8px 10px;width:100%">${typeOpts}</select></div>
+      <div><label style="font-size:11px;color:var(--text2);font-weight:700;display:block;margin-bottom:3px">ملاحظات</label>
+        <input type="text" id="xe_note_${id}" value="${x.note||''}" class="finp" style="padding:8px 10px;width:100%"></div>
+    </div>
+    <div style="display:flex;gap:7px">
+      <button class="btn btn-sm" style="background:var(--warning);color:#fff;border:none;border-radius:var(--rp);padding:7px 14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif" onclick="saveExtraEdit('${id}')">💾 حفظ التعديل</button>
+      <button class="btn btn-sec btn-sm" onclick="document.getElementById('xedit_${id}').remove()">إلغاء ✕</button>
+    </div>
+  </td>`;
+  tRow.insertAdjacentElement('afterend', editRow);
+  editRow.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
-
+async function saveExtraEdit(id){
+  const date=document.getElementById('xe_date_'+id)?.value||'';
+  const hrsRaw=document.getElementById('xe_hrs_'+id)?.value||'';
+  const type=document.getElementById('xe_type_'+id)?.value||'عادي';
+  const note=document.getElementById('xe_note_'+id)?.value||'';
+  if(!date){toast('يرجى إدخال التاريخ','error');return;}
+  const hrs=parseFloat(hrsRaw.replace(',','.'));
+  if(isNaN(hrs)||hrs<=0){toast('عدد ساعات غير صحيح','error');return;}
+  const arr=getExtras();
+  const idx=arr.findIndex(i=>String(i.id)===String(id));
+  const orig=idx>=0?arr[idx]:{};
+  const updated={...orig,date,hrs,type,note};
+  if(idx>=0){arr[idx]=updated;saveExtras(arr);}
+  const gUrl=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
+  if(gUrl){
+    await gas('اضافي_حذف',{id:String(id)}).catch(()=>{});
+    gas('اضافي_اضافة',updated).catch(()=>{});
+  }
+  const eRow=document.getElementById('xedit_'+id);
+  if(eRow) eRow.remove();
+  toast('✅ تم تعديل السجل','success');
+  renderExtraTable();
+}
 // ============================================================
 // تنسيق التواريخ - عربي نظيف بدون GMT
 // ============================================================
