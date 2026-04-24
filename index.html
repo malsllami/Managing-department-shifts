@@ -1313,9 +1313,9 @@ function buildDash(){
     }
   } else if(dShiftBadge) dShiftBadge.innerHTML='';
   const el=document.getElementById('dContent');
-  if(VR==='مدير')el.innerHTML=mgrDash();
-  else if(VR==='مشرف')el.innerHTML=supDash();
-  else el.innerHTML=empDash();
+  if(VR==='مدير'){ el.innerHTML=mgrDash(); }
+  else if(VR==='مشرف'){ el.innerHTML=supDash(); }
+  else { el.innerHTML='<div style="text-align:center;padding:30px;color:var(--text2)"><div class="spinner" style="margin:0 auto 10px;border-color:var(--border);border-top-color:var(--primary)"></div>جاري تحميل البيانات...</div>'; empDashAsync(); }
   setTimeout(drawWeekChart,80);
 }
 function mgrDash(){
@@ -1512,32 +1512,41 @@ function supDash(){
     </table></div></div>
   </div>`;
 }
-function empDash(){
+async function empDashAsync(){
   let dispU = U;
   if(U.role==='مدير' && U.mgrEmpId){
     const me=emps.find(e=>String(e.empId)===String(U.mgrEmpId));
     if(me) dispU=me;
   }
-  const b=getBalances(dispU.empId);
-  const info=getInfos().find(x=>String(x.empId)===String(dispU.empId))||{};
+  // Fetch fresh data from GAS or localStorage
+  const gasUrl=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
+  const [lRes,xRes,iRes,bRes] = await Promise.all([
+    gasUrl?gas('اجازات_جلب',{empId:dispU.empId}).catch(()=>({ok:false})):Promise.resolve({ok:false}),
+    gasUrl?gas('اضافي_جلب',{empId:dispU.empId}).catch(()=>({ok:false})):Promise.resolve({ok:false}),
+    gasUrl?gas('بيانات_جلب',{empId:dispU.empId}).catch(()=>({ok:false})):Promise.resolve({ok:false}),
+    gasUrl?gas('ارصدة_جلب',{empId:dispU.empId}).catch(()=>({ok:false})):Promise.resolve({ok:false}),
+  ]);
+  const empLeaves = lRes.ok&&lRes.data ? lRes.data : getLeaves().filter(l=>String(l.empId)===String(dispU.empId));
+  const empExtras = xRes.ok&&xRes.data ? xRes.data : getExtras().filter(x=>String(x.empId)===String(dispU.empId));
+  const info = (iRes.ok&&iRes.data&&iRes.data[0]) ? iRes.data[0] : (getInfos().find(x=>String(x.empId)===String(dispU.empId))||{});
+  const b = bRes.ok&&bRes.data ? bRes.data : getBalances(dispU.empId);
+
   const tod=dispU.shift?getShiftStatus(dispU.shift,new Date()):null;
   const todIcon=tod==='صباح'?'🌅':tod==='مساء'?'🌙':'🏖️';
   const todLabel=tod==='صباح'?'صباح (7ص-7م)':tod==='مساء'?'مساء (7م-7ص)':'إجازة اليوم';
-  const todCol=tod==='صباح'?'var(--shift-a)':tod==='مساء'?'var(--shift-b)':'var(--success)';
   const shiftCardCls=dispU.shift?(dispU.shift==='أ'?'shc-a':dispU.shift==='ب'?'shc-b':dispU.shift==='ج'?'shc-c':'shc-d'):'shc-a';
 
-  // Leaves
-  const empLeaves=getLeaves().filter(l=>String(l.empId)===String(dispU.empId));
-  const now=new Date();now.setHours(0,0,0,0);
-  const activeLeave=empLeaves.find(l=>new Date(l.start)<=now&&new Date(l.end)>=now);
-  const futureLeave=empLeaves.filter(l=>new Date(l.start)>now).sort((a,b)=>a.start.localeCompare(b.start))[0];
+  const fmtD=d=>{ if(!d||d==='-')return'-'; const x=String(d); return x.includes('T')?x.split('T')[0]:x.includes(' ')?x.split(' ')[0]:x.includes('GMT')?x.split(' ').slice(0,4).join(' '):x; };
 
-  // Extras
-  const empExtras=getExtras().filter(x=>String(x.empId)===String(dispU.empId));
+  const now=new Date();now.setHours(0,0,0,0);
+  const activeLeave=empLeaves.find(l=>new Date(fmtD(l.start))<=now&&new Date(fmtD(l.end))>=now);
+  const futureLeave=empLeaves.filter(l=>new Date(fmtD(l.start))>now).sort((a,b)=>String(a.start).localeCompare(String(b.start)))[0];
   const totalHrs=empExtras.reduce((s,x)=>s+(Number(x.hrs)||0),0);
   const pendingExtras=empExtras.filter(x=>!x.received);
 
-  return `
+  const el=document.getElementById('dContent');
+  if(!el) return;
+  el.innerHTML = `
   <!-- Info strip - compact on mobile -->
   <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center">
     ${info.region||info.center?`<span style="font-size:12px;font-weight:700;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rp);padding:4px 12px">📍 ${info.region||''} ${info.center?'· '+info.center:''}</span>`:''}
@@ -1587,12 +1596,13 @@ function empDash(){
       <div class="tw"><table>
         <thead><tr><th>النوع</th><th>من</th><th>إلى</th><th>الأيام</th><th>الحالة</th></tr></thead>
         <tbody>${empLeaves.length?empLeaves.map(l=>{
-          const lEnd=new Date(l.end); const lStart=new Date(l.start);
-          const isActive=lStart<=now&&lEnd>=now;
-          const isExpired=lEnd<now;
-          const remaining=isActive?Math.max(0,Math.ceil((lEnd-now)/86400000))+1:0;
+          const ls=fmtD(l.start),le=fmtD(l.end);
+          const lEnd=new Date(ls); const lStart=new Date(le);
+          const isActive=new Date(ls)<=now&&new Date(le)>=now;
+          const isExpired=new Date(le)<now;
+          const remaining=isActive?Math.max(0,Math.ceil((new Date(le)-now)/86400000))+1:0;
           return `<tr>
-            <td>${l.type}</td><td>${l.start}</td><td>${l.end||'-'}</td>
+            <td>${l.type}</td><td>${ls}</td><td>${le||'-'}</td>
             <td>${l.days}</td>
             <td>${isActive?`<span style="color:var(--success);font-weight:700">نشطة · ${remaining} يوم متبقي</span>`:isExpired?'<span style="color:var(--text3)">منتهية</span>':'<span style="color:var(--primary)">قادمة</span>'}</td>
           </tr>`;
@@ -1612,8 +1622,10 @@ function empDash(){
       <div class="tw"><table>
         <thead><tr><th>التاريخ</th><th>الساعات</th><th>النوع</th><th>الاستلام</th></tr></thead>
         <tbody>${empExtras.length?empExtras.map(x=>`<tr>
-          <td>${x.date}</td><td>${x.hrs}</td><td>${x.type}</td>
-          <td>${x.received?'<span style="color:var(--success);font-weight:700">✅ مُستلم</span>':'<span style="color:var(--danger)">⏳ لم يُستلم</span>'}</td>
+          <td>${fmtD(x.date)}</td>
+          <td><b>${x.hrs}</b> ساعة</td>
+          <td>${x.type}</td>
+          <td><button class="btn btn-sm" style="border-radius:var(--rp);padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;background:${x.received?'rgba(0,200,150,.15)':'rgba(239,68,68,.1)'};color:${x.received?'var(--success)':'var(--danger)'};border:1px solid ${x.received?'rgba(0,200,150,.3)':'rgba(239,68,68,.25)'}" onclick="toggleExtraReceived('${x.id}',this)">${x.received?'✅ مُستلم':'⏳ لم يُستلم'}</button></td>
         </tr>`).join(''):'<tr><td colspan="4" class="no-data">لا يوجد سجلات</td></tr>'}</tbody>
       </table></div>
       <div style="padding:10px 16px"><button class="btn btn-primary btn-sm" style="width:auto" onclick="showPage('forms');switchFormTab('extra')">➕ إضافة ساعات</button></div>
@@ -2584,17 +2596,21 @@ async function renderExtraTable(){
   const gasUrl2=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
   const empId2=isMgrOrSup()?null:getCurrentEmpId();
   const arr = gasUrl2 ? await fetchExtras(empId2) : getExtras();
+  const fmtExtraDate=d=>{ if(!d)return'-'; const s=String(d); if(s.includes('T'))return s.split('T')[0]; if(s.includes('GMT'))return s.replace(/\s*\(.*\)/, '').replace(/\s*(GMT|UTC)[+-]\d+:\d+/,'').replace(/\s+\d{4}$/,'').trim(); if(s.includes(' '))return s.split(' ')[0]; return s; };
   tb.innerHTML=arr.length?arr.map(x=>{
     const rec=x.received||false;
     const recBtn=`<button class="btn btn-sm" style="border-radius:var(--rp);padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;background:${rec?'rgba(0,200,150,.15)':'rgba(239,68,68,.1)'};color:${rec?'var(--success)':'var(--danger)'};border:1px solid ${rec?'rgba(0,200,150,.3)':'rgba(239,68,68,.25)'}" onclick="toggleExtraReceived('${x.id}',this)">${rec?'✅ مُستلم':'⏳ لم يُستلم'}</button>`;
     return `<tr>
       <td><b>${x.empName}</b></td>
-      <td>${x.date.split('T')[0]||x.date}</td>
+      <td>${fmtExtraDate(x.date)}</td>
       <td><b>${x.hrs}</b> ساعة</td>
       <td>${x.type}</td>
       <td>${recBtn}</td>
       <td>${x.note||'-'}</td>
-      <td><button class="btn btn-dng btn-sm" onclick="deleteExtra('${x.id}')">🗑️</button></td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-sec btn-sm" onclick="editExtraRow('${x.id}')" title="تعديل">✏️</button>
+        <button class="btn btn-dng btn-sm" onclick="deleteExtra('${x.id}')" style="margin-right:2px">🗑️</button>
+      </td>
     </tr>`;
   }).join(''):'<tr><td colspan="7" class="no-data">لا يوجد سجلات</td></tr>';
 }
@@ -3140,6 +3156,24 @@ async function syncComprehensiveSheet(){
   const r=await gas('تحديث_الجدول_الشامل',{});
   if(r.ok) toast('✅ '+r.message,'success');
   else toast('❌ '+(r.error||'خطأ في التحديث'),'error');
+}
+
+
+function editExtraRow(id){
+  const arr=getExtras();
+  const x=arr.find(i=>String(i.id)===String(id));
+  if(!x) return;
+  // Fill form with existing data
+  if(isMgrOrSup()) { const sel=document.getElementById('fExtraEmp'); if(sel) sel.value=x.empId; }
+  const fDate=document.getElementById('fExtraDate'); if(fDate) fDate.value=x.date?x.date.split('T')[0]:x.date;
+  const fHrs=document.getElementById('fExtraHrs'); if(fHrs) fHrs.value=x.hrs;
+  const fType=document.getElementById('fExtraType'); if(fType) fType.value=x.type;
+  const fNote=document.getElementById('fExtraNote'); if(fNote) fNote.value=x.note||'';
+  // Delete old entry so save creates new
+  deleteExtra(id);
+  // Scroll to form
+  const sec=document.getElementById('fsec-extra'); if(sec) sec.scrollIntoView({behavior:'smooth'});
+  toast('✏️ تم تحميل البيانات - عدّل ثم احفظ','info');
 }
 
 window.onload=()=>{
