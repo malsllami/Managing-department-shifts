@@ -248,14 +248,21 @@ select.finp{-webkit-appearance:none;}
 @media(max-width:768px){.sidebar{display:none;}.fgrid{grid-template-columns:1fr;}.sg{grid-template-columns:1fr 1fr;}.shg{grid-template-columns:1fr 1fr;}}
 
 /* CALENDAR */
-.cal-day{border-radius:10px;padding:6px 4px;min-height:80px;background:var(--surface2);border:1px solid var(--border);transition:var(--tr);position:relative;overflow:hidden;}
+.cal-day{border-radius:8px;padding:5px 3px;min-height:72px;background:var(--surface2);border:1px solid var(--border);transition:var(--tr);position:relative;overflow:hidden;}
 .cal-day:hover{border-color:var(--primary);}
 .cal-day.today{border-color:var(--danger);border-width:2px;background:rgba(239,68,68,.06);}
 .cal-day.other-month{opacity:.35;}
-.cal-day-num{font-size:12px;font-weight:800;margin-bottom:4px;color:var(--text2);}
+.cal-day-num{font-size:13px;font-weight:900;margin-bottom:2px;color:var(--text2);}
 .cal-day.today .cal-day-num{color:var(--danger);}
-.cal-day-hij{font-size:9px;color:var(--text3);margin-bottom:3px;}
-.cal-shift-tag{display:block;font-size:9px;font-weight:700;border-radius:6px;padding:2px 4px;margin-bottom:2px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cal-day-hij{font-size:9px;color:var(--text3);margin-bottom:2px;line-height:1.2;}
+.cal-shift-tag{display:block;font-size:9px;font-weight:700;border-radius:5px;padding:2px 3px;margin-bottom:2px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+@media(max-width:520px){
+  .cal-day{min-height:60px;padding:3px 2px;}
+  .cal-day-num{font-size:11px;}
+  .cal-day-hij{display:none;}
+  .cal-shift-tag{font-size:8px;padding:1px 2px;}
+  #calCard .card-bd{padding:6px 4px;}
+}
 .cs-morning{background:rgba(0,149,217,.18);color:#0095D9;}
 .cs-evening{background:rgba(139,92,246,.18);color:#8B5CF6;}
 .cs-off{background:rgba(0,200,150,.12);color:var(--success);}
@@ -321,13 +328,47 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
 .days-red  { background:rgba(239,68,68,.15);color:var(--danger); }
 .days-warn { background:rgba(245,158,11,.15);color:var(--warning); }
 .days-ok   { background:rgba(0,200,150,.12);color:var(--success); }
-/* Sticky first 3 columns */
+/* Sticky first 3 columns - رقم الوظيفي + الاسم + الجوال */
 #comprehensiveTbl td:nth-child(1),
-#comprehensiveTbl th:nth-child(1){ position:sticky;right:0;z-index:3;background:var(--surface); }
+#comprehensiveTbl th:nth-child(1){
+  position:sticky;right:0;z-index:3;
+  background:var(--surface);
+  border-left:2px solid var(--primary) !important;
+  min-width:75px;
+}
 #comprehensiveTbl td:nth-child(2),
-#comprehensiveTbl th:nth-child(2){ position:sticky;right:70px;z-index:3;background:var(--surface); }
+#comprehensiveTbl th:nth-child(2){
+  position:sticky;right:75px;z-index:3;
+  background:var(--surface);
+  min-width:140px;
+}
 #comprehensiveTbl td:nth-child(3),
-#comprehensiveTbl th:nth-child(3){ position:sticky;right:200px;z-index:3;background:var(--surface); }
+#comprehensiveTbl th:nth-child(3){
+  position:sticky;right:215px;z-index:3;
+  background:var(--surface);
+  border-left:1px solid var(--border) !important;
+  min-width:115px;
+}
+/* Add shadow to indicate more content to the left */
+#comprehensiveTbl td:nth-child(3)::after,
+#comprehensiveTbl th:nth-child(3)::after{
+  content:'';
+  position:absolute;
+  left:-8px;top:0;bottom:0;width:8px;
+  background:linear-gradient(to left,rgba(0,0,0,.08),transparent);
+  pointer-events:none;
+}
+/* Even row background preserve sticky */
+#comprehensiveTbl tr:nth-child(even) td:nth-child(1),
+#comprehensiveTbl tr:nth-child(even) td:nth-child(2),
+#comprehensiveTbl tr:nth-child(even) td:nth-child(3){
+  background:var(--surface2);
+}
+#comprehensiveTbl tr:hover td:nth-child(1),
+#comprehensiveTbl tr:hover td:nth-child(2),
+#comprehensiveTbl tr:hover td:nth-child(3){
+  background:rgba(0,149,217,.08) !important;
+}
 
 
 /* ===== BOTTOM NAVIGATION (MOBILE) ===== */
@@ -427,6 +468,33 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
 }
 @media(min-width: 769px) {
   #bottomNav { display: none !important; }
+}
+
+
+@media(max-width:520px){
+  #comprehensiveCard { display: none; }
+  #simpleEmpCard { display: block !important; }
+  #viewToggleBtn { display: none; }
+  #mobileSwitchNote { display: block !important; }
+}
+
+
+/* MOBILE FORMS */
+@media(max-width:520px){
+  /* Date fields on same row */
+  .leave-date-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  /* Auto-fill bar as column */
+  #leaveEmpBar, #extraEmpBar { flex-direction:column; gap:6px; padding:10px; }
+  /* Balances row smaller */
+  #balancesRow span { font-size:11px; padding:3px 8px; }
+  /* Forms card max width */
+  .card { max-width:100% !important; }
+  /* Tab labels shorter */
+  #ftab-leave::after { content: ''; }
+  /* Calendar controls wrap */
+  #calCard .card-bd { padding:6px; }
+  /* Weekly API scroll */
+  .wk-grid { gap:4px; }
 }
 
 </style>
@@ -588,6 +656,7 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
         </div>
 
         <!-- SUMMARY STATS -->
+        <div id="mobileSwitchNote" style="display:none;background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--rsm);padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--text2)">📱 الجدول الشامل متاح على الشاشات الأكبر — يظهر هنا الجدول المبسط</div>
         <div id="empSummaryStats" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-bottom:14px"></div>
 
         <!-- COMPREHENSIVE TABLE -->
@@ -597,8 +666,8 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
             <span id="empCount" style="font-size:12px;color:var(--text2)"></span>
           </div>
           <div class="card-bd" style="padding:0;overflow:hidden">
-            <div style="overflow-x:auto;overflow-y:auto;max-height:65vh">
-              <table id="comprehensiveTbl" style="min-width:1600px">
+            <div style="overflow-x:auto;overflow-y:auto;max-height:65vh;-webkit-overflow-scrolling:touch">
+              <table id="comprehensiveTbl" style="min-width:1600px;table-layout:fixed">
                 <thead id="comprehensiveThead"></thead>
                 <tbody id="empTb"><tr><td colspan="30" class="no-data">⏳ جاري تحميل البيانات...</td></tr></tbody>
               </table>
@@ -739,15 +808,15 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
 
         <!-- STICKY TABS -->
         <div id="formTabsBar" style="position:sticky;top:0;z-index:50;background:var(--bg);padding:8px 0 10px;margin-bottom:14px">
-          <div style="display:flex;gap:4px;background:var(--bg2);border-radius:20px;padding:4px;width:fit-content">
-            <button onclick="switchFormTab('leave')" id="ftab-leave" class="ftb on">🏖️ الإجازات</button>
-            <button onclick="switchFormTab('extra')" id="ftab-extra" class="ftb off">⏰ ساعات إضافية</button>
-            <button onclick="switchFormTab('info')"  id="ftab-info"  class="ftb off">🗂️ البيانات الوظيفية</button>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;background:var(--bg2);border-radius:20px;padding:4px">
+            <button onclick="switchFormTab('leave')" id="ftab-leave" class="ftb on" style="flex:1;min-width:100px">🏖️ الإجازات</button>
+            <button onclick="switchFormTab('extra')" id="ftab-extra" class="ftb off" style="flex:1;min-width:100px">⏰ إضافي</button>
+            <button onclick="switchFormTab('info')"  id="ftab-info"  class="ftb off" style="flex:1;min-width:100px">🗂️ البيانات</button>
           </div>
         </div>
 
         <!-- ===== LEAVE SECTION ===== -->
-        <div id="fsec-leave">
+        <div id="fsec-leave" style="max-width:680px">
           <!-- Employee info bar (auto-filled for employees) -->
           <div id="leaveEmpBar" style="display:none;background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 16px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:14px;align-items:center">
             <span style="font-size:13px;font-weight:700" id="leEmpName"></span>
@@ -789,13 +858,15 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
                     <button class="btn btn-sec btn-sm" onclick="addLeaveType()" title="إضافة نوع جديد" style="flex-shrink:0;border-radius:12px;padding:0 10px">➕</button>
                   </div>
                 </div>
-                <div class="form-group">
-                  <label>تاريخ البداية <span>*</span></label>
-                  <input type="date" id="fLeaveStart" class="finp" onchange="calcLeaveDays()">
-                </div>
-                <div class="form-group">
-                  <label>تاريخ النهاية <span>*</span></label>
-                  <input type="date" id="fLeaveEnd" class="finp" onchange="calcLeaveDays()">
+                <div class="form-group full leave-date-row">
+                  <div class="form-group" style="margin:0">
+                    <label>تاريخ البداية <span>*</span></label>
+                    <input type="date" id="fLeaveStart" class="finp" onchange="calcLeaveDays()">
+                  </div>
+                  <div class="form-group" style="margin:0">
+                    <label>تاريخ النهاية <span>*</span></label>
+                    <input type="date" id="fLeaveEnd" class="finp" onchange="calcLeaveDays()">
+                  </div>
                 </div>
                 <div class="form-group">
                   <label>مدة الإجازة (تلقائي)</label>
@@ -1007,8 +1078,8 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
         <div class="card" id="calCard">
           <div class="card-hd" style="font-size:15px;font-weight:800"><span id="calTitle">-</span></div>
           <div class="card-bd" style="padding:10px">
-            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px" id="calDayHeaders"></div>
-            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px" id="calGrid"></div>
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px" id="calDayHeaders"></div>
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px" id="calGrid"></div>
           </div>
         </div>
         <div id="miniSchedule"></div>
@@ -1933,7 +2004,18 @@ function showPage(pg){
   const pe=document.getElementById('page-'+pg);if(pe)pe.style.display='block';
   const ne=document.getElementById('nav-'+pg);if(ne)ne.classList.add('active');
   updateBottomNavActive(pg);
-  if(pg==='emp'){if(compView==='comprehensive'){allLeaves=getLeaves();allExtras=getExtras();allInfos=getInfos();}renderEmpTbl();}
+  if(pg==='emp'){
+  // Auto-switch to simple on mobile
+  if(window.innerWidth <= 520 && compView==='comprehensive'){
+    compView='simple';
+    const cv=document.getElementById('comprehensiveCard');
+    const sv=document.getElementById('simpleEmpCard');
+    if(cv) cv.style.display='none';
+    if(sv) sv.style.display='block';
+  }
+  if(compView==='comprehensive'){allLeaves=getLeaves();allExtras=getExtras();allInfos=getInfos();}
+  renderEmpTbl();
+}
   if(pg==='sh')renderShTbl();
   if(pg==='prof')showProf();
   if(pg==='set')loadSets();
@@ -2028,16 +2110,29 @@ function switchRole(r){
 // وردية أ: index 6 (3rd off)
 // Cycle: صباح صباح مساء مساء أوف أوف أوف أوف (8 days)
 
-const CAL_REF = new Date(2026, 3, 23); // April 23, 2026 (month is 0-indexed)
+// مرجع: الخميس 23 أبريل 2026
+// وردية ب: يوم 1 صباح | وردية ج: يوم 1 مساء | وردية د: يوم 1 أوف | وردية أ: يوم 3 أوف
+const CAL_REF_Y = 2026, CAL_REF_M = 4, CAL_REF_D = 23; // April 23, 2026
 const CYCLE8 = ['صباح','صباح','مساء','مساء','أوف','أوف','أوف','أوف'];
 const SHIFT_OFF = {'أ':6,'ب':0,'ج':2,'د':4};
 const SHIFT_COLORS = {'أ':'sh-a','ب':'sh-b','ج':'sh-c','د':'sh-d'};
 const SHIFT_CARD_C = {'أ':'#0095D9','ب':'#8B5CF6','ج':'#F59E0B','د':'#EF4444'};
 
+// حساب فرق الأيام بدون تأثير التوقيت (محلي فقط)
+function dateDiffDays(d) {
+  // d is a Date object - use local date components
+  const y = d.getFullYear(), m = d.getMonth()+1, day = d.getDate();
+  // Days since epoch for both dates (ignoring timezone)
+  const toEpochDays = (yr,mo,da) => {
+    // Zeller/simple Julian day calculation
+    const a = Math.floor((14-mo)/12), y2=yr+4800-a, m2=mo+12*a-3;
+    return da + Math.floor((153*m2+2)/5) + 365*y2 + Math.floor(y2/4) - Math.floor(y2/100) + Math.floor(y2/400) - 32045;
+  };
+  return toEpochDays(y,m,day) - toEpochDays(CAL_REF_Y,CAL_REF_M,CAL_REF_D);
+}
+
 function getShiftStatus(shift, date) {
-  const ms = CAL_REF.getTime();
-  const ds = date.getTime();
-  const diffDays = Math.round((ds - ms) / 86400000);
+  const diffDays = dateDiffDays(date);
   const idx = ((SHIFT_OFF[shift] + diffDays) % 8 + 8) % 8;
   return CYCLE8[idx]; // 'صباح' | 'مساء' | 'أوف'
 }
