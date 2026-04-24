@@ -857,6 +857,16 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
                   <label>ملاحظات</label>
                   <input type="text" id="fExtraNote" class="finp" placeholder="وصف مهمة الإضافي...">
                 </div>
+                <div class="form-group full">
+                  <label>حالة الاستلام</label>
+                  <div style="display:flex;gap:10px;align-items:center">
+                    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:600;font-size:13px;color:var(--text)">
+                      <input type="checkbox" id="fExtraReceived" style="width:18px;height:18px;cursor:pointer;accent-color:var(--success)">
+                      تم الاستلام ✅
+                    </label>
+                    <span id="fExtraReceivedHint" style="font-size:12px;color:var(--text3)">اتركه فارغاً إذا لم يُستلم بعد</span>
+                  </div>
+                </div>
               </div>
               <button class="btn btn-primary btn-full" onclick="saveExtra()">💾 حفظ</button>
             </div>
@@ -864,7 +874,7 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
           <div class="card" style="margin-top:14px">
             <div class="card-hd"><h3>سجل الساعات الإضافية</h3></div>
             <div class="card-bd" style="padding:0"><div class="tw"><table>
-              <thead><tr><th>الموظف</th><th>التاريخ</th><th>الساعات</th><th>النوع</th><th>ملاحظات</th><th>حذف</th></tr></thead>
+              <thead><tr><th>الموظف</th><th>التاريخ</th><th>الساعات</th><th>النوع</th><th>الاستلام</th><th>ملاحظات</th><th>حذف</th></tr></thead>
               <tbody id="extraTb"><tr><td colspan="6" class="no-data">لا يوجد سجلات</td></tr></tbody>
             </table></div></div>
           </div>
@@ -1053,6 +1063,21 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
             <option value="موظف">موظف</option>
             <option value="مشرف">مشرف</option>
           </select>
+        </div>
+        <div class="form-group">
+          <label>المنطقة</label>
+          <select id="pRegion" class="finp">
+            <option value="">-- اختر --</option>
+            <option value="شمال">شمال</option>
+            <option value="وسط">وسط</option>
+            <option value="جنوب">جنوب</option>
+            <option value="غرب">غرب</option>
+            <option value="شرق">شرق</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>المركز</label>
+          <input type="text" id="pCenter" class="finp" placeholder="اسم المركز">
         </div>
       </div>
     </div>
@@ -1470,24 +1495,138 @@ function supDash(){
 function empDash(){
   let dispU = U;
   if(U.role==='مدير' && U.mgrEmpId){
-    const me = emps.find(e=>String(e.empId)===String(U.mgrEmpId));
-    if(me) dispU = me;
+    const me=emps.find(e=>String(e.empId)===String(U.mgrEmpId));
+    if(me) dispU=me;
   }
   const b=getBalances(dispU.empId);
   const info=getInfos().find(x=>String(x.empId)===String(dispU.empId))||{};
-  const todayStatus = dispU.shift ? getShiftStatus(dispU.shift,new Date()) : null;
-  const todayIcon = todayStatus==='صباح'?'🌅':todayStatus==='مساء'?'🌙':todayStatus==='أوف'?'🏖️':'—';
-  const todayLabel = todayStatus==='صباح'?'صباح (7ص-7م)':todayStatus==='مساء'?'مساء (7م-7ص)':todayStatus==='أوف'?'إجازة اليوم':'—';
-  const todayCol = todayStatus==='صباح'?'var(--shift-a)':todayStatus==='مساء'?'var(--shift-b)':'var(--success)';
-  return `<div class="sg">
-    <div class="sc"><div class="si" style="background:rgba(0,149,217,.12);font-size:22px">${todayIcon}</div><div><div class="sv" style="font-size:15px">${todayLabel}</div><div class="sl" style="color:${todayCol}">${SHNAMES[dispU.shift]||dispU.shift||''}</div></div></div>
-    <div class="sc"><div class="si si-b">🏢</div><div><div class="sv" style="font-size:16px">${SHNAMES[dispU.shift]||dispU.shift||'-'}</div><div class="sl">الوردية</div></div></div>
-    <div class="sc"><div class="si si-g">🏷️</div><div><div class="sv" style="font-size:16px">${dispU.dept||'-'}</div><div class="sl">القسم</div></div></div>
-    <div class="sc"><div class="si si-o">🪪</div><div><div class="sv">${dispU.empId}</div><div class="sl">رقم الوظيفي</div></div></div>
-    <div class="sc"><div class="si si-g">📅</div><div><div class="sv">${b.annual}</div><div class="sl">رصيد سنوية</div></div></div>
-    <div class="sc"><div class="si si-p">📋</div><div><div class="sv">${b.scheduled}</div><div class="sl">رصيد مجدولة</div></div></div>
+  const tod=dispU.shift?getShiftStatus(dispU.shift,new Date()):null;
+  const todIcon=tod==='صباح'?'🌅':tod==='مساء'?'🌙':'🏖️';
+  const todLabel=tod==='صباح'?'صباح (7ص-7م)':tod==='مساء'?'مساء (7م-7ص)':'إجازة اليوم';
+  const todCol=tod==='صباح'?'var(--shift-a)':tod==='مساء'?'var(--shift-b)':'var(--success)';
+  const shiftCardCls=dispU.shift?(dispU.shift==='أ'?'shc-a':dispU.shift==='ب'?'shc-b':dispU.shift==='ج'?'shc-c':'shc-d'):'shc-a';
+
+  // Leaves
+  const empLeaves=getLeaves().filter(l=>String(l.empId)===String(dispU.empId));
+  const now=new Date();now.setHours(0,0,0,0);
+  const activeLeave=empLeaves.find(l=>new Date(l.start)<=now&&new Date(l.end)>=now);
+  const futureLeave=empLeaves.filter(l=>new Date(l.start)>now).sort((a,b)=>a.start.localeCompare(b.start))[0];
+
+  // Extras
+  const empExtras=getExtras().filter(x=>String(x.empId)===String(dispU.empId));
+  const totalHrs=empExtras.reduce((s,x)=>s+(Number(x.hrs)||0),0);
+  const pendingExtras=empExtras.filter(x=>!x.received);
+
+  return `
+  <!-- TOP INFO CARD (shift style) -->
+  <div class="${shiftCardCls}" style="border-radius:var(--r);padding:18px 20px;margin-bottom:14px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+    <div style="position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.07)"></div>
+    <div>
+      <div style="font-size:11px;color:rgba(255,255,255,.7);font-weight:700;margin-bottom:4px">وردية</div>
+      <div style="font-size:20px;font-weight:900;color:#fff">${SHNAMES[dispU.shift]||dispU.shift||'—'}</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.7);margin-top:2px">${dispU.dept||''}${info.region?' · '+info.region+' · '+info.center:''}</div>
+    </div>
+    <div style="text-align:center">
+      <div style="font-size:32px">${todIcon}</div>
+      <div style="font-size:13px;font-weight:800;color:#fff">${todLabel}</div>
+    </div>
   </div>
-  ${info.center?'<div class="card" style="max-width:400px"><div class="card-hd"><h3>📍 بيانات العمل</h3></div><div class="card-bd"><div class="srow"><div class="slbl">المنطقة</div><div>'+info.region+'</div></div><div class="srow"><div class="slbl">المركز</div><div>'+info.center+'</div></div><div class="srow"><div class="slbl">السيارة</div><div>'+(info.car||'-')+'</div></div></div></div>':''}`;
+
+  <!-- KPI GRID -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px;margin-bottom:14px">
+    <div class="sc" style="border-color:rgba(0,200,150,.3)"><div class="si si-g" style="font-size:20px">📅</div><div><div class="sv">${b.annual}</div><div class="sl">رصيد سنوية</div></div></div>
+    <div class="sc" style="border-color:rgba(0,149,217,.3)"><div class="si si-b" style="font-size:20px">📋</div><div><div class="sv">${b.scheduled}</div><div class="sl">رصيد مجدولة</div></div></div>
+    <div class="sc" onclick="showPage('forms')" style="cursor:pointer"><div class="si si-o" style="font-size:20px">⏰</div><div><div class="sv">${totalHrs}</div><div class="sl">إجمالي الإضافي (ساعة)</div></div></div>
+    <div class="sc" style="border-color:rgba(239,68,68,.2)"><div class="si si-r" style="font-size:20px">⚠️</div><div><div class="sv">${pendingExtras.length}</div><div class="sl">إضافي لم يُستلم</div></div></div>
+    ${dispU.empId?`<div class="sc"><div class="si si-p" style="font-size:20px">🪪</div><div><div class="sv" style="font-size:16px">${dispU.empId}</div><div class="sl">رقم الوظيفي</div></div></div>`:''}
+  </div>
+
+  <!-- ACTIVE / UPCOMING LEAVE CARD -->
+  ${activeLeave?`
+  <div style="background:rgba(0,200,150,.1);border:1px solid rgba(0,200,150,.3);border-radius:var(--r);padding:14px 18px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+    <div><span style="font-size:13px;font-weight:800;color:var(--success)">🏖️ أنت في إجازة الآن</span><span style="font-size:11px;color:var(--text2);margin-right:8px">${activeLeave.type}</span></div>
+    <div style="font-size:12px;color:var(--text2)">
+      ${activeLeave.start} ← ${activeLeave.end}
+      <span style="font-weight:800;color:var(--success);margin-right:8px">
+        متبقي: ${Math.max(0,Math.ceil((new Date(activeLeave.end)-now)/86400000))+1} يوم
+      </span>
+    </div>
+  </div>`:''}
+  ${!activeLeave&&futureLeave?`
+  <div style="background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--r);padding:14px 18px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+    <div><span style="font-size:13px;font-weight:800;color:var(--primary)">📅 إجازة قادمة</span><span style="font-size:11px;color:var(--text2);margin-right:8px">${futureLeave.type}</span></div>
+    <div style="font-size:12px;color:var(--text2)">
+      ${futureLeave.start}
+      <span style="font-weight:800;color:var(--primary);margin-right:8px">
+        بعد: ${Math.ceil((new Date(futureLeave.start)-now)/86400000)} يوم
+      </span>
+    </div>
+  </div>`:''}
+
+  <!-- LEAVES TABLE -->
+  <div class="card" style="margin-bottom:12px">
+    <div class="card-hd" style="cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+      <h3>🏖️ سجل إجازاتي</h3>
+      <span style="font-size:12px;color:var(--text2)">${empLeaves.length} إجازة | ${empLeaves.reduce((s,l)=>s+(Number(l.days)||0),0)} يوم إجمالي ▾</span>
+    </div>
+    <div style="display:none">
+      <div class="tw"><table>
+        <thead><tr><th>النوع</th><th>من</th><th>إلى</th><th>الأيام</th><th>الحالة</th></tr></thead>
+        <tbody>${empLeaves.length?empLeaves.map(l=>{
+          const lEnd=new Date(l.end); const lStart=new Date(l.start);
+          const isActive=lStart<=now&&lEnd>=now;
+          const isExpired=lEnd<now;
+          const remaining=isActive?Math.max(0,Math.ceil((lEnd-now)/86400000))+1:0;
+          return `<tr>
+            <td>${l.type}</td><td>${l.start}</td><td>${l.end||'-'}</td>
+            <td>${l.days}</td>
+            <td>${isActive?`<span style="color:var(--success);font-weight:700">نشطة · ${remaining} يوم متبقي</span>`:isExpired?'<span style="color:var(--text3)">منتهية</span>':'<span style="color:var(--primary)">قادمة</span>'}</td>
+          </tr>`;
+        }).join(''):'<tr><td colspan="5" class="no-data">لا يوجد إجازات</td></tr>'}</tbody>
+      </table></div>
+      <div style="padding:10px 16px"><button class="btn btn-primary btn-sm" style="width:auto" onclick="showPage('forms')">➕ طلب إجازة جديدة</button></div>
+    </div>
+  </div>
+
+  <!-- EXTRAS SUMMARY -->
+  <div class="card" style="margin-bottom:12px">
+    <div class="card-hd" style="cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+      <h3>⏰ سجل الساعات الإضافية</h3>
+      <span style="font-size:12px;color:var(--text2)">${totalHrs} ساعة | ${pendingExtras.length} لم تُستلم ▾</span>
+    </div>
+    <div style="display:none">
+      <div class="tw"><table>
+        <thead><tr><th>التاريخ</th><th>الساعات</th><th>النوع</th><th>الاستلام</th></tr></thead>
+        <tbody>${empExtras.length?empExtras.map(x=>`<tr>
+          <td>${x.date}</td><td>${x.hrs}</td><td>${x.type}</td>
+          <td>${x.received?'<span style="color:var(--success);font-weight:700">✅ مُستلم</span>':'<span style="color:var(--danger)">⏳ لم يُستلم</span>'}</td>
+        </tr>`).join(''):'<tr><td colspan="4" class="no-data">لا يوجد سجلات</td></tr>'}</tbody>
+      </table></div>
+      <div style="padding:10px 16px"><button class="btn btn-primary btn-sm" style="width:auto" onclick="showPage('forms');switchFormTab('extra')">➕ إضافة ساعات</button></div>
+    </div>
+  </div>
+
+  <!-- CLOTHING SIZES -->
+  ${info.shirt2||info.suit4||info.shoes?`
+  <div class="card">
+    <div class="card-hd"><h3>👕 المقاسات والتجهيزات</h3></div>
+    <div class="card-bd">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px">
+        ${info.shirt2?`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center"><div style="font-size:16px;font-weight:800">${info.shirt2}</div><div style="font-size:10px;color:var(--text2)">قميص CAT2 (${info.shirt2Qty||0})</div></div>`:''}
+        ${info.pants2?`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center"><div style="font-size:16px;font-weight:800">${info.pants2}</div><div style="font-size:10px;color:var(--text2)">بنطلون CAT2 (${info.pants2Qty||0})</div></div>`:''}
+        ${info.suit4?`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center"><div style="font-size:16px;font-weight:800">${info.suit4}</div><div style="font-size:10px;color:var(--text2)">بدلة CAT4 (${info.suit4Qty||0})</div></div>`:''}
+        ${info.shoes?`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center"><div style="font-size:16px;font-weight:800">${info.shoes}</div><div style="font-size:10px;color:var(--text2)">حذاء (${info.shoeQty||0})</div></div>`:''}
+        ${info.car?`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center"><div style="font-size:14px;font-weight:800">${info.car}</div><div style="font-size:10px;color:var(--text2)">رقم السيارة</div></div>`:''}
+      </div>
+      <button class="btn btn-sec btn-sm" onclick="showPage('forms');switchFormTab('info')" style="margin-top:10px">✏️ تعديل المقاسات</button>
+    </div>
+  </div>`:`
+  <div style="text-align:center;padding:16px;color:var(--text3);font-size:13px">
+    <span style="font-size:24px;display:block;margin-bottom:6px">👕</span>
+    لم تُدخل بيانات المقاسات بعد
+    <br><button class="btn btn-primary btn-sm" onclick="showPage('forms');switchFormTab('info')" style="margin-top:10px;width:auto">إدخال البيانات</button>
+  </div>`}
+  `;
 }
 
 // EMP TABLE
@@ -1696,6 +1835,10 @@ function openEditProf(){
   // Shift field: managers can change any, employee/supervisor can change own
   const pshWrap=document.getElementById('pShiftWrap');
   if(pshWrap) pshWrap.style.display='block'; // always show
+  // Load region/center from infos
+  const ei=getInfos().find(x=>String(x.empId)===String(editU.empId))||{};
+  const pReg=document.getElementById('pRegion');if(pReg)pReg.value=ei.region||'';
+  const pCen=document.getElementById('pCenter');if(pCen)pCen.value=ei.center||'';
   hideAl('mProfAl');openM('mProf');
 }
 async function saveProf(){
@@ -1736,6 +1879,18 @@ async function saveProf(){
     sessionStorage.setItem('seU',JSON.stringify(U));
   }
   closeM('mProf');toast('✅ تم تحديث البيانات','success');
+  // Save region/center to infos
+  const pReg2=document.getElementById('pRegion');
+  const pCen2=document.getElementById('pCenter');
+  if(pReg2||pCen2){
+    const existInfo=getInfos().find(x=>String(x.empId)===String(targetEmp.empId))||{};
+    const updInfo={...existInfo,empId:String(targetEmp.empId),empName:targetEmp.name||'',region:pReg2?pReg2.value:existInfo.region||'',center:pCen2?pCen2.value:existInfo.center||''};
+    const iArr=getInfos();const iIdx=iArr.findIndex(x=>String(x.empId)===String(targetEmp.empId));
+    if(iIdx>=0)iArr[iIdx]={...iArr[iIdx],...updInfo};else iArr.push(updInfo);
+    saveInfos(iArr);
+    const __g=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
+    if(__g) gas('بيانات_حفظ',updInfo).catch(()=>{});
+  }
   updateTop();await loadAll();showProf();
 }
 
@@ -2373,29 +2528,55 @@ function saveExtra(){
   const hrsRaw=document.getElementById('fExtraHrs').value;
   const type=document.getElementById('fExtraType').value;
   const note=document.getElementById('fExtraNote').value.trim();
+  const received=document.getElementById('fExtraReceived')?document.getElementById('fExtraReceived').checked:false;
   if(!empId||!date||!hrsRaw){showAl('extraAl','d','يرجى ملء الحقول المطلوبة');return;}
   const hrs=parseFloat(hrsRaw);
-  if(isNaN(hrs)||hrs<=0){showAl('extraAl','d','يرجى إدخال عدد ساعات صحيح (مثال: 3 أو 0.5 أو 0.25)');return;}
+  if(isNaN(hrs)||hrs<=0){showAl('extraAl','d','يرجى إدخال عدد ساعات صحيح');return;}
   const empObj=emps.find(e=>String(e.empId)===String(empId));
   const arr=getExtras();
-  const extraObj={id:Date.now(),empId,empName:empObj?empObj.name:empId,empShift:empObj?empObj.shift:'',date,hrs,type,note};
+  const extraObj={id:Date.now(),empId,empName:empObj?empObj.name:empId,empShift:empObj?empObj.shift:'',date,hrs,type,note,received};
   const _gasUrl=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
   if(_gasUrl){ gas('اضافي_اضافة',extraObj).then(r=>{if(!r.ok)console.warn('GAS extra:',r.error);}); }
   else { arr.unshift(extraObj);saveExtras(arr); }
   showAl('extraAl','s','✅ تم حفظ الساعات الإضافية');
   renderExtraTable();
   ['fExtraDate','fExtraHrs','fExtraNote'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const rc=document.getElementById('fExtraReceived');if(rc)rc.checked=false;
+}
+
+// Toggle received status directly from table
+async function toggleExtraReceived(id,btn){
+  const arr=getExtras();
+  const idx=arr.findIndex(x=>String(x.id)===String(id));
+  let newVal;
+  if(idx>=0){ arr[idx].received=!arr[idx].received; newVal=arr[idx].received; saveExtras(arr); }
+  else newVal=false;
+  // Update GAS
+  const gasUrl=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
+  if(gasUrl) gas('اضافي_تعديل_استلام',{id:String(id),received:newVal}).catch(()=>{});
+  btn.textContent=newVal?'✅ مُستلم':'⏳ لم يُستلم';
+  btn.style.background=newVal?'rgba(0,200,150,.15)':'rgba(239,68,68,.1)';
+  btn.style.color=newVal?'var(--success)':'var(--danger)';
+  btn.style.borderColor=newVal?'rgba(0,200,150,.3)':'rgba(239,68,68,.25)';
 }
 async function renderExtraTable(){
   const tb=document.getElementById('extraTb');if(!tb)return;
   const gasUrl2=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
   const empId2=isMgrOrSup()?null:getCurrentEmpId();
   const arr = gasUrl2 ? await fetchExtras(empId2) : getExtras();
-  tb.innerHTML=arr.length?arr.map(x=>`<tr>
-    <td><b>${x.empName}</b></td><td>${x.date}</td><td>${x.hrs} ساعة</td>
-    <td>${x.type}</td><td>${x.note||'-'}</td>
-    <td><button class="btn btn-dng btn-sm" onclick="deleteExtra(${x.id})">🗑️</button></td>
-  </tr>`).join(''):'<tr><td colspan="6" class="no-data">لا يوجد سجلات</td></tr>';
+  tb.innerHTML=arr.length?arr.map(x=>{
+    const rec=x.received||false;
+    const recBtn=`<button class="btn btn-sm" style="border-radius:var(--rp);padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;background:${rec?'rgba(0,200,150,.15)':'rgba(239,68,68,.1)'};color:${rec?'var(--success)':'var(--danger)'};border:1px solid ${rec?'rgba(0,200,150,.3)':'rgba(239,68,68,.25)'}" onclick="toggleExtraReceived('${x.id}',this)">${rec?'✅ مُستلم':'⏳ لم يُستلم'}</button>`;
+    return `<tr>
+      <td><b>${x.empName}</b></td>
+      <td>${x.date.split('T')[0]||x.date}</td>
+      <td><b>${x.hrs}</b> ساعة</td>
+      <td>${x.type}</td>
+      <td>${recBtn}</td>
+      <td>${x.note||'-'}</td>
+      <td><button class="btn btn-dng btn-sm" onclick="deleteExtra('${x.id}')">🗑️</button></td>
+    </tr>`;
+  }).join(''):'<tr><td colspan="7" class="no-data">لا يوجد سجلات</td></tr>';
 }
 async function deleteExtra(id){if(!confirm('حذف السجل؟'))return;
   const gasUrl5=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
