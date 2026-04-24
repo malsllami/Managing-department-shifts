@@ -330,47 +330,54 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
 .days-red  { background:rgba(239,68,68,.15);color:var(--danger); }
 .days-warn { background:rgba(245,158,11,.15);color:var(--warning); }
 .days-ok   { background:rgba(0,200,150,.12);color:var(--success); }
-/* Sticky first 3 columns - رقم الوظيفي + الاسم + الجوال */
+/* ===== STICKY COLUMNS ===== */
+#comprehensiveTbl { border-collapse: separate; border-spacing: 0; }
+
+/* Column 1: رقم الوظيفي (75px) */
 #comprehensiveTbl td:nth-child(1),
-#comprehensiveTbl th:nth-child(1){
-  position:sticky;right:0;z-index:3;
-  background:var(--surface);
-  border-left:2px solid var(--primary) !important;
-  min-width:75px;
+#comprehensiveTbl th:nth-child(1) {
+  position: sticky; right: 0; z-index: 4;
+  background: var(--surface);
+  min-width: 80px; max-width: 80px;
+  box-shadow: -3px 0 6px rgba(0,0,0,.15);
 }
+
+/* Column 2: الاسم (145px) */
 #comprehensiveTbl td:nth-child(2),
-#comprehensiveTbl th:nth-child(2){
-  position:sticky;right:75px;z-index:3;
-  background:var(--surface);
-  min-width:140px;
+#comprehensiveTbl th:nth-child(2) {
+  position: sticky; right: 80px; z-index: 4;
+  background: var(--surface);
+  min-width: 145px; max-width: 145px;
 }
+
+/* Column 3: الجوال - with divider shadow */
 #comprehensiveTbl td:nth-child(3),
-#comprehensiveTbl th:nth-child(3){
-  position:sticky;right:215px;z-index:3;
-  background:var(--surface);
-  border-left:1px solid var(--border) !important;
-  min-width:115px;
+#comprehensiveTbl th:nth-child(3) {
+  position: sticky; right: 225px; z-index: 4;
+  background: var(--surface);
+  min-width: 120px; max-width: 120px;
+  border-left: 2px solid rgba(0,149,217,.3) !important;
 }
-/* Add shadow to indicate more content to the left */
-#comprehensiveTbl td:nth-child(3)::after,
-#comprehensiveTbl th:nth-child(3)::after{
-  content:'';
-  position:absolute;
-  left:-8px;top:0;bottom:0;width:8px;
-  background:linear-gradient(to left,rgba(0,0,0,.08),transparent);
-  pointer-events:none;
-}
-/* Even row background preserve sticky */
+
+/* Header row: higher z-index */
+#comprehensiveTbl thead th:nth-child(1),
+#comprehensiveTbl thead th:nth-child(2),
+#comprehensiveTbl thead th:nth-child(3) { z-index: 6; background: var(--bg2) !important; }
+
+/* Even rows */
 #comprehensiveTbl tr:nth-child(even) td:nth-child(1),
 #comprehensiveTbl tr:nth-child(even) td:nth-child(2),
-#comprehensiveTbl tr:nth-child(even) td:nth-child(3){
-  background:var(--surface2);
-}
+#comprehensiveTbl tr:nth-child(even) td:nth-child(3) { background: var(--surface2); }
+
+/* Hover */
 #comprehensiveTbl tr:hover td:nth-child(1),
 #comprehensiveTbl tr:hover td:nth-child(2),
-#comprehensiveTbl tr:hover td:nth-child(3){
-  background:rgba(0,149,217,.08) !important;
-}
+#comprehensiveTbl tr:hover td:nth-child(3) { background: rgba(0,149,217,.08) !important; }
+
+/* Transferred rows */
+#comprehensiveTbl tr.transferred td:nth-child(1),
+#comprehensiveTbl tr.transferred td:nth-child(2),
+#comprehensiveTbl tr.transferred td:nth-child(3) { background: rgba(245,158,11,.12) !important; }
 
 
 /* ===== BOTTOM NAVIGATION (MOBILE) ===== */
@@ -1286,6 +1293,8 @@ async function loginEmp(){
   if(normPh(pw)!==normPh(e.phone)&&pw!==e.phone){showAl('loginAlert','d','كلمة المرور غير صحيحة');setLd('eBtn',false);return;}
   emps=r.data;U={...e,viewRole:e.role};VR=e.role;
   sessionStorage.setItem('seU',JSON.stringify(U));
+  // Track active session
+  trackSession(e.empId, e.name, e.shift);
   setLd('eBtn',false);startApp();
 }
 async function loginMgr(){
@@ -1298,6 +1307,7 @@ async function loginMgr(){
   const savedMgrEmpId = localStorage.getItem('seMgrEmpId')||'';
   U={empId:r.data.mgrId,name:r.data.mgrName||'مدير النظام',role:'مدير',viewRole:'مدير',phone:'',dept:'الإدارة',shift:'-',mgrEmpId:savedMgrEmpId};
   VR='مدير';sessionStorage.setItem('seU',JSON.stringify(U));
+  trackSession(U.empId, U.name, '-');
   await loadAll();setLd('mBtn',false);startApp();
 }
 
@@ -1440,7 +1450,9 @@ function mgrDash(){
     <td><button class="btn btn-sec btn-sm" onclick="viewCenterEmps('${cc.name}')">عرض</button></td>
   </tr>`).join('');
   // Online (all emps = simulated)
-  const onl=emps.slice(0,Math.min(5,emps.length));
+  // Real active sessions
+  const sessions=getActiveSessions();
+  const onl=sessions.length>0?sessions.map(s=>({name:s.name,shift:s.shift,empId:s.empId})):emps.slice(0,Math.min(3,emps.length));
   const cols=['#0095D9','#8B5CF6','#00C896','#F59E0B','#EF4444'];
   // Week API chart data
   const wkData=[481,979,701,619,768,394,354];
@@ -1454,7 +1466,7 @@ function mgrDash(){
       {i:'⭐',v:sup,l:'إجمالي المشرفين',c:'si-o'},
       {i:'🏖️',v:leaves.length,l:'في إجازة الآن',c:'si-p'},
       {i:'⏰',v:extras.length,l:'إضافي لم يُسلّم',c:'si-r'},
-      {i:'👁️',v:onl.length,l:'متواجدون الآن',c:'si-g'},
+      {i:'👁️',v:sessions.length||1,l:'متواجدون الآن',c:'si-g'},
       {i:'⚡',v:usage,l:'طلبات API اليوم',c:'si-o',sub:'20,000 / '+usage}
     ].map(x=>`<div class="sc" style="flex-direction:column;align-items:flex-start;gap:4px">
       <div style="display:flex;align-items:center;justify-content:space-between;width:100%">
@@ -2072,7 +2084,15 @@ function showAl(id,t,msg){const el=document.getElementById(id);if(!el)return;el.
 function hideAl(id){const el=document.getElementById(id);if(el)el.classList.remove('show');}
 function toast(msg,t='info'){const el=document.getElementById('toast');el.textContent=msg;el.className=`show ${t}`;setTimeout(()=>el.className='',3000);}
 function setLd(id,on){const b=document.getElementById(id);if(!b)return;b.disabled=on;if(on)b.innerHTML='<div class="spinner"></div>';else{if(id==='eBtn')b.innerHTML='<span>تسجيل الدخول</span>';else if(id==='mBtn')b.innerHTML='<span>دخول المدير</span>';else b.innerHTML='💾 حفظ';}}
-function logout(){sessionStorage.removeItem('seU');U=null;VR=null;emps=[];document.getElementById('mainApp').classList.remove('active');document.getElementById('loginPage').classList.add('active');document.getElementById('eId').value='';document.getElementById('ePw').value='';}
+function logout(){
+  // Remove from active sessions
+  if(U) removeSession(U.empId);
+  sessionStorage.removeItem('seU');U=null;VR=null;emps=[];
+  document.getElementById('mainApp').classList.remove('active');
+  document.getElementById('loginPage').classList.add('active');
+  document.getElementById('eId').value='';
+  document.getElementById('ePw').value='';
+}
 function shTag(s){return`<span class="sht ${SHK[s]||'sh-a'}">${SHNAMES[s]||s}</span>`;}
 function stBadge(s){return s==='نشط'?'<span class="badge b-on">● نشط</span>':'<span class="badge b-off">● غير نشط</span>';}
 
@@ -2220,14 +2240,20 @@ function initCalendar() {
 
 function goToday() {
   const now = new Date();
-  document.getElementById('calMonth').value = now.getMonth();
-  document.getElementById('calYear').value = now.getFullYear();
+  const monthSel = document.getElementById('calMonth');
+  const yearSel = document.getElementById('calYear');
+  if(!monthSel || !yearSel) { showPage('cal'); setTimeout(goToday, 300); return; }
+  monthSel.value = now.getMonth();
+  yearSel.value = now.getFullYear();
   renderCalendar();
-  // Scroll to today's cell
   setTimeout(()=>{
     const todayCell = document.querySelector('.cal-day.today');
-    if(todayCell) todayCell.scrollIntoView({behavior:'smooth', block:'center'});
-  }, 150);
+    if(todayCell){
+      todayCell.scrollIntoView({behavior:'smooth', block:'center'});
+      todayCell.style.outline = '3px solid var(--danger)';
+      setTimeout(()=>todayCell.style.outline='',2000);
+    }
+  }, 300);
 }
 
 function renderCalendar() {
@@ -2811,7 +2837,15 @@ function saveInfo(){
 async function renderInfoTable(){
   const tb=document.getElementById('infoTb');if(!tb)return;
   const gasUrl3=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
-  const arr = gasUrl3 ? await fetchInfos() : getInfos();
+  let arr = gasUrl3 ? await fetchInfos() : getInfos();
+  // Filter by shift for supervisors
+  if(VR==='مشرف'){
+    const myShift=U.shift;
+    const shiftEmpIds=emps.filter(e=>e.shift===myShift).map(e=>String(e.empId));
+    arr=arr.filter(x=>shiftEmpIds.includes(String(x.empId)));
+  } else if(VR==='موظف'){
+    arr=arr.filter(x=>String(x.empId)===String(getCurrentEmpId()));
+  }
   tb.innerHTML=arr.length?arr.map(x=>`<tr>
     <td><b>${x.empName}</b></td><td>${x.region||'-'}</td><td>${x.center||'-'}</td>
     <td>${x.car||'-'}</td>
@@ -3472,6 +3506,35 @@ async function saveLeaveEdit(id){
   if(eRow) eRow.remove();
   toast('✅ تم تعديل الإجازة','success');
   renderLeaveTable();
+}
+
+
+// ============================================================
+// ACTIVE SESSION TRACKING
+// ============================================================
+function trackSession(empId, name, shift){
+  const sessions = JSON.parse(localStorage.getItem('seSessions')||'{}');
+  sessions[String(empId)] = {empId:String(empId), name, shift, loginTime:Date.now()};
+  localStorage.setItem('seSessions', JSON.stringify(sessions));
+}
+
+function removeSession(empId){
+  const sessions = JSON.parse(localStorage.getItem('seSessions')||'{}');
+  delete sessions[String(empId)];
+  localStorage.setItem('seSessions', JSON.stringify(sessions));
+}
+
+function getActiveSessions(){
+  const sessions = JSON.parse(localStorage.getItem('seSessions')||'{}');
+  const maxAge = 8 * 60 * 60 * 1000; // 8 hours
+  const now = Date.now();
+  // Clean stale sessions
+  let changed = false;
+  Object.keys(sessions).forEach(k=>{
+    if(now - sessions[k].loginTime > maxAge){ delete sessions[k]; changed=true; }
+  });
+  if(changed) localStorage.setItem('seSessions', JSON.stringify(sessions));
+  return Object.values(sessions);
 }
 
 window.onload=()=>{
