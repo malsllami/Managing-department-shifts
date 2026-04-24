@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -28,41 +27,41 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 @keyframes loadFill{from{width:0}to{width:100%}}
 
 /* LOADING */
-#loadingScreen{position:fixed;inset:0;z-index:9999;background:var(–bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;}
-.loading-bar{width:200px;height:3px;background:var(–surface2,#162540);border-radius:4px;overflow:hidden;}
-.loading-fill{height:100%;background:var(–grad);animation:loadFill 1.5s ease forwards;}
+#loadingScreen{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;}
+.loading-bar{width:200px;height:3px;background:var(--surface2,#162540);border-radius:4px;overflow:hidden;}
+.loading-fill{height:100%;background:var(--grad);animation:loadFill 1.5s ease forwards;}
 .spinner{width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;animation:spin .7s linear infinite;}
 
 /* LOGIN */
 #loginPage{min-height:100vh;display:none;align-items:center;justify-content:center;padding:20px;position:relative;z-index:1;}
 #loginPage.active{display:flex;}
-.login-card{background:var(–surface);border:1px solid var(–border);border-radius:var(–r);padding:36px 28px;width:100%;max-width:460px;box-shadow:var(–shadow);animation:fadeUp .5s ease;}
+.login-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:36px 28px;width:100%;max-width:460px;box-shadow:var(--shadow);animation:fadeUp .5s ease;}
 .login-logo{text-align:center;margin-bottom:28px;}
 .login-logo h1{font-size:18px;font-weight:800;margin-top:12px;}
-.login-logo p{font-size:13px;color:var(–text2);margin-top:3px;}
-.login-tabs{display:flex;gap:4px;background:var(–bg2);border-radius:var(–r);padding:4px;margin-bottom:24px;overflow:hidden;}
-.login-tab{flex:1;padding:9px 6px;text-align:center;border-radius:calc(var(–r) - 4px);cursor:pointer;font-size:13px;font-weight:700;color:var(–text2);transition:var(–tr);border:none;background:transparent;font-family:‘Cairo’,sans-serif;white-space:nowrap;}
-.login-tab.active{background:var(–primary);color:#fff;}
+.login-logo p{font-size:13px;color:var(--text2);margin-top:3px;}
+.login-tabs{display:flex;gap:4px;background:var(--bg2);border-radius:var(--r);padding:4px;margin-bottom:24px;overflow:hidden;}
+.login-tab{flex:1;padding:9px 6px;text-align:center;border-radius:calc(var(--r) - 4px);cursor:pointer;font-size:13px;font-weight:700;color:var(--text2);transition:var(--tr);border:none;background:transparent;font-family:'Cairo',sans-serif;white-space:nowrap;}
+.login-tab.active{background:var(--primary);color:#fff;}
 .form-group{margin-bottom:18px;}
-.form-group label{display:block;font-size:13px;font-weight:700;color:var(–text2);margin-bottom:7px;}
-.form-group label span{color:var(–danger);}
+.form-group label{display:block;font-size:13px;font-weight:700;color:var(--text2);margin-bottom:7px;}
+.form-group label span{color:var(--danger);}
 .fw{position:relative;}
-.fw input{width:100%;padding:12px 42px 12px 42px;background:var(–ibg);border:1.5px solid var(–border);border-radius:var(–rsm);color:var(–text);font-size:14px;font-family:‘Cairo’,sans-serif;outline:none;transition:var(–tr);}
+.fw input{width:100%;padding:12px 42px 12px 42px;background:var(--ibg);border:1.5px solid var(--border);border-radius:var(--rsm);color:var(--text);font-size:14px;font-family:'Cairo',sans-serif;outline:none;transition:var(--tr);}
 .fw input.nol{padding-left:14px;}
-.fw input:focus{border-color:var(–primary);box-shadow:0 0 0 3px rgba(0,149,217,.12);}
-.fic{position:absolute;top:50%;transform:translateY(-50%);display:flex;align-items:center;color:var(–text3);}
+.fw input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(0,149,217,.12);}
+.fic{position:absolute;top:50%;transform:translateY(-50%);display:flex;align-items:center;color:var(--text3);}
 .fic.r{right:13px;}
-.fic.l{left:10px;cursor:pointer;padding:4px;border-radius:8px;transition:var(–tr);background:none;border:none;color:var(–text3);}
-.fic.l:hover{color:var(–primary);}
+.fic.l{left:10px;cursor:pointer;padding:4px;border-radius:8px;transition:var(--tr);background:none;border:none;color:var(--text3);}
+.fic.l:hover{color:var(--primary);}
 .fic svg{width:17px;height:17px;display:block;}
 
 /* BUTTONS */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px 22px;border-radius:var(–rp);font-size:13px;font-weight:700;font-family:‘Cairo’,sans-serif;cursor:pointer;border:none;transition:var(–tr);}
-.btn-primary{background:var(–grad);color:#fff;width:100%;}
-.btn-primary:hover{opacity:.9;transform:translateY(-1px);box-shadow:var(–shadow2);}
-.btn-sec{background:var(–surface2);color:var(–text);border:1px solid var(–border);}
-.btn-sec:hover{border-color:var(–primary);color:var(–primary);}
-.btn-dng{background:rgba(239,68,68,.12);color:var(–danger);border:1px solid rgba(239,68,68,.25);}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px 22px;border-radius:var(--rp);font-size:13px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;border:none;transition:var(--tr);}
+.btn-primary{background:var(--grad);color:#fff;width:100%;}
+.btn-primary:hover{opacity:.9;transform:translateY(-1px);box-shadow:var(--shadow2);}
+.btn-sec{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+.btn-sec:hover{border-color:var(--primary);color:var(--primary);}
+.btn-dng{background:rgba(239,68,68,.12);color:var(--danger);border:1px solid rgba(239,68,68,.25);}
 .btn-dng:hover{background:rgba(239,68,68,.22);}
 .btn-sm{padding:7px 14px;font-size:12px;}
 .btn-full{width:100%;}
@@ -72,61 +71,61 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 #mainApp.active{display:block;}
 
 /* TOPBAR */
-.topbar{background:var(–surface);border-bottom:1px solid var(–border);padding:0 12px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.12);}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 12px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.12);}
 .tb-brand{display:flex;align-items:center;gap:8px;min-width:0;}
 .tb-brand h1{font-size:14px;font-weight:800;white-space:nowrap;}
-.tb-brand p{font-size:10px;color:var(–text2);}
+.tb-brand p{font-size:10px;color:var(--text2);}
 .tb-right{display:flex;align-items:center;gap:6px;flex-shrink:0;}
-.user-chip{display:flex;align-items:center;gap:7px;background:var(–surface2);border:1px solid var(–border);border-radius:var(–r);padding:5px 10px;}
-.u-av{width:30px;height:30px;border-radius:12px;background:var(–grad);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;}
+.user-chip{display:flex;align-items:center;gap:7px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:5px 10px;}
+.u-av{width:30px;height:30px;border-radius:12px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;}
 .u-name{font-size:13px;font-weight:700;}
-.u-role{font-size:11px;color:var(–text2);}
-.sync-pill{display:flex;align-items:center;gap:5px;font-size:11px;color:var(–text2);padding:5px 11px;background:var(–surface2);border:1px solid var(–border);border-radius:var(–rp);}
-.sync-dot{width:6px;height:6px;border-radius:50%;background:var(–success);animation:blink 1.5s infinite;}
-.theme-btn{background:var(–surface2);border:1px solid var(–border);border-radius:var(–rp);padding:7px 13px;cursor:pointer;font-size:16px;transition:var(–tr);}
-.theme-btn:hover{border-color:var(–primary);}
+.u-role{font-size:11px;color:var(--text2);}
+.sync-pill{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2);padding:5px 11px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rp);}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--success);animation:blink 1.5s infinite;}
+.theme-btn{background:var(--surface2);border:1px solid var(--border);border-radius:var(--rp);padding:7px 13px;cursor:pointer;font-size:16px;transition:var(--tr);}
+.theme-btn:hover{border-color:var(--primary);}
 
 /* ROLE SWITCH BAR */
-.rs-bar{background:var(–surface);border-bottom:1px solid var(–border);padding:8px 20px;display:flex;align-items:center;justify-content:center;gap:10px;}
-.rs-btn{padding:6px 18px;border-radius:var(–rp);font-size:12px;font-weight:700;cursor:pointer;border:none;font-family:‘Cairo’,sans-serif;transition:var(–tr);}
-.rs-btn.on{background:var(–grad);color:#fff;}
-.rs-btn.off{background:var(–surface2);color:var(–text2);border:1px solid var(–border);}
-.rs-btn.off:hover{border-color:var(–primary);color:var(–primary);}
+.rs-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:8px 20px;display:flex;align-items:center;justify-content:center;gap:10px;}
+.rs-btn{padding:6px 18px;border-radius:var(--rp);font-size:12px;font-weight:700;cursor:pointer;border:none;font-family:'Cairo',sans-serif;transition:var(--tr);}
+.rs-btn.on{background:var(--grad);color:#fff;}
+.rs-btn.off{background:var(--surface2);color:var(--text2);border:1px solid var(--border);}
+.rs-btn.off:hover{border-color:var(--primary);color:var(--primary);}
 
 /* LAYOUT */
 .app-layout{display:flex;height:calc(100vh - 60px);}
-.sidebar{width:228px;background:var(–surface);border-left:1px solid var(–border);padding:14px 9px;overflow-y:auto;flex-shrink:0;}
-.sb-sec{font-size:10px;font-weight:800;color:var(–text3);padding:8px 12px 4px;letter-spacing:1px;}
-.nav-item{display:flex;align-items:center;gap:9px;padding:10px 13px;border-radius:var(–rsm);color:var(–text2);cursor:pointer;font-size:13px;font-weight:600;transition:var(–tr);border:1px solid transparent;margin-bottom:2px;}
-.nav-item:hover{background:var(–surface2);color:var(–text);}
-.nav-item.active{background:rgba(0,149,217,.1);color:var(–primary);border-color:rgba(0,149,217,.2);}
+.sidebar{width:228px;background:var(--surface);border-left:1px solid var(--border);padding:14px 9px;overflow-y:auto;flex-shrink:0;}
+.sb-sec{font-size:10px;font-weight:800;color:var(--text3);padding:8px 12px 4px;letter-spacing:1px;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:10px 13px;border-radius:var(--rsm);color:var(--text2);cursor:pointer;font-size:13px;font-weight:600;transition:var(--tr);border:1px solid transparent;margin-bottom:2px;}
+.nav-item:hover{background:var(--surface2);color:var(--text);}
+.nav-item.active{background:rgba(0,149,217,.1);color:var(--primary);border-color:rgba(0,149,217,.2);}
 .ni{font-size:15px;}
 .main-content{flex:1;overflow-y:auto;padding:20px;}
 
 /* CARDS */
-.card{background:var(–surface);border:1px solid var(–border);border-radius:var(–r);overflow:hidden;margin-bottom:16px;}
-.card-hd{padding:14px 18px;border-bottom:1px solid var(–border);display:flex;align-items:center;justify-content:space-between;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px;}
+.card-hd{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
 .card-hd h3{font-size:14px;font-weight:800;}
 .card-bd{padding:18px;}
 
 /* STATS */
 .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:13px;margin-bottom:16px;}
-.sc{background:var(–surface);border:1.5px solid var(–border);border-radius:var(–r);padding:16px;display:flex;align-items:center;gap:12px;transition:var(–tr);}
-.sc:hover{transform:translateY(-2px);box-shadow:var(–shadow2);}
-.si{width:44px;height:44px;border-radius:var(–rsm);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.sc{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:16px;display:flex;align-items:center;gap:12px;transition:var(--tr);}
+.sc:hover{transform:translateY(-2px);box-shadow:var(--shadow2);}
+.si{width:44px;height:44px;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
 .si-b{background:rgba(0,149,217,.12);}
 .si-g{background:rgba(0,200,150,.12);}
 .si-o{background:rgba(245,166,35,.12);}
 .si-r{background:rgba(239,68,68,.12);}
 .si-p{background:rgba(139,92,246,.12);}
 .sv{font-size:22px;font-weight:900;line-height:1.2;}
-.sl{font-size:12px;color:var(–text2);margin-top:2px;}
+.sl{font-size:12px;color:var(--text2);margin-top:2px;}
 
 /* SHIFT CARDS */
 .shg{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:14px;}
-.shc{border-radius:var(–r);padding:18px;position:relative;overflow:hidden;transition:var(–tr);}
+.shc{border-radius:var(--r);padding:18px;position:relative;overflow:hidden;transition:var(--tr);}
 .shc:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.2);}
-.shc::before{content:’’;position:absolute;top:-25px;left:-25px;width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.07);}
+.shc::before{content:'';position:absolute;top:-25px;left:-25px;width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.07);}
 .shc-a{background:linear-gradient(135deg,#005f8e,#0095D9);border:1px solid rgba(0,149,217,.3);}
 .shc-b{background:linear-gradient(135deg,#5b21b6,#8B5CF6);border:1px solid rgba(139,92,246,.3);}
 .shc-c{background:linear-gradient(135deg,#92400e,#F59E0B);border:1px solid rgba(245,158,11,.3);}
@@ -139,153 +138,296 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .shc-sub{font-size:10px;color:rgba(255,255,255,.7);}
 
 /* ONLINE */
-.ol-card{background:var(–surface);border:1px solid var(–border);border-radius:var(–r);padding:18px;margin-bottom:16px;}
+.ol-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:16px;}
 .ol-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-.ol-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(–success);animation:blink 1s infinite;margin-left:5px;}
+.ol-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--success);animation:blink 1s infinite;margin-left:5px;}
 .ol-list{display:flex;flex-wrap:wrap;gap:7px;max-height:260px;overflow-y:auto;}
-.ol-chip{display:flex;align-items:center;gap:7px;background:var(–surface2);border:1px solid var(–border);border-radius:var(–rp);padding:6px 11px;}
+.ol-chip{display:flex;align-items:center;gap:7px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rp);padding:6px 11px;}
 .ol-av{width:25px;height:25px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;}
 
 /* USAGE */
-.ug-card{background:var(–surface);border:1px solid var(–border);border-radius:var(–r);padding:18px;margin-bottom:16px;}
-.ug-bar-w{background:var(–bg2);border-radius:var(–rp);height:11px;overflow:hidden;margin:9px 0;}
-.ug-bar-f{height:100%;background:var(–grad);border-radius:var(–rp);transition:width 1s ease;}
+.ug-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:16px;}
+.ug-bar-w{background:var(--bg2);border-radius:var(--rp);height:11px;overflow:hidden;margin:9px 0;}
+.ug-bar-f{height:100%;background:var(--grad);border-radius:var(--rp);transition:width 1s ease;}
 .wk-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-top:12px;}
 .wk-day{text-align:center;}
 .wk-bw{height:48px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:3px;}
 .wk-b{width:18px;border-radius:4px 4px 0 0;background:rgba(0,149,217,.2);transition:height .5s ease;}
-.wk-b.on{background:var(–grad);}
-.wk-lbl{font-size:9px;color:var(–text2);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
-.wk-n{font-size:10px;color:var(–text3);}
+.wk-b.on{background:var(--grad);}
+.wk-lbl{font-size:9px;color:var(--text2);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
+.wk-n{font-size:10px;color:var(--text3);}
 
 /* PAGE HEADER */
 .ph{margin-bottom:18px;}
 .ph h2{font-size:20px;font-weight:900;}
-.ph p{font-size:13px;color:var(–text2);margin-top:3px;}
-.gh{background:var(–grad);border-radius:var(–r);padding:20px;margin-bottom:16px;color:#fff;position:relative;overflow:hidden;}
-.gh::after{content:’’;position:absolute;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.07);top:-50px;left:-40px;}
+.ph p{font-size:13px;color:var(--text2);margin-top:3px;}
+.gh{background:var(--grad);border-radius:var(--r);padding:20px;margin-bottom:16px;color:#fff;position:relative;overflow:hidden;}
+.gh::after{content:'';position:absolute;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.07);top:-50px;left:-40px;}
 .gh h2{font-size:20px;font-weight:900;position:relative;z-index:1;}
 .gh p{font-size:13px;opacity:.85;margin-top:3px;position:relative;z-index:1;}
 
 /* TABLES */
 .tw{overflow-x:auto;}
 table{width:100%;border-collapse:collapse;}
-thead tr th{background:var(–bg2);padding:11px 12px;text-align:center;font-size:12px;font-weight:800;color:var(–primary);position:sticky;top:0;z-index:2;border-bottom:2px solid var(–primary);white-space:nowrap;}
-tbody tr td{padding:10px 12px;text-align:center;font-size:13px;border-bottom:1px solid var(–border);white-space:nowrap;}
-tbody tr:hover td{background:var(–chov);}
+thead tr th{background:var(--bg2);padding:11px 12px;text-align:center;font-size:12px;font-weight:800;color:var(--primary);position:sticky;top:0;z-index:2;border-bottom:2px solid var(--primary);white-space:nowrap;}
+tbody tr td{padding:10px 12px;text-align:center;font-size:13px;border-bottom:1px solid var(--border);white-space:nowrap;}
+tbody tr:hover td{background:var(--chov);}
 tbody tr:nth-child(even) td{background:rgba(0,0,0,.02);}
-.no-data{text-align:center;padding:28px;color:var(–text2);font-size:13px;}
+.no-data{text-align:center;padding:28px;color:var(--text2);font-size:13px;}
 
 /* ALERTS */
-.al{padding:10px 14px;border-radius:var(–rsm);font-size:13px;font-weight:600;margin-bottom:13px;display:none;align-items:center;gap:8px;}
+.al{padding:10px 14px;border-radius:var(--rsm);font-size:13px;font-weight:600;margin-bottom:13px;display:none;align-items:center;gap:8px;}
 .al.show{display:flex;}
-.al-s{background:rgba(0,200,150,.1);border:1px solid rgba(0,200,150,.3);color:var(–success);}
-.al-d{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(–danger);}
-.al-i{background:rgba(0,149,217,.1);border:1px solid var(–border);color:var(–primary);}
+.al-s{background:rgba(0,200,150,.1);border:1px solid rgba(0,200,150,.3);color:var(--success);}
+.al-d{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(--danger);}
+.al-i{background:rgba(0,149,217,.1);border:1px solid var(--border);color:var(--primary);}
 
 /* MODALS */
 .mo{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:20px;}
 .mo.active{display:flex;}
-.modal{background:var(–surface);border:1px solid var(–border);border-radius:var(–r);width:100%;max-width:560px;box-shadow:var(–shadow);animation:fadeUp .3s ease;max-height:90vh;overflow-y:auto;}
-.m-hd{padding:16px 20px;border-bottom:1px solid var(–border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(–surface);z-index:1;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);width:100%;max-width:560px;box-shadow:var(--shadow);animation:fadeUp .3s ease;max-height:90vh;overflow-y:auto;}
+.m-hd{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--surface);z-index:1;}
 .m-hd h3{font-size:15px;font-weight:800;}
 .m-bd{padding:20px;}
-.m-ft{padding:14px 20px;border-top:1px solid var(–border);display:flex;gap:8px;justify-content:flex-end;}
-.btn-x{background:none;border:none;color:var(–text2);cursor:pointer;font-size:18px;padding:4px;border-radius:8px;transition:var(–tr);}
-.btn-x:hover{background:var(–surface2);color:var(–danger);}
+.m-ft{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;}
+.btn-x{background:none;border:none;color:var(--text2);cursor:pointer;font-size:18px;padding:4px;border-radius:8px;transition:var(--tr);}
+.btn-x:hover{background:var(--surface2);color:var(--danger);}
 .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
 .fgrid .full{grid-column:1/-1;}
-.finp{width:100%;padding:11px 13px;background:var(–ibg);border:1.5px solid var(–border);border-radius:var(–rsm);color:var(–text);font-family:‘Cairo’,sans-serif;font-size:14px;outline:none;transition:var(–tr);}
-.finp:focus{border-color:var(–primary);box-shadow:0 0 0 3px rgba(0,149,217,.1);}
+.finp{width:100%;padding:11px 13px;background:var(--ibg);border:1.5px solid var(--border);border-radius:var(--rsm);color:var(--text);font-family:'Cairo',sans-serif;font-size:14px;outline:none;transition:var(--tr);}
+.finp:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(0,149,217,.1);}
 select.finp{-webkit-appearance:none;}
 
 /* BADGES */
-.badge{display:inline-flex;align-items:center;gap:3px;padding:4px 10px;border-radius:var(–rp);font-size:11px;font-weight:700;}
-.b-on{background:rgba(0,200,150,.12);color:var(–success);border:1px solid rgba(0,200,150,.25);}
-.b-off{background:rgba(239,68,68,.1);color:var(–danger);border:1px solid rgba(239,68,68,.2);}
-.b-sup{background:rgba(0,149,217,.1);color:var(–primary);border:1px solid var(–border);}
-.sht{display:inline-flex;align-items:center;padding:4px 10px;border-radius:var(–rp);font-size:11px;font-weight:700;}
-.sh-a{background:rgba(0,149,217,.12);color:var(–shift-a);border:1px solid rgba(0,149,217,.25);}
-.sh-b{background:rgba(139,92,246,.12);color:var(–shift-b);border:1px solid rgba(139,92,246,.25);}
-.sh-c{background:rgba(245,158,11,.12);color:var(–shift-c);border:1px solid rgba(245,158,11,.25);}
-.sh-d{background:rgba(239,68,68,.12);color:var(–shift-d);border:1px solid rgba(239,68,68,.25);}
+.badge{display:inline-flex;align-items:center;gap:3px;padding:4px 10px;border-radius:var(--rp);font-size:11px;font-weight:700;}
+.b-on{background:rgba(0,200,150,.12);color:var(--success);border:1px solid rgba(0,200,150,.25);}
+.b-off{background:rgba(239,68,68,.1);color:var(--danger);border:1px solid rgba(239,68,68,.2);}
+.b-sup{background:rgba(0,149,217,.1);color:var(--primary);border:1px solid var(--border);}
+.sht{display:inline-flex;align-items:center;padding:4px 10px;border-radius:var(--rp);font-size:11px;font-weight:700;}
+.sh-a{background:rgba(0,149,217,.12);color:var(--shift-a);border:1px solid rgba(0,149,217,.25);}
+.sh-b{background:rgba(139,92,246,.12);color:var(--shift-b);border:1px solid rgba(139,92,246,.25);}
+.sh-c{background:rgba(245,158,11,.12);color:var(--shift-c);border:1px solid rgba(245,158,11,.25);}
+.sh-d{background:rgba(239,68,68,.12);color:var(--shift-d);border:1px solid rgba(239,68,68,.25);}
 
 /* SEARCH */
 .sw{position:relative;margin-bottom:13px;}
-.sw input{width:100%;padding:10px 34px 10px 13px;background:var(–ibg);border:1.5px solid var(–border);border-radius:var(–rsm);color:var(–text);font-family:‘Cairo’,sans-serif;font-size:13px;outline:none;transition:var(–tr);}
-.sw input:focus{border-color:var(–primary);}
-.sw .si2{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(–text3);font-size:14px;}
+.sw input{width:100%;padding:10px 34px 10px 13px;background:var(--ibg);border:1.5px solid var(--border);border-radius:var(--rsm);color:var(--text);font-family:'Cairo',sans-serif;font-size:13px;outline:none;transition:var(--tr);}
+.sw input:focus{border-color:var(--primary);}
+.sw .si2{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px;}
 
 /* DIVIDER */
-.dv{height:1px;background:var(–border);margin:14px 0;}
+.dv{height:1px;background:var(--border);margin:14px 0;}
 
 /* PROFILE */
-.pav{width:72px;height:72px;border-radius:22px;background:var(–grad);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;margin:0 auto 12px;}
-.srow{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(–border);}
+.pav{width:72px;height:72px;border-radius:22px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;margin:0 auto 12px;}
+.srow{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);}
 .srow:last-child{border-bottom:none;}
 .slbl{font-size:13px;font-weight:700;}
 
 /* TOAST */
-#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(–surface);border:1px solid var(–border);border-radius:var(–r);padding:10px 20px;font-size:13px;font-weight:700;z-index:9999;display:none;align-items:center;gap:8px;box-shadow:var(–shadow);min-width:220px;justify-content:center;}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 20px;font-size:13px;font-weight:700;z-index:9999;display:none;align-items:center;gap:8px;box-shadow:var(--shadow);min-width:220px;justify-content:center;}
 #toast.show{display:flex;}
-#toast.success{border-color:rgba(0,200,150,.4);color:var(–success);}
-#toast.error{border-color:rgba(239,68,68,.4);color:var(–danger);}
-#toast.info{color:var(–primary);}
+#toast.success{border-color:rgba(0,200,150,.4);color:var(--success);}
+#toast.error{border-color:rgba(239,68,68,.4);color:var(--danger);}
+#toast.info{color:var(--primary);}
+
 
 /* MOBILE TOPBAR */
 .u-info-desk{display:flex;flex-direction:column;}
 .sync-txt{display:inline;}
 .tb-date-desktop{display:block;}
 @media(max-width:520px){
-.tb-date-desktop{display:none;}
-.sync-txt{display:none;}
-.u-info-desk{display:none;}
-.user-chip{padding:5px 7px;}
-.sync-pill{padding:5px 8px;}
-.theme-btn{padding:6px 10px;}
-.topbar{padding:0 10px;}
+  .tb-date-desktop{display:none;}
+  .sync-txt{display:none;}
+  .u-info-desk{display:none;}
+  .user-chip{padding:5px 7px;}
+  .sync-pill{padding:5px 8px;}
+  .theme-btn{padding:6px 10px;}
+  .topbar{padding:0 10px;}
 }
 @media(max-width:768px){.sidebar{display:none;}.fgrid{grid-template-columns:1fr;}.sg{grid-template-columns:1fr 1fr;}.shg{grid-template-columns:1fr 1fr;}}
 
 /* CALENDAR */
-.cal-day{border-radius:10px;padding:6px 4px;min-height:80px;background:var(–surface2);border:1px solid var(–border);transition:var(–tr);position:relative;overflow:hidden;}
-.cal-day:hover{border-color:var(–primary);}
-.cal-day.today{border-color:var(–danger);border-width:2px;background:rgba(239,68,68,.06);}
+.cal-day{border-radius:10px;padding:6px 4px;min-height:80px;background:var(--surface2);border:1px solid var(--border);transition:var(--tr);position:relative;overflow:hidden;}
+.cal-day:hover{border-color:var(--primary);}
+.cal-day.today{border-color:var(--danger);border-width:2px;background:rgba(239,68,68,.06);}
 .cal-day.other-month{opacity:.35;}
-.cal-day-num{font-size:12px;font-weight:800;margin-bottom:4px;color:var(–text2);}
-.cal-day.today .cal-day-num{color:var(–danger);}
-.cal-day-hij{font-size:9px;color:var(–text3);margin-bottom:3px;}
+.cal-day-num{font-size:12px;font-weight:800;margin-bottom:4px;color:var(--text2);}
+.cal-day.today .cal-day-num{color:var(--danger);}
+.cal-day-hij{font-size:9px;color:var(--text3);margin-bottom:3px;}
 .cal-shift-tag{display:block;font-size:9px;font-weight:700;border-radius:6px;padding:2px 4px;margin-bottom:2px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .cs-morning{background:rgba(0,149,217,.18);color:#0095D9;}
 .cs-evening{background:rgba(139,92,246,.18);color:#8B5CF6;}
-.cs-off{background:rgba(0,200,150,.12);color:var(–success);}
-.cal-dh{text-align:center;font-size:11px;font-weight:800;color:var(–text2);padding:6px 0;}
+.cs-off{background:rgba(0,200,150,.12);color:var(--success);}
+.cal-dh{text-align:center;font-size:11px;font-weight:800;color:var(--text2);padding:6px 0;}
 /* Mini table */
-.mini-sch{background:var(–surface);border:1px solid var(–border);border-radius:var(–r);overflow:hidden;margin-top:14px;}
-.mini-sch-hd{padding:13px 18px;border-bottom:1px solid var(–border);font-size:14px;font-weight:800;}
+.mini-sch{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-top:14px;}
+.mini-sch-hd{padding:13px 18px;border-bottom:1px solid var(--border);font-size:14px;font-weight:800;}
 .mini-cycle{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;padding:14px;}
 .mc-cell{border-radius:8px;padding:8px 4px;text-align:center;}
 .mc-cell .mc-n{font-size:14px;font-weight:900;}
 .mc-cell .mc-l{font-size:9px;font-weight:700;margin-top:2px;}
 .mc-morning{background:rgba(0,149,217,.15);color:#0095D9;border:1px solid rgba(0,149,217,.25);}
 .mc-evening{background:rgba(139,92,246,.15);color:#8B5CF6;border:1px solid rgba(139,92,246,.25);}
-.mc-off{background:rgba(0,200,150,.1);color:var(–success);border:1px solid rgba(0,200,150,.2);}
+.mc-off{background:rgba(0,200,150,.1);color:var(--success);border:1px solid rgba(0,200,150,.2);}
+
 
 /* TRANSFER HIGHLIGHT */
 .emp-transferred {
-animation: highlightRow 1s ease;
+  animation: highlightRow 1s ease;
 }
 @keyframes highlightRow {
-0% { background: rgba(245,158,11,.35) !important; }
-100% { background: rgba(245,158,11,.35); }
+  0% { background: rgba(245,158,11,.35) !important; }
+  100% { background: rgba(245,158,11,.35); }
 }
-tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 3px solid var(–warning); }
+tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 3px solid var(--warning); }
+
 
 /* FORM TABS STICKY */
-.ftb{padding:9px 18px;border-radius:16px;border:none;cursor:pointer;font-size:13px;font-weight:700;font-family:‘Cairo’,sans-serif;transition:all .25s;}
-.ftb.on{background:var(–primary);color:#fff;}
-.ftb.off{background:transparent;color:var(–text2);}
-.ftb.off:hover{color:var(–text);}
+.ftb{padding:9px 18px;border-radius:16px;border:none;cursor:pointer;font-size:13px;font-weight:700;font-family:'Cairo',sans-serif;transition:all .25s;}
+.ftb.on{background:var(--primary);color:#fff;}
+.ftb.off{background:transparent;color:var(--text2);}
+.ftb.off:hover{color:var(--text);}
+
+
+/* COMPREHENSIVE TABLE */
+#comprehensiveTbl th{
+  background:var(--bg2);padding:10px 10px;text-align:center;
+  font-size:11px;font-weight:800;color:var(--primary);
+  position:sticky;top:0;z-index:2;border-bottom:2px solid var(--primary);
+  white-space:nowrap;border-left:1px solid var(--border);
+}
+#comprehensiveTbl th.th-group-id     { background:rgba(0,149,217,.12); }
+#comprehensiveTbl th.th-group-info   { background:rgba(0,200,150,.08); }
+#comprehensiveTbl th.th-group-leave  { background:rgba(139,92,246,.08); }
+#comprehensiveTbl th.th-group-extra  { background:rgba(245,158,11,.08); }
+#comprehensiveTbl th.th-group-cloth  { background:rgba(239,68,68,.06); }
+#comprehensiveTbl th.th-group-card   { background:rgba(0,149,217,.06); }
+#comprehensiveTbl td{
+  padding:9px 10px;text-align:center;font-size:12px;
+  border-bottom:1px solid var(--border);border-left:1px solid rgba(255,255,255,.03);
+  white-space:nowrap;
+}
+#comprehensiveTbl tr:nth-child(even) td{ background:rgba(0,0,0,.02); }
+#comprehensiveTbl tr:hover td{ background:var(--chov) !important; }
+#comprehensiveTbl tr.transferred td{ border-right:3px solid var(--warning); }
+.exp-soon{ color:var(--danger);font-weight:700; }
+.exp-warn{ color:var(--warning);font-weight:700; }
+.exp-ok  { color:var(--success); }
+.days-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:32px;height:20px;border-radius:10px;font-size:10px;font-weight:800;
+}
+.days-red  { background:rgba(239,68,68,.15);color:var(--danger); }
+.days-warn { background:rgba(245,158,11,.15);color:var(--warning); }
+.days-ok   { background:rgba(0,200,150,.12);color:var(--success); }
+/* Sticky first 3 columns */
+#comprehensiveTbl td:nth-child(1),
+#comprehensiveTbl th:nth-child(1){ position:sticky;right:0;z-index:3;background:var(--surface); }
+#comprehensiveTbl td:nth-child(2),
+#comprehensiveTbl th:nth-child(2){ position:sticky;right:70px;z-index:3;background:var(--surface); }
+#comprehensiveTbl td:nth-child(3),
+#comprehensiveTbl th:nth-child(3){ position:sticky;right:200px;z-index:3;background:var(--surface); }
+
+
+/* ===== BOTTOM NAVIGATION (MOBILE) ===== */
+#bottomNav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  z-index: 200;
+  padding: 6px 0 max(6px, env(safe-area-inset-bottom));
+  box-shadow: 0 -4px 20px rgba(0,0,0,.2);
+}
+.bn-list {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  gap: 0;
+}
+.bn-list::-webkit-scrollbar { display: none; }
+.bn-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 6px 10px;
+  min-width: 56px;
+  cursor: pointer;
+  border-radius: 14px;
+  transition: all .2s;
+  flex-shrink: 0;
+  border: none;
+  background: none;
+  font-family: 'Cairo', sans-serif;
+  color: var(--text3);
+  position: relative;
+}
+.bn-item .bn-icon { font-size: 20px; line-height: 1; }
+.bn-item .bn-lbl  { font-size: 10px; font-weight: 700; white-space: nowrap; }
+.bn-item.active {
+  color: var(--primary);
+  background: rgba(0,149,217,.1);
+}
+.bn-item.active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%; transform: translateX(-50%);
+  width: 24px; height: 3px;
+  background: var(--primary);
+  border-radius: 0 0 4px 4px;
+}
+/* More menu overlay */
+#bnMoreMenu {
+  display: none;
+  position: fixed;
+  bottom: 70px;
+  left: 0; right: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-radius: 20px 20px 0 0;
+  padding: 16px 12px;
+  z-index: 199;
+  box-shadow: 0 -8px 32px rgba(0,0,0,.3);
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.bnm-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  transition: all .2s;
+  margin-bottom: 4px;
+}
+.bnm-item:hover, .bnm-item.active { background: rgba(0,149,217,.1); color: var(--primary); }
+.bnm-icon { font-size: 20px; }
+#bnMoreOverlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.4);
+  z-index: 198;
+}
+@media(max-width: 768px) {
+  #bottomNav { display: block; }
+  .app-layout { height: calc(100vh - 56px); }
+  .main-content { padding: 14px 12px 80px; }
+}
+@media(min-width: 769px) {
+  #bottomNav { display: none !important; }
+}
 
 </style>
 </head>
@@ -301,7 +443,6 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
 </div>
 
 <!-- LOGIN -->
-
 <div id="loginPage">
   <div class="login-card">
     <div class="login-logo">
@@ -339,7 +480,6 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
 </div>
 
 <!-- MAIN APP -->
-
 <div id="mainApp">
   <div class="topbar">
     <div class="tb-brand">
@@ -372,6 +512,22 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
     <button class="rs-btn" id="rsS" onclick="switchRole('مشرف')" style="display:none">⭐ مشرف</button>
     <button class="rs-btn" id="rsE" onclick="switchRole('موظف')" style="display:none">👤 موظف</button>
   </div>
+
+  <!-- BOTTOM NAVIGATION (MOBILE) -->
+  <div id="bottomNav">
+    <div class="bn-list" id="bnList">
+      <!-- filled by JS buildBottomNav() -->
+    </div>
+  </div>
+  <!-- More Menu -->
+  <div id="bnMoreOverlay" onclick="closeBnMore()"></div>
+  <div id="bnMoreMenu">
+    <div style="text-align:center;padding:4px 0 12px">
+      <div style="width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto"></div>
+    </div>
+    <div id="bnMoreList"></div>
+  </div>
+
   <div class="app-layout">
     <div class="sidebar">
       <div class="sb-sec">الرئيسية</div>
@@ -386,427 +542,472 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
     </div>
     <div class="main-content">
 
-```
-  <!-- DASHBOARD -->
-  <div id="page-db" class="page">
-    <div class="gh"><h2 id="dWelcome">مرحباً!</h2><p id="dDate"></p></div>
-    <div id="dContent"></div>
-  </div>
-
-  <!-- EMPLOYEES -->
-  <div id="page-emp" class="page" style="display:none">
-    <div class="ph"><h2>👥 إدارة الموظفين</h2><p>إضافة وتعديل وحذف الموظفين</p></div>
-    <div class="card">
-      <div class="card-hd"><h3>قائمة الموظفين</h3><button class="btn btn-primary btn-sm" style="width:auto" onclick="openAdd()">➕ إضافة موظف</button></div>
-      <div class="card-bd">
-        <div class="sw"><span class="si2">🔍</span><input type="text" id="empSrch" placeholder="بحث..." oninput="filterEmp()"></div>
-        <div class="tw"><table><thead><tr><th>رقم الوظيفي</th><th>الاسم الكامل</th><th>رقم الجوال</th><th>القسم</th><th>الوردية</th><th>الدور</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody id="empTb"><tr><td colspan="8" class="no-data">⏳ جاري التحميل...</td></tr></tbody></table></div>
+      <!-- DASHBOARD -->
+      <div id="page-db" class="page">
+        <div class="gh"><h2 id="dWelcome">مرحباً!</h2><p id="dDate"></p></div>
+        <div id="dContent"></div>
       </div>
-    </div>
-  </div>
 
-  <!-- MY SHIFT -->
-  <div id="page-sh" class="page" style="display:none">
-    <div class="ph"><h2>📋 موظفو ورديتي</h2><p id="supLbl">-</p></div>
-    <div class="card">
-      <div class="card-hd"><h3 id="shTitle">الوردية</h3><button class="btn btn-primary btn-sm" style="width:auto" onclick="openAddShift()">➕ إضافة موظف</button></div>
-      <div class="card-bd">
-        <div class="sw"><span class="si2">🔍</span><input type="text" id="shSrch" placeholder="بحث..." oninput="filterSh()"></div>
-        <div class="tw"><table><thead><tr><th>رقم الوظيفي</th><th>الاسم الكامل</th><th>رقم الجوال</th><th>الحالة</th><th>الدور</th><th>إجراءات</th></tr></thead><tbody id="shTb"><tr><td colspan="5" class="no-data">لا يوجد موظفون</td></tr></tbody></table></div>
-      </div>
-    </div>
-  </div>
+      <!-- EMPLOYEES -->
+      <div id="page-emp" class="page" style="display:none">
+        <div class="ph"><h2>👥 إدارة الموظفين</h2><p>الجدول الشامل لجميع بيانات الموظفين</p></div>
 
-  <!-- PROFILE -->
-  <div id="page-prof" class="page" style="display:none">
-    <div class="ph"><h2>👤 ملفي الشخصي</h2></div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;max-width:900px">
-      <!-- Left: basic info -->
-      <div class="card">
-        <div class="card-hd"><h3>البيانات الأساسية</h3><button class="btn btn-sec btn-sm" onclick="openEditProf()">✏️ تعديل</button></div>
-        <div class="card-bd" style="text-align:center;padding-top:18px">
-          <div class="pav" id="profAv">م</div>
-          <h2 id="profName" style="font-size:17px;margin-bottom:3px"></h2>
-          <p id="profRol" style="color:var(--text2);font-size:13px;margin-bottom:14px"></p>
-          <div class="dv"></div>
-          <div style="text-align:right">
-            <div class="srow"><div class="slbl">رقم الوظيفي</div><div style="color:var(--primary);font-weight:800" id="profId"></div></div>
-            <div class="srow"><div class="slbl">رقم الجوال</div><div id="profPh"></div></div>
-            <div class="srow"><div class="slbl">القسم</div><div id="profDp"></div></div>
-            <div class="srow"><div class="slbl">الوردية</div><div id="profSh"></div></div>
-            <div class="srow"><div class="slbl">المنطقة</div><div id="profRegion" style="color:var(--text2)">-</div></div>
-            <div class="srow"><div class="slbl">المركز</div><div id="profCenter" style="color:var(--text2)">-</div></div>
+        <!-- CONTROLS BAR -->
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 16px">
+          <div class="sw" style="margin:0;flex:1;min-width:200px">
+            <span class="si2">🔍</span>
+            <input type="text" id="empSrch" placeholder="بحث بالاسم أو الرقم أو المركز..." oninput="filterEmp()" style="width:100%">
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <select id="filterShift" class="finp" style="width:110px;padding:8px 10px" onchange="filterEmp()">
+              <option value="">كل الورديات</option>
+              <option value="أ">وردية أ</option>
+              <option value="ب">وردية ب</option>
+              <option value="ج">وردية ج</option>
+              <option value="د">وردية د</option>
+            </select>
+            <select id="filterRole" class="finp" style="width:100px;padding:8px 10px" onchange="filterEmp()">
+              <option value="">كل الأدوار</option>
+              <option value="موظف">موظف</option>
+              <option value="مشرف">مشرف</option>
+            </select>
+            <button class="btn btn-sec btn-sm" onclick="toggleEmpView()" id="viewToggleBtn" title="تبديل العرض">📊 عرض مبسط</button>
+            <button class="btn btn-primary btn-sm" style="width:auto" onclick="openAdd()">➕ إضافة موظف</button>
+            <button class="btn btn-sec btn-sm" onclick="refreshComprehensive()" title="تحديث البيانات الكاملة">🔄</button>
           </div>
         </div>
-      </div>
-      <!-- Right: balances + transfer history -->
-      <div style="display:flex;flex-direction:column;gap:14px">
-        <div class="card" id="profBalCard">
-          <div class="card-hd"><h3>📊 أرصدة الإجازات</h3><button class="btn btn-sec btn-sm" onclick="openEditBalances()" id="editBalBtn">✏️ تعديل</button></div>
-          <div class="card-bd">
-            <div id="profBalances"></div>
+
+        <!-- SUMMARY STATS -->
+        <div id="empSummaryStats" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-bottom:14px"></div>
+
+        <!-- COMPREHENSIVE TABLE -->
+        <div class="card" id="comprehensiveCard">
+          <div class="card-hd">
+            <h3 id="empTableTitle">📋 الجدول الشامل للموظفين</h3>
+            <span id="empCount" style="font-size:12px;color:var(--text2)"></span>
           </div>
-        </div>
-        <div class="card">
-          <div class="card-hd"><h3>📋 حالة الوردية اليوم</h3></div>
-          <div class="card-bd" id="profShiftToday"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Edit balances modal trigger area (for employee) -->
-    <div id="profBalEditArea" class="card" style="max-width:460px;margin-top:14px;display:none">
-      <div class="card-hd"><h3>تعديل الأرصدة</h3></div>
-      <div class="card-bd">
-        <div class="fgrid">
-          <div class="form-group"><label>رصيد سنوية</label><input type="number" id="profBalAnnual" class="finp" min="0"></div>
-          <div class="form-group"><label>رصيد مجدولة</label><input type="number" id="profBalSched" class="finp" min="0"></div>
-        </div>
-        <button class="btn btn-primary btn-full" onclick="saveProfBalances()">💾 حفظ</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- SETTINGS -->
-  <div id="page-set" class="page" style="display:none">
-    <div class="ph"><h2>⚙️ إعدادات النظام</h2></div>
-    <div class="card" style="max-width:480px">
-      <div class="card-hd"><h3>بيانات حساب المدير</h3></div>
-      <div class="card-bd">
-        <div id="setAl" class="al"></div>
-        <div class="form-group"><label>رقم دخول المدير</label><input type="text" id="sMId" class="finp"></div>
-        <div class="form-group"><label>كلمة المرور الجديدة (فارغة = بدون تغيير)</label><input type="password" id="sMPw" class="finp" placeholder="كلمة مرور جديدة..."></div>
-        <div class="form-group"><label>اسم المدير</label><input type="text" id="sMNm" class="finp"></div>
-        <button class="btn btn-primary btn-full" onclick="saveSets()">💾 حفظ الإعدادات</button>
-      </div>
-    </div>
-    <div class="card" style="max-width:480px;margin-top:13px">
-      <div class="card-hd"><h3>حساب المدير كموظف</h3></div>
-      <div class="card-bd">
-        <p style="font-size:12px;color:var(--text2);margin-bottom:14px">ربط حساب المدير بحساب موظف للتنقل بين الدورين</p>
-        <div class="form-group"><label>رقم الوظيفي الخاص بالمدير كموظف</label><input type="text" id="sMgrEmpId" class="finp" placeholder="مثال: 9999" oninput="norm(this)"></div>
-        <button class="btn btn-sec btn-full" onclick="saveMgrEmpLink()" style="margin-bottom:0">🔗 ربط الحساب</button>
-        <div id="mgrEmpAl" class="al" style="margin-top:10px"></div>
-      </div>
-    </div>
-    <div class="card" style="max-width:480px;margin-top:13px">
-      <div class="card-hd"><h3>🔗 ربط Google Sheets</h3></div>
-      <div class="card-bd">
-        <div id="gasAl" class="al"></div>
-        <div class="form-group">
-          <label>معرّف جدول البيانات (Sheet ID)</label>
-          <div style="display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rsm);padding:8px 12px">
-            <span style="font-size:11px;color:var(--text3);word-break:break-all;flex:1" id="sheetId">11iUjLsOz64NaVi6MxPqf8acMl9--vXg8QuJpm0yWVL4</span>
-            <button class="btn btn-sec btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('sheetId').textContent).then(()=>toast('✅ تم النسخ','success'))">📋</button>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>رابط Google Apps Script (بعد النشر)</label>
-          <input type="text" id="gasUrlInput" class="finp" placeholder="https://script.google.com/macros/s/..." value="">
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-primary btn-sm" style="width:auto" onclick="saveGasUrl()">🔗 ربط وتفعيل</button>
-          <button class="btn btn-sec btn-sm" onclick="initSheets()">🔧 تهيئة الجداول</button>
-          <button class="btn btn-sec btn-sm" onclick="testGasConnection()">🧪 اختبار الاتصال</button>
-          <button class="btn btn-sec btn-sm" onclick="loadAll()">🔄 تحديث</button>
-        </div>
-        <div style="margin-top:12px;padding:10px 12px;background:var(--bg2);border-radius:var(--rsm);font-size:11px;color:var(--text3)">
-          💡 <b>طريقة الربط:</b> 1) افتح script.google.com → مشروع جديد → انسخ كود Code.gs من تعليقات الملف → نشر ← تطبيق ويب ← متاح للجميع → انسخ الرابط وألصقه هنا
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- FORMS PAGE -->
-  <div id="page-forms" class="page" style="display:none">
-    <div class="ph"><h2>📝 النماذج</h2><p>إجازات · ساعات إضافية · البيانات الوظيفية</p></div>
-
-    <!-- STICKY TABS -->
-    <div id="formTabsBar" style="position:sticky;top:0;z-index:50;background:var(--bg);padding:8px 0 10px;margin-bottom:14px">
-      <div style="display:flex;gap:4px;background:var(--bg2);border-radius:20px;padding:4px;width:fit-content">
-        <button onclick="switchFormTab('leave')" id="ftab-leave" class="ftb on">🏖️ الإجازات</button>
-        <button onclick="switchFormTab('extra')" id="ftab-extra" class="ftb off">⏰ ساعات إضافية</button>
-        <button onclick="switchFormTab('info')"  id="ftab-info"  class="ftb off">🗂️ البيانات الوظيفية</button>
-      </div>
-    </div>
-
-    <!-- ===== LEAVE SECTION ===== -->
-    <div id="fsec-leave">
-      <!-- Employee info bar (auto-filled for employees) -->
-      <div id="leaveEmpBar" style="display:none;background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 16px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:14px;align-items:center">
-        <span style="font-size:13px;font-weight:700" id="leEmpName"></span>
-        <span style="font-size:12px;color:var(--text2)" id="leEmpId"></span>
-        <span id="leEmpShift" class="sht sh-a"></span>
-        <span style="font-size:12px;color:var(--text2)" id="leEmpRegion"></span>
-        <span style="font-size:12px;color:var(--text2)" id="leEmpCenter"></span>
-      </div>
-      <div class="card" style="max-width:680px">
-        <div class="card-hd"><h3>🏖️ طلب إجازة</h3></div>
-        <div class="card-bd">
-          <div id="leaveAl" class="al"></div>
-          <!-- Emp selector (managers/supervisors only) -->
-          <div id="leaveEmpSelectWrap" class="form-group" style="display:none">
-            <label>الموظف <span>*</span></label>
-            <select id="fLeaveEmp" class="finp" onchange="onLeaveEmpChange()"><option value="">-- اختر الموظف --</option></select>
-          </div>
-          <!-- Leave balances -->
-          <div id="leaveBalances" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;padding:10px 14px;background:var(--bg2);border-radius:var(--rsm)">
-            <span style="font-size:12px;font-weight:700;color:var(--text2);width:100%;margin-bottom:2px">📊 أرصدة الإجازات:</span>
-            <div style="display:flex;flex-wrap:wrap;gap:8px" id="balancesRow">
-              <span style="font-size:12px;color:var(--text3)">اختر موظفاً لعرض الأرصدة</span>
+          <div class="card-bd" style="padding:0;overflow:hidden">
+            <div style="overflow-x:auto;overflow-y:auto;max-height:65vh">
+              <table id="comprehensiveTbl" style="min-width:1600px">
+                <thead id="comprehensiveThead"></thead>
+                <tbody id="empTb"><tr><td colspan="30" class="no-data">⏳ جاري تحميل البيانات...</td></tr></tbody>
+              </table>
             </div>
           </div>
-          <div class="fgrid">
+        </div>
+
+        <!-- SIMPLE TABLE (hidden by default) -->
+        <div class="card" id="simpleEmpCard" style="display:none">
+          <div class="card-hd"><h3>قائمة الموظفين</h3></div>
+          <div class="card-bd" style="padding:0">
+            <div class="tw"><table>
+              <thead><tr><th>رقم الوظيفي</th><th>الاسم الكامل</th><th>رقم الجوال</th><th>القسم</th><th>الوردية</th><th>الدور</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+              <tbody id="empTbSimple"></tbody>
+            </table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MY SHIFT -->
+      <div id="page-sh" class="page" style="display:none">
+        <div class="ph"><h2>📋 موظفو ورديتي</h2><p id="supLbl">-</p></div>
+        <div class="card">
+          <div class="card-hd"><h3 id="shTitle">الوردية</h3><button class="btn btn-primary btn-sm" style="width:auto" onclick="openAddShift()">➕ إضافة موظف</button></div>
+          <div class="card-bd">
+            <div class="sw"><span class="si2">🔍</span><input type="text" id="shSrch" placeholder="بحث..." oninput="filterSh()"></div>
+            <div class="tw"><table><thead><tr><th>رقم الوظيفي</th><th>الاسم الكامل</th><th>رقم الجوال</th><th>الحالة</th><th>الدور</th><th>إجراءات</th></tr></thead><tbody id="shTb"><tr><td colspan="5" class="no-data">لا يوجد موظفون</td></tr></tbody></table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROFILE -->
+      <div id="page-prof" class="page" style="display:none">
+        <div class="ph"><h2>👤 ملفي الشخصي</h2></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;max-width:900px">
+          <!-- Left: basic info -->
+          <div class="card">
+            <div class="card-hd"><h3>البيانات الأساسية</h3><button class="btn btn-sec btn-sm" onclick="openEditProf()">✏️ تعديل</button></div>
+            <div class="card-bd" style="text-align:center;padding-top:18px">
+              <div class="pav" id="profAv">م</div>
+              <h2 id="profName" style="font-size:17px;margin-bottom:3px"></h2>
+              <p id="profRol" style="color:var(--text2);font-size:13px;margin-bottom:14px"></p>
+              <div class="dv"></div>
+              <div style="text-align:right">
+                <div class="srow"><div class="slbl">رقم الوظيفي</div><div style="color:var(--primary);font-weight:800" id="profId"></div></div>
+                <div class="srow"><div class="slbl">رقم الجوال</div><div id="profPh"></div></div>
+                <div class="srow"><div class="slbl">القسم</div><div id="profDp"></div></div>
+                <div class="srow"><div class="slbl">الوردية</div><div id="profSh"></div></div>
+                <div class="srow"><div class="slbl">المنطقة</div><div id="profRegion" style="color:var(--text2)">-</div></div>
+                <div class="srow"><div class="slbl">المركز</div><div id="profCenter" style="color:var(--text2)">-</div></div>
+              </div>
+            </div>
+          </div>
+          <!-- Right: balances + transfer history -->
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div class="card" id="profBalCard">
+              <div class="card-hd"><h3>📊 أرصدة الإجازات</h3><button class="btn btn-sec btn-sm" onclick="openEditBalances()" id="editBalBtn">✏️ تعديل</button></div>
+              <div class="card-bd">
+                <div id="profBalances"></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-hd"><h3>📋 حالة الوردية اليوم</h3></div>
+              <div class="card-bd" id="profShiftToday"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Edit balances modal trigger area (for employee) -->
+        <div id="profBalEditArea" class="card" style="max-width:460px;margin-top:14px;display:none">
+          <div class="card-hd"><h3>تعديل الأرصدة</h3></div>
+          <div class="card-bd">
+            <div class="fgrid">
+              <div class="form-group"><label>رصيد سنوية</label><input type="number" id="profBalAnnual" class="finp" min="0"></div>
+              <div class="form-group"><label>رصيد مجدولة</label><input type="number" id="profBalSched" class="finp" min="0"></div>
+            </div>
+            <button class="btn btn-primary btn-full" onclick="saveProfBalances()">💾 حفظ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div id="page-set" class="page" style="display:none">
+        <div class="ph"><h2>⚙️ إعدادات النظام</h2></div>
+        <div class="card" style="max-width:480px">
+          <div class="card-hd"><h3>بيانات حساب المدير</h3></div>
+          <div class="card-bd">
+            <div id="setAl" class="al"></div>
+            <div class="form-group"><label>رقم دخول المدير</label><input type="text" id="sMId" class="finp"></div>
+            <div class="form-group"><label>كلمة المرور الجديدة (فارغة = بدون تغيير)</label><input type="password" id="sMPw" class="finp" placeholder="كلمة مرور جديدة..."></div>
+            <div class="form-group"><label>اسم المدير</label><input type="text" id="sMNm" class="finp"></div>
+            <button class="btn btn-primary btn-full" onclick="saveSets()">💾 حفظ الإعدادات</button>
+          </div>
+        </div>
+        <div class="card" style="max-width:480px;margin-top:13px">
+          <div class="card-hd"><h3>حساب المدير كموظف</h3></div>
+          <div class="card-bd">
+            <p style="font-size:12px;color:var(--text2);margin-bottom:14px">ربط حساب المدير بحساب موظف للتنقل بين الدورين</p>
+            <div class="form-group"><label>رقم الوظيفي الخاص بالمدير كموظف</label><input type="text" id="sMgrEmpId" class="finp" placeholder="مثال: 9999" oninput="norm(this)"></div>
+            <button class="btn btn-sec btn-full" onclick="saveMgrEmpLink()" style="margin-bottom:0">🔗 ربط الحساب</button>
+            <div id="mgrEmpAl" class="al" style="margin-top:10px"></div>
+          </div>
+        </div>
+        <div class="card" style="max-width:480px;margin-top:13px">
+          <div class="card-hd"><h3>🔗 ربط Google Sheets</h3></div>
+          <div class="card-bd">
+            <div id="gasAl" class="al"></div>
             <div class="form-group">
-              <label>نوع الإجازة <span>*</span></label>
-              <div style="display:flex;gap:6px">
-                <select id="fLeaveType" class="finp" style="flex:1" onchange="onLeaveTypeChange()">
-                  <option value="سنوية">سنوية</option>
-                  <option value="مجدولة">مجدولة</option>
-                  <option value="مرضية">مرضية</option>
-                  <option value="وفاة">وفاة</option>
-                  <option value="زواج">زواج</option>
-                  <option value="مولود">مولود</option>
-                  <option value="اختبارات">اختبارات</option>
-                  <option value="دورة عمل">دورة عمل</option>
-                </select>
-                <button class="btn btn-sec btn-sm" onclick="addLeaveType()" title="إضافة نوع جديد" style="flex-shrink:0;border-radius:12px;padding:0 10px">➕</button>
+              <label>معرّف جدول البيانات (Sheet ID)</label>
+              <div style="display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rsm);padding:8px 12px">
+                <span style="font-size:11px;color:var(--text3);word-break:break-all;flex:1" id="sheetId">11iUjLsOz64NaVi6MxPqf8acMl9--vXg8QuJpm0yWVL4</span>
+                <button class="btn btn-sec btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('sheetId').textContent).then(()=>toast('✅ تم النسخ','success'))">📋</button>
               </div>
             </div>
             <div class="form-group">
-              <label>تاريخ البداية <span>*</span></label>
-              <input type="date" id="fLeaveStart" class="finp" onchange="calcLeaveDays()">
+              <label>رابط Google Apps Script (بعد النشر)</label>
+              <input type="text" id="gasUrlInput" class="finp" placeholder="https://script.google.com/macros/s/..." value="">
             </div>
-            <div class="form-group">
-              <label>تاريخ النهاية <span>*</span></label>
-              <input type="date" id="fLeaveEnd" class="finp" onchange="calcLeaveDays()">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" style="width:auto" onclick="saveGasUrl()">🔗 ربط وتفعيل</button>
+              <button class="btn btn-sec btn-sm" onclick="initSheets()">🔧 تهيئة الجداول</button>
+              <button class="btn btn-sec btn-sm" onclick="testGasConnection()">🧪 اختبار الاتصال</button>
+              <button class="btn btn-sec btn-sm" onclick="loadAll()">🔄 تحديث</button>
+              <button class="btn btn-dng btn-sm" onclick="clearDemoData()">🗑️ حذف البيانات التجريبية</button>
             </div>
-            <div class="form-group">
-              <label>مدة الإجازة (تلقائي)</label>
-              <input type="text" id="fLeaveDays" class="finp" readonly style="opacity:.75;background:var(--bg2)" placeholder="تُحسب تلقائياً">
-            </div>
-            <div class="form-group full">
-              <label>ملاحظات</label>
-              <input type="text" id="fLeaveNote" class="finp" placeholder="سبب الإجازة أو ملاحظات...">
+            <div style="margin-top:12px;padding:10px 12px;background:var(--bg2);border-radius:var(--rsm);font-size:11px;color:var(--text3)">
+              💡 <b>طريقة الربط:</b> 1) افتح script.google.com → مشروع جديد → انسخ كود Code.gs من تعليقات الملف → نشر ← تطبيق ويب ← متاح للجميع → انسخ الرابط وألصقه هنا
             </div>
           </div>
-          <!-- Balance deduction preview -->
-          <div id="leaveDeductPreview" style="display:none;padding:10px 14px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:var(--rsm);margin-bottom:12px;font-size:13px;font-weight:700;color:var(--danger)"></div>
-          <div id="leavePeriodSched" style="display:none"></div>
-          <button class="btn btn-primary btn-full" onclick="saveLeave()">💾 حفظ الطلب</button>
         </div>
       </div>
-      <!-- Balance editor (for manager/supervisor) -->
-      <div id="leaveBalanceEditor" class="card" style="max-width:680px;margin-top:14px;display:none">
-        <div class="card-hd"><h3>💰 تعديل أرصدة الإجازات</h3></div>
-        <div class="card-bd">
-          <div class="fgrid">
-            <div class="form-group"><label>رصيد سنوية (بالنظام)</label><input type="number" id="balAnnual" class="finp" min="0"></div>
-            <div class="form-group"><label>رصيد مجدولة (بالمشرف)</label><input type="number" id="balScheduled" class="finp" min="0"></div>
+
+
+      <!-- FORMS PAGE -->
+      <div id="page-forms" class="page" style="display:none">
+        <div class="ph"><h2>📝 النماذج</h2><p>إجازات · ساعات إضافية · البيانات الوظيفية</p></div>
+
+        <!-- STICKY TABS -->
+        <div id="formTabsBar" style="position:sticky;top:0;z-index:50;background:var(--bg);padding:8px 0 10px;margin-bottom:14px">
+          <div style="display:flex;gap:4px;background:var(--bg2);border-radius:20px;padding:4px;width:fit-content">
+            <button onclick="switchFormTab('leave')" id="ftab-leave" class="ftb on">🏖️ الإجازات</button>
+            <button onclick="switchFormTab('extra')" id="ftab-extra" class="ftb off">⏰ ساعات إضافية</button>
+            <button onclick="switchFormTab('info')"  id="ftab-info"  class="ftb off">🗂️ البيانات الوظيفية</button>
           </div>
-          <button class="btn btn-sec" onclick="saveBalances()" style="border-radius:var(--rp)">💾 حفظ الأرصدة</button>
+        </div>
+
+        <!-- ===== LEAVE SECTION ===== -->
+        <div id="fsec-leave">
+          <!-- Employee info bar (auto-filled for employees) -->
+          <div id="leaveEmpBar" style="display:none;background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 16px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:14px;align-items:center">
+            <span style="font-size:13px;font-weight:700" id="leEmpName"></span>
+            <span style="font-size:12px;color:var(--text2)" id="leEmpId"></span>
+            <span id="leEmpShift" class="sht sh-a"></span>
+            <span style="font-size:12px;color:var(--text2)" id="leEmpRegion"></span>
+            <span style="font-size:12px;color:var(--text2)" id="leEmpCenter"></span>
+          </div>
+          <div class="card" style="max-width:680px">
+            <div class="card-hd"><h3>🏖️ طلب إجازة</h3></div>
+            <div class="card-bd">
+              <div id="leaveAl" class="al"></div>
+              <!-- Emp selector (managers/supervisors only) -->
+              <div id="leaveEmpSelectWrap" class="form-group" style="display:none">
+                <label>الموظف <span>*</span></label>
+                <select id="fLeaveEmp" class="finp" onchange="onLeaveEmpChange()"><option value="">-- اختر الموظف --</option></select>
+              </div>
+              <!-- Leave balances -->
+              <div id="leaveBalances" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;padding:10px 14px;background:var(--bg2);border-radius:var(--rsm)">
+                <span style="font-size:12px;font-weight:700;color:var(--text2);width:100%;margin-bottom:2px">📊 أرصدة الإجازات:</span>
+                <div style="display:flex;flex-wrap:wrap;gap:8px" id="balancesRow">
+                  <span style="font-size:12px;color:var(--text3)">اختر موظفاً لعرض الأرصدة</span>
+                </div>
+              </div>
+              <div class="fgrid">
+                <div class="form-group">
+                  <label>نوع الإجازة <span>*</span></label>
+                  <div style="display:flex;gap:6px">
+                    <select id="fLeaveType" class="finp" style="flex:1" onchange="onLeaveTypeChange()">
+                      <option value="سنوية">سنوية</option>
+                      <option value="مجدولة">مجدولة</option>
+                      <option value="مرضية">مرضية</option>
+                      <option value="وفاة">وفاة</option>
+                      <option value="زواج">زواج</option>
+                      <option value="مولود">مولود</option>
+                      <option value="اختبارات">اختبارات</option>
+                      <option value="دورة عمل">دورة عمل</option>
+                    </select>
+                    <button class="btn btn-sec btn-sm" onclick="addLeaveType()" title="إضافة نوع جديد" style="flex-shrink:0;border-radius:12px;padding:0 10px">➕</button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>تاريخ البداية <span>*</span></label>
+                  <input type="date" id="fLeaveStart" class="finp" onchange="calcLeaveDays()">
+                </div>
+                <div class="form-group">
+                  <label>تاريخ النهاية <span>*</span></label>
+                  <input type="date" id="fLeaveEnd" class="finp" onchange="calcLeaveDays()">
+                </div>
+                <div class="form-group">
+                  <label>مدة الإجازة (تلقائي)</label>
+                  <input type="text" id="fLeaveDays" class="finp" readonly style="opacity:.75;background:var(--bg2)" placeholder="تُحسب تلقائياً">
+                </div>
+                <div class="form-group full">
+                  <label>ملاحظات</label>
+                  <input type="text" id="fLeaveNote" class="finp" placeholder="سبب الإجازة أو ملاحظات...">
+                </div>
+              </div>
+              <!-- Balance deduction preview -->
+              <div id="leaveDeductPreview" style="display:none;padding:10px 14px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:var(--rsm);margin-bottom:12px;font-size:13px;font-weight:700;color:var(--danger)"></div>
+              <div id="leavePeriodSched" style="display:none"></div>
+              <button class="btn btn-primary btn-full" onclick="saveLeave()">💾 حفظ الطلب</button>
+            </div>
+          </div>
+          <!-- Balance editor (for manager/supervisor) -->
+          <div id="leaveBalanceEditor" class="card" style="max-width:680px;margin-top:14px;display:none">
+            <div class="card-hd"><h3>💰 تعديل أرصدة الإجازات</h3></div>
+            <div class="card-bd">
+              <div class="fgrid">
+                <div class="form-group"><label>رصيد سنوية (بالنظام)</label><input type="number" id="balAnnual" class="finp" min="0"></div>
+                <div class="form-group"><label>رصيد مجدولة (بالمشرف)</label><input type="number" id="balScheduled" class="finp" min="0"></div>
+              </div>
+              <button class="btn btn-sec" onclick="saveBalances()" style="border-radius:var(--rp)">💾 حفظ الأرصدة</button>
+            </div>
+          </div>
+          <div class="card" style="margin-top:14px">
+            <div class="card-hd"><h3>سجل الإجازات</h3></div>
+            <div class="card-bd" style="padding:0"><div class="tw"><table>
+              <thead><tr><th>الموظف</th><th>نوع الإجازة</th><th>من</th><th>إلى</th><th>الأيام</th><th>ملاحظات</th><th>حذف</th></tr></thead>
+              <tbody id="leaveTb"><tr><td colspan="7" class="no-data">لا يوجد طلبات</td></tr></tbody>
+            </table></div></div>
+          </div>
+        </div>
+
+        <!-- ===== EXTRA HOURS SECTION ===== -->
+        <div id="fsec-extra" style="display:none">
+          <div id="extraEmpBar" style="display:none;background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 16px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:14px;align-items:center">
+            <span style="font-size:13px;font-weight:700" id="exEmpName"></span>
+            <span style="font-size:12px;color:var(--text2)" id="exEmpId"></span>
+            <span id="exEmpShift" class="sht sh-a"></span>
+          </div>
+          <div class="card" style="max-width:680px">
+            <div class="card-hd"><h3>⏰ ساعات العمل الإضافية</h3></div>
+            <div class="card-bd">
+              <div id="extraAl" class="al"></div>
+              <div id="extraEmpSelectWrap" class="form-group" style="display:none">
+                <label>الموظف <span>*</span></label>
+                <select id="fExtraEmp" class="finp"><option value="">-- اختر الموظف --</option></select>
+              </div>
+              <div class="fgrid">
+                <div class="form-group">
+                  <label>التاريخ <span>*</span></label>
+                  <input type="date" id="fExtraDate" class="finp">
+                </div>
+                <div class="form-group">
+                  <label>عدد الساعات <span>*</span></label>
+                  <input type="number" id="fExtraHrs" class="finp" placeholder="مثال: 3 أو 0.5 أو 0.25" min="0.25" max="24" step="0.25" inputmode="decimal" oninput="this.value=this.value.replace(/[^0-9.]/g,'');if(parseFloat(this.value)>24)this.value=24">
+                </div>
+                <div class="form-group">
+                  <label>نوع الإضافي</label>
+                  <select id="fExtraType" class="finp">
+                    <option value="عادي">عادي</option>
+                    <option value="عطلة">عطلة رسمية</option>
+                    <option value="في يوم إجازة">في يوم إجازة</option>
+                  </select>
+                </div>
+                <div class="form-group full">
+                  <label>ملاحظات</label>
+                  <input type="text" id="fExtraNote" class="finp" placeholder="وصف مهمة الإضافي...">
+                </div>
+              </div>
+              <button class="btn btn-primary btn-full" onclick="saveExtra()">💾 حفظ</button>
+            </div>
+          </div>
+          <div class="card" style="margin-top:14px">
+            <div class="card-hd"><h3>سجل الساعات الإضافية</h3></div>
+            <div class="card-bd" style="padding:0"><div class="tw"><table>
+              <thead><tr><th>الموظف</th><th>التاريخ</th><th>الساعات</th><th>النوع</th><th>ملاحظات</th><th>حذف</th></tr></thead>
+              <tbody id="extraTb"><tr><td colspan="6" class="no-data">لا يوجد سجلات</td></tr></tbody>
+            </table></div></div>
+          </div>
+        </div>
+
+        <!-- ===== INFO SECTION ===== -->
+        <div id="fsec-info" style="display:none">
+          <div id="infoEmpBar" style="display:none;background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 16px;margin-bottom:14px">
+            <span style="font-size:13px;font-weight:700" id="infBarName"></span>
+          </div>
+          <div class="card" style="max-width:720px">
+            <div class="card-hd"><h3>🗂️ البيانات الوظيفية الإضافية</h3></div>
+            <div class="card-bd">
+              <div id="infoAl" class="al"></div>
+              <div id="infoEmpSelectWrap" class="form-group" style="display:none">
+                <label>الموظف <span>*</span></label>
+                <select id="fInfoEmp" class="finp" onchange="onInfoEmpChange()"><option value="">-- اختر الموظف --</option></select>
+              </div>
+              <div class="fgrid">
+                <div class="form-group">
+                  <label>المنطقة</label>
+                  <select id="fInfoRegion" class="finp">
+                    <option value="">-- اختر --</option>
+                    <option value="شمال">شمال</option>
+                    <option value="وسط">وسط</option>
+                    <option value="جنوب">جنوب</option>
+                    <option value="غرب">غرب</option>
+                    <option value="شرق">شرق</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>المركز</label>
+                  <input type="text" id="fInfoCenter" class="finp" placeholder="اسم المركز">
+                </div>
+                <div class="form-group">
+                  <label>رقم السيارة</label>
+                  <input type="text" id="fInfoCar" class="finp" placeholder="رقم اللوحة">
+                </div>
+              </div>
+
+              <div class="dv" style="margin:10px 0 14px"></div>
+              <p style="font-size:12px;font-weight:800;color:var(--text2);margin-bottom:10px">👕 مقاسات الملابس والتجهيزات</p>
+              <div class="fgrid">
+                <div class="form-group">
+                  <label>قميص CAT 2 (مقاس)</label>
+                  <select id="fInfoShirt2" class="finp">
+                    <option value="">--</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>XXXL</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>قميص CAT 2 (عدد)</label>
+                  <input type="number" id="fInfoShirt2Qty" class="finp" placeholder="0" min="0">
+                </div>
+                <div class="form-group">
+                  <label>بنطلون CAT 2 (مقاس)</label>
+                  <input type="text" id="fInfoPants2" class="finp" placeholder="مثال: 32">
+                </div>
+                <div class="form-group">
+                  <label>بنطلون CAT 2 (عدد)</label>
+                  <input type="number" id="fInfoPants2Qty" class="finp" placeholder="0" min="0">
+                </div>
+                <div class="form-group">
+                  <label>بدلة CAT 4 (مقاس)</label>
+                  <select id="fInfoSuit4" class="finp">
+                    <option value="">--</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>XXXL</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>بدلة CAT 4 (عدد)</label>
+                  <input type="number" id="fInfoSuit4Qty" class="finp" placeholder="0" min="0">
+                </div>
+                <div class="form-group">
+                  <label>مقاس الحذاء</label>
+                  <input type="text" id="fInfoShoes" class="finp" placeholder="مثال: 43">
+                </div>
+                <div class="form-group">
+                  <label>عدد الأحذية</label>
+                  <input type="number" id="fInfoShoeQty" class="finp" placeholder="0" min="0">
+                </div>
+              </div>
+              <button class="btn btn-primary btn-full" onclick="saveInfo()" style="margin-top:6px">💾 حفظ البيانات</button>
+            </div>
+          </div>
+          <div class="card" style="margin-top:14px">
+            <div class="card-hd"><h3>جدول البيانات الوظيفية</h3></div>
+            <div class="card-bd" style="padding:0"><div class="tw"><table>
+              <thead><tr><th>الموظف</th><th>المنطقة</th><th>المركز</th><th>السيارة</th><th>قميص CAT2</th><th>بنطلون CAT2</th><th>بدلة CAT4</th><th>حذاء</th><th>تعديل</th></tr></thead>
+              <tbody id="infoTb"><tr><td colspan="9" class="no-data">لا يوجد بيانات</td></tr></tbody>
+            </table></div></div>
+          </div>
         </div>
       </div>
-      <div class="card" style="margin-top:14px">
-        <div class="card-hd"><h3>سجل الإجازات</h3></div>
-        <div class="card-bd" style="padding:0"><div class="tw"><table>
-          <thead><tr><th>الموظف</th><th>نوع الإجازة</th><th>من</th><th>إلى</th><th>الأيام</th><th>ملاحظات</th><th>حذف</th></tr></thead>
-          <tbody id="leaveTb"><tr><td colspan="7" class="no-data">لا يوجد طلبات</td></tr></tbody>
-        </table></div></div>
-      </div>
-    </div>
 
-    <!-- ===== EXTRA HOURS SECTION ===== -->
-    <div id="fsec-extra" style="display:none">
-      <div id="extraEmpBar" style="display:none;background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 16px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:14px;align-items:center">
-        <span style="font-size:13px;font-weight:700" id="exEmpName"></span>
-        <span style="font-size:12px;color:var(--text2)" id="exEmpId"></span>
-        <span id="exEmpShift" class="sht sh-a"></span>
-      </div>
-      <div class="card" style="max-width:680px">
-        <div class="card-hd"><h3>⏰ ساعات العمل الإضافية</h3></div>
-        <div class="card-bd">
-          <div id="extraAl" class="al"></div>
-          <div id="extraEmpSelectWrap" class="form-group" style="display:none">
-            <label>الموظف <span>*</span></label>
-            <select id="fExtraEmp" class="finp"><option value="">-- اختر الموظف --</option></select>
+      <!-- CALENDAR PAGE -->
+      <div id="page-cal" class="page" style="display:none">
+        <div class="ph"><h2>📅 تقويم الورديات</h2><p>جدول دوام الورديات الأربع — يومين صباح | يومين مساء | أربعة أيام إجازة</p></div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px">
+          <div style="display:flex;align-items:center;gap:7px">
+            <label style="font-size:13px;font-weight:700;color:var(--text2)">الشهر:</label>
+            <select id="calMonth" class="finp" style="width:120px;padding:8px 10px" onchange="renderCalendar()">
+              <option value="0">يناير</option><option value="1">فبراير</option><option value="2">مارس</option>
+              <option value="3">أبريل</option><option value="4">مايو</option><option value="5">يونيو</option>
+              <option value="6">يوليو</option><option value="7">أغسطس</option><option value="8">سبتمبر</option>
+              <option value="9">أكتوبر</option><option value="10">نوفمبر</option><option value="11">ديسمبر</option>
+            </select>
           </div>
-          <div class="fgrid">
-            <div class="form-group">
-              <label>التاريخ <span>*</span></label>
-              <input type="date" id="fExtraDate" class="finp">
-            </div>
-            <div class="form-group">
-              <label>عدد الساعات <span>*</span></label>
-              <input type="number" id="fExtraHrs" class="finp" placeholder="مثال: 3 أو 0.5 أو 0.25" min="0.25" max="24" step="0.25" inputmode="decimal" oninput="this.value=this.value.replace(/[^0-9.]/g,'');if(parseFloat(this.value)>24)this.value=24">
-            </div>
-            <div class="form-group">
-              <label>نوع الإضافي</label>
-              <select id="fExtraType" class="finp">
-                <option value="عادي">عادي</option>
-                <option value="عطلة">عطلة رسمية</option>
-                <option value="في يوم إجازة">في يوم إجازة</option>
-              </select>
-            </div>
-            <div class="form-group full">
-              <label>ملاحظات</label>
-              <input type="text" id="fExtraNote" class="finp" placeholder="وصف مهمة الإضافي...">
-            </div>
+          <div style="display:flex;align-items:center;gap:7px">
+            <label style="font-size:13px;font-weight:700;color:var(--text2)">السنة:</label>
+            <select id="calYear" class="finp" style="width:95px;padding:8px 10px" onchange="renderCalendar()"></select>
           </div>
-          <button class="btn btn-primary btn-full" onclick="saveExtra()">💾 حفظ</button>
+          <div style="display:flex;align-items:center;gap:7px">
+            <label style="font-size:13px;font-weight:700;color:var(--text2)">الوردية:</label>
+            <select id="calFilter" class="finp" style="width:130px;padding:8px 10px" onchange="renderCalendar()">
+              <option value="all">جميع الورديات</option>
+              <option value="أ">وردية أ فقط</option>
+              <option value="ب">وردية ب فقط</option>
+              <option value="ج">وردية ج فقط</option>
+              <option value="د">وردية د فقط</option>
+            </select>
+          </div>
+          <button class="btn btn-sec btn-sm" onclick="goToday()">📍 اليوم</button>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-right:auto">
+            <span style="background:rgba(0,149,217,.15);color:#0095D9;border:1px solid rgba(0,149,217,.3);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700">🌅 صباح 7ص-7م</span>
+            <span style="background:rgba(139,92,246,.15);color:#8B5CF6;border:1px solid rgba(139,92,246,.3);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700">🌙 مساء 7م-7ص</span>
+            <span style="background:rgba(0,200,150,.12);color:var(--success);border:1px solid rgba(0,200,150,.2);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700">🏖️ إجازة</span>
+          </div>
         </div>
-      </div>
-      <div class="card" style="margin-top:14px">
-        <div class="card-hd"><h3>سجل الساعات الإضافية</h3></div>
-        <div class="card-bd" style="padding:0"><div class="tw"><table>
-          <thead><tr><th>الموظف</th><th>التاريخ</th><th>الساعات</th><th>النوع</th><th>ملاحظات</th><th>حذف</th></tr></thead>
-          <tbody id="extraTb"><tr><td colspan="6" class="no-data">لا يوجد سجلات</td></tr></tbody>
-        </table></div></div>
-      </div>
-    </div>
-
-    <!-- ===== INFO SECTION ===== -->
-    <div id="fsec-info" style="display:none">
-      <div id="infoEmpBar" style="display:none;background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 16px;margin-bottom:14px">
-        <span style="font-size:13px;font-weight:700" id="infBarName"></span>
-      </div>
-      <div class="card" style="max-width:720px">
-        <div class="card-hd"><h3>🗂️ البيانات الوظيفية الإضافية</h3></div>
-        <div class="card-bd">
-          <div id="infoAl" class="al"></div>
-          <div id="infoEmpSelectWrap" class="form-group" style="display:none">
-            <label>الموظف <span>*</span></label>
-            <select id="fInfoEmp" class="finp" onchange="onInfoEmpChange()"><option value="">-- اختر الموظف --</option></select>
+        <div class="card" id="calCard">
+          <div class="card-hd" style="font-size:15px;font-weight:800"><span id="calTitle">-</span></div>
+          <div class="card-bd" style="padding:10px">
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px" id="calDayHeaders"></div>
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px" id="calGrid"></div>
           </div>
-          <div class="fgrid">
-            <div class="form-group">
-              <label>المنطقة</label>
-              <select id="fInfoRegion" class="finp">
-                <option value="">-- اختر --</option>
-                <option value="شمال">شمال</option>
-                <option value="وسط">وسط</option>
-                <option value="جنوب">جنوب</option>
-                <option value="غرب">غرب</option>
-                <option value="شرق">شرق</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>المركز</label>
-              <input type="text" id="fInfoCenter" class="finp" placeholder="اسم المركز">
-            </div>
-            <div class="form-group">
-              <label>رقم السيارة</label>
-              <input type="text" id="fInfoCar" class="finp" placeholder="رقم اللوحة">
-            </div>
-          </div>
-
-          <div class="dv" style="margin:10px 0 14px"></div>
-          <p style="font-size:12px;font-weight:800;color:var(--text2);margin-bottom:10px">👕 مقاسات الملابس والتجهيزات</p>
-          <div class="fgrid">
-            <div class="form-group">
-              <label>قميص CAT 2 (مقاس)</label>
-              <select id="fInfoShirt2" class="finp">
-                <option value="">--</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>XXXL</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>قميص CAT 2 (عدد)</label>
-              <input type="number" id="fInfoShirt2Qty" class="finp" placeholder="0" min="0">
-            </div>
-            <div class="form-group">
-              <label>بنطلون CAT 2 (مقاس)</label>
-              <input type="text" id="fInfoPants2" class="finp" placeholder="مثال: 32">
-            </div>
-            <div class="form-group">
-              <label>بنطلون CAT 2 (عدد)</label>
-              <input type="number" id="fInfoPants2Qty" class="finp" placeholder="0" min="0">
-            </div>
-            <div class="form-group">
-              <label>بدلة CAT 4 (مقاس)</label>
-              <select id="fInfoSuit4" class="finp">
-                <option value="">--</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>XXXL</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>بدلة CAT 4 (عدد)</label>
-              <input type="number" id="fInfoSuit4Qty" class="finp" placeholder="0" min="0">
-            </div>
-            <div class="form-group">
-              <label>مقاس الحذاء</label>
-              <input type="text" id="fInfoShoes" class="finp" placeholder="مثال: 43">
-            </div>
-            <div class="form-group">
-              <label>عدد الأحذية</label>
-              <input type="number" id="fInfoShoeQty" class="finp" placeholder="0" min="0">
-            </div>
-          </div>
-          <button class="btn btn-primary btn-full" onclick="saveInfo()" style="margin-top:6px">💾 حفظ البيانات</button>
         </div>
+        <div id="miniSchedule"></div>
+        <div id="monthlyStats"></div>
       </div>
-      <div class="card" style="margin-top:14px">
-        <div class="card-hd"><h3>جدول البيانات الوظيفية</h3></div>
-        <div class="card-bd" style="padding:0"><div class="tw"><table>
-          <thead><tr><th>الموظف</th><th>المنطقة</th><th>المركز</th><th>السيارة</th><th>قميص CAT2</th><th>بنطلون CAT2</th><th>بدلة CAT4</th><th>حذاء</th><th>تعديل</th></tr></thead>
-          <tbody id="infoTb"><tr><td colspan="9" class="no-data">لا يوجد بيانات</td></tr></tbody>
-        </table></div></div>
-      </div>
-    </div>
-  </div>
 
-  <!-- CALENDAR PAGE -->
-  <div id="page-cal" class="page" style="display:none">
-    <div class="ph"><h2>📅 تقويم الورديات</h2><p>جدول دوام الورديات الأربع — يومين صباح | يومين مساء | أربعة أيام إجازة</p></div>
-    <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px">
-      <div style="display:flex;align-items:center;gap:7px">
-        <label style="font-size:13px;font-weight:700;color:var(--text2)">الشهر:</label>
-        <select id="calMonth" class="finp" style="width:120px;padding:8px 10px" onchange="renderCalendar()">
-          <option value="0">يناير</option><option value="1">فبراير</option><option value="2">مارس</option>
-          <option value="3">أبريل</option><option value="4">مايو</option><option value="5">يونيو</option>
-          <option value="6">يوليو</option><option value="7">أغسطس</option><option value="8">سبتمبر</option>
-          <option value="9">أكتوبر</option><option value="10">نوفمبر</option><option value="11">ديسمبر</option>
-        </select>
-      </div>
-      <div style="display:flex;align-items:center;gap:7px">
-        <label style="font-size:13px;font-weight:700;color:var(--text2)">السنة:</label>
-        <select id="calYear" class="finp" style="width:95px;padding:8px 10px" onchange="renderCalendar()"></select>
-      </div>
-      <div style="display:flex;align-items:center;gap:7px">
-        <label style="font-size:13px;font-weight:700;color:var(--text2)">الوردية:</label>
-        <select id="calFilter" class="finp" style="width:130px;padding:8px 10px" onchange="renderCalendar()">
-          <option value="all">جميع الورديات</option>
-          <option value="أ">وردية أ فقط</option>
-          <option value="ب">وردية ب فقط</option>
-          <option value="ج">وردية ج فقط</option>
-          <option value="د">وردية د فقط</option>
-        </select>
-      </div>
-      <button class="btn btn-sec btn-sm" onclick="goToday()">📍 اليوم</button>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-right:auto">
-        <span style="background:rgba(0,149,217,.15);color:#0095D9;border:1px solid rgba(0,149,217,.3);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700">🌅 صباح 7ص-7م</span>
-        <span style="background:rgba(139,92,246,.15);color:#8B5CF6;border:1px solid rgba(139,92,246,.3);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700">🌙 مساء 7م-7ص</span>
-        <span style="background:rgba(0,200,150,.12);color:var(--success);border:1px solid rgba(0,200,150,.2);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700">🏖️ إجازة</span>
-      </div>
     </div>
-    <div class="card" id="calCard">
-      <div class="card-hd" style="font-size:15px;font-weight:800"><span id="calTitle">-</span></div>
-      <div class="card-bd" style="padding:10px">
-        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px" id="calDayHeaders"></div>
-        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px" id="calGrid"></div>
-      </div>
-    </div>
-    <div id="miniSchedule"></div>
-    <div id="monthlyStats"></div>
-  </div>
-
-</div>
-```
-
   </div>
 </div>
 
 <!-- MODAL EMP -->
-
 <div class="mo" id="mEmp">
   <div class="modal">
     <div class="m-hd"><h3 id="mEmpTit">إضافة موظف</h3><button class="btn-x" onclick="closeM('mEmp')">✕</button></div>
@@ -828,7 +1029,6 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
 </div>
 
 <!-- MODAL PROFILE EDIT -->
-
 <div class="mo" id="mProf">
   <div class="modal">
     <div class="m-hd"><h3>✏️ تعديل الملف الشخصي</h3><button class="btn-x" onclick="closeM('mProf')">✕</button></div>
@@ -888,17 +1088,43 @@ function normPh(p){p=String(p).trim().replace(/\s+/g,'').replace(/-/g,'');p=p.re
 function switchTab(t){document.querySelectorAll('.login-tab').forEach((x,i)=>x.classList.toggle('active',(i===0&&t==='e')||(i===1&&t==='m')));document.getElementById('eForm').style.display=t==='e'?'block':'none';document.getElementById('mForm').style.display=t==='m'?'block':'none';hideAl('loginAlert');}
 
 // DB
+// خريطة تحويل أسماء الإجراءات القديمة إلى العربية
+const GAS_ACTIONS = {
+  'getSettings':    'الاعدادات_جلب',
+  'getEmployees':   'موظفين_جلب',
+  'saveSettings':   'الاعدادات_حفظ',
+  'addEmployee':    'موظف_اضافة',
+  'updateEmployee': 'موظف_تعديل',
+  'deleteEmployee': 'موظف_حذف',
+  'initSheets':     'تهيئة_الجداول',
+  'اجازات_جلب':    'اجازات_جلب',
+  'اجازة_اضافة':   'اجازة_اضافة',
+  'اجازة_حذف':     'اجازة_حذف',
+  'اضافي_جلب':     'اضافي_جلب',
+  'اضافي_اضافة':   'اضافي_اضافة',
+  'اضافي_حذف':     'اضافي_حذف',
+  'بيانات_جلب':    'بيانات_جلب',
+  'بيانات_حفظ':    'بيانات_حفظ',
+  'ارصدة_جلب':     'ارصدة_جلب',
+  'ارصدة_حفظ':     'ارصدة_حفظ',
+  'انواع_جلب':     'انواع_جلب',
+  'نوع_اضافة':     'نوع_اضافة',
+};
+
 async function gas(a,p={}){
   const effectiveUrl = window._GAS_URL_OVERRIDE || localStorage.getItem('seGasUrl') || GAS_URL;
   if(!effectiveUrl) return demoDB(a,p);
+  const action = GAS_ACTIONS[a] || a;
   try{
-    const r=await fetch(effectiveUrl+'?action='+a+'&payload='+encodeURIComponent(JSON.stringify(p)));
+    const r=await fetch(effectiveUrl+'?action='+encodeURIComponent(action)+'&payload='+encodeURIComponent(JSON.stringify(p)));
     const data=await r.json();
-    // Track usage
-    const u=parseInt(localStorage.getItem('seUsage')||'394')+1;
+    const u=parseInt(localStorage.getItem('seUsage')||'0')+1;
     localStorage.setItem('seUsage',u);
     return data;
-  }catch(e){console.error('GAS error:',e);return demoDB(a,p);}
+  }catch(e){
+    console.error('GAS error:',e);
+    return demoDB(a,p); // fallback للوضع التجريبي
+  }
 }
 async function demoDB(a,p){
   const DEF={settings:{mgrId:'100',mgrPass:'admin123',mgrName:'مدير النظام'},employees:[
@@ -952,7 +1178,14 @@ async function loginMgr(){
 }
 
 // APP
-function startApp(){document.getElementById('loginPage').classList.remove('active');document.getElementById('mainApp').classList.add('active');buildSidebar();updateTop();buildDash();showPage('db');if(VR!=='موظف')loadAll();}
+function startApp(){
+  document.getElementById('loginPage').classList.remove('active');
+  document.getElementById('mainApp').classList.add('active');
+  buildSidebar();
+  buildBottomNav();
+  updateTop();buildDash();showPage('db');
+  if(VR!=='موظف') loadAll();
+}
 function buildSidebar(){
   const r=VR;
   // Base role is the ORIGINAL role (مدير/مشرف/موظف), not the view role
@@ -1258,13 +1491,28 @@ function empDash(){
 }
 
 // EMP TABLE
-function renderEmpTbl(){const tb=document.getElementById('empTb');if(!tb)return;if(!emps.length){tb.innerHTML='<tr><td colspan="8" class="no-data">لا يوجد موظفون</td></tr>';return;}tb.innerHTML=emps.map((e,i)=>{
-    const isTransferred = e.transferDate && (Date.now()-new Date(e.transferDate).getTime())<7*24*60*60*1000;
-    const rowClass = isTransferred ? 'class="new-transfer"' : '';
-    const transferBtn = VR==='مدير'?`<select onchange="if(this.value){transferEmployee('${e.empId}',this.value);this.value=''}" style="padding:5px 8px;border-radius:10px;background:var(--ibg);border:1px solid var(--border);color:var(--text);font-family:Cairo,sans-serif;font-size:11px;cursor:pointer;margin-right:3px"><option value="">↕️ نقل</option>${SHIFTS.map(s=>s!==e.shift?`<option value="${s}">${SHNAMES[s]}</option>`:'').join('')}</select>`:'' ;
-    return `<tr ${rowClass}><td><b>${e.empId}</b></td><td>${e.name}</td><td dir="ltr">${e.phone}</td><td>${e.dept||'-'}</td><td>${shTag(e.shift)}</td><td>${e.role==='مشرف'?'<span class="badge b-sup">⭐ مشرف</span>':'موظف'}</td><td>${stBadge(e.status)}</td><td style="white-space:nowrap">${transferBtn}<button class="btn btn-sec btn-sm" onclick="editEmp(${i})">✏️</button> <button class="btn btn-dng btn-sm" onclick="delEmp(${i})">🗑️</button></td></tr>`;
-  }).join('');}
-function filterEmp(){const q=document.getElementById('empSrch').value.toLowerCase();document.querySelectorAll('#empTb tr').forEach(r=>r.style.display=r.textContent.toLowerCase().includes(q)?'':'none');}
+function renderEmpTbl(){
+  if(compView==='comprehensive') renderComprehensiveTable();
+  else renderSimpleEmpTbl();
+  markTransferredRows();
+}
+function filterEmp(){
+  const q=(document.getElementById('empSrch')?.value||'').toLowerCase();
+  const sh=(document.getElementById('filterShift')?.value||'');
+  const rl=(document.getElementById('filterRole')?.value||'');
+  const rows=document.querySelectorAll('#empTb tr, #empTbSimple tr');
+  rows.forEach(row=>{
+    const txt=row.textContent.toLowerCase();
+    const matchQ=!q||txt.includes(q);
+    // Get shift and role from dataset or text
+    const cells=row.querySelectorAll('td');
+    const rowShift=cells[3]?cells[3].textContent.trim():'';
+    const rowRole=cells[4]?cells[4].textContent.trim():'';
+    const matchSh=!sh||rowShift.includes(SHNAMES[sh]||sh)||rowShift.includes(sh);
+    const matchRl=!rl||rowRole.includes(rl);
+    row.style.display=(matchQ&&matchSh&&matchRl)?'':'none';
+  });
+}
 function renderShTbl(){
   const tb=document.getElementById('shTb');
   if(!tb||VR!=='مشرف')return;
@@ -1321,7 +1569,6 @@ async function delEmp(i){const e=emps[i];if(!e)return;if(!confirm('حذف: '+e.n
 
 // PROFILE
 function showProf(){
-  // When manager is viewing as employee, show EMPLOYEE data
   let dispU = U;
   if(VR==='موظف' && U.role==='مدير' && U.mgrEmpId){
     const me = emps.find(e=>String(e.empId)===String(U.mgrEmpId));
@@ -1333,7 +1580,96 @@ function showProf(){
   document.getElementById('profId').textContent=dispU.empId;
   document.getElementById('profPh').textContent=dispU.phone||'-';
   document.getElementById('profDp').textContent=dispU.dept||'-';
-  document.getElementById('profSh').textContent=SHNAMES[dispU.shift]||dispU.shift||'-';
+  const profShEl=document.getElementById('profSh');
+  if(profShEl) profShEl.innerHTML=dispU.shift?shTag(dispU.shift):'-';
+
+  // Region/center from infos
+  const info=getInfos().find(x=>String(x.empId)===String(dispU.empId))||{};
+  const prEl=document.getElementById('profRegion');if(prEl)prEl.textContent=info.region||'-';
+  const pcEl=document.getElementById('profCenter');if(pcEl)pcEl.textContent=info.center||'-';
+
+  // Balances
+  const b=getBalances(dispU.empId);
+  const bEl=document.getElementById('profBalances');
+  if(bEl) bEl.innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div style="background:rgba(0,200,150,.1);border:1px solid rgba(0,200,150,.25);border-radius:14px;padding:14px;text-align:center">
+        <div style="font-size:28px;font-weight:900;color:var(--success)">${b.annual}</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:3px">رصيد سنوية</div>
+      </div>
+      <div style="background:rgba(0,149,217,.1);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center">
+        <div style="font-size:28px;font-weight:900;color:var(--primary)">${b.scheduled}</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:3px">رصيد مجدولة</div>
+      </div>
+    </div>`;
+
+  // Today shift
+  const tsEl=document.getElementById('profShiftToday');
+  if(tsEl && dispU.shift){
+    const tod=getShiftStatus(dispU.shift,new Date());
+    const icon=tod==='صباح'?'🌅':tod==='مساء'?'🌙':'🏖️';
+    const label=tod==='صباح'?'صباح (7ص-7م)':tod==='مساء'?'مساء (7م-7ص)':'إجازة اليوم';
+    const col=tod==='صباح'?'var(--shift-a)':tod==='مساء'?'var(--shift-b)':'var(--success)';
+    tsEl.innerHTML=`<div style="text-align:center;padding:10px">
+      <div style="font-size:36px;margin-bottom:6px">${icon}</div>
+      <div style="font-size:15px;font-weight:800;color:${col}">${label}</div>
+      <div style="font-size:12px;color:var(--text2);margin-top:4px">${SHNAMES[dispU.shift]}</div>
+    </div>`;
+  }
+
+  // Show/hide balance edit card
+  const ea=document.getElementById('profBalEditArea');
+  if(ea) ea.style.display='none'; // hide until user clicks edit
+
+  // Show edit balance button for manager/supervisor
+  const eb=document.getElementById('editBalBtn');
+  if(eb) eb.style.display=isMgrOrSup()?'inline-flex':'inline-flex'; // always show - employee can also edit own
+}
+
+function openEditBalances(){
+  let dispU = U;
+  if(VR==='موظف' && U.role==='مدير' && U.mgrEmpId){
+    const me=emps.find(e=>String(e.empId)===String(U.mgrEmpId));
+    if(me) dispU=me;
+  }
+  const b=getBalances(dispU.empId);
+  const ea=document.getElementById('profBalEditArea');
+  const isHidden = !ea || ea.style.display==='none';
+  if(ea) ea.style.display=isHidden?'block':'none';
+  if(isHidden){
+    const annEl=document.getElementById('profBalAnnual');
+    const schEl=document.getElementById('profBalSched');
+    if(annEl) annEl.value=b.annual||0;
+    if(schEl) schEl.value=b.scheduled||0;
+    if(ea) ea.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+}
+
+async function saveProfBalances(){
+  let dispU = U;
+  if(VR==='موظف' && U.role==='مدير' && U.mgrEmpId){
+    const me=emps.find(e=>String(e.empId)===String(U.mgrEmpId));
+    if(me) dispU=me;
+  }
+  const annEl=document.getElementById('profBalAnnual');
+  const schEl=document.getElementById('profBalSched');
+  const an=parseFloat(annEl?annEl.value:0)||0;
+  const sc=parseFloat(schEl?schEl.value:0)||0;
+
+  // Save locally
+  saveBalanceData(dispU.empId,{annual:an,scheduled:sc});
+
+  // Save to GAS
+  const gasUrl=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
+  if(gasUrl){
+    gas('ارصدة_حفظ',{empId:dispU.empId,empName:dispU.name||'',annual:an,scheduled:sc})
+      .then(r=>{ if(!r.ok) console.warn('balance save:',r.error); });
+  }
+
+  toast('✅ تم حفظ الأرصدة','success');
+  const ea=document.getElementById('profBalEditArea');
+  if(ea) ea.style.display='none';
+  showProf(); // refresh display
 }
 function openEditProf(){
   let editU = U;
@@ -1408,7 +1744,21 @@ async function saveSets(){const id=document.getElementById('sMId').value.trim(),
 async function initSheets(){toast('⏳ جاري التهيئة...','info');const r=await gas('initSheets',{});toast(r.ok?'✅ تمت التهيئة':'⚠️ '+(r.error||''),r.ok?'success':'error');}
 
 // NAV
-function showPage(pg){document.querySelectorAll('.page').forEach(p=>p.style.display='none');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));const pe=document.getElementById('page-'+pg);if(pe)pe.style.display='block';const ne=document.getElementById('nav-'+pg);if(ne)ne.classList.add('active');if(pg==='emp')renderEmpTbl();if(pg==='sh')renderShTbl();if(pg==='prof')showProf();if(pg==='set')loadSets();if(pg==='cal')initCalendar();if(pg==='forms'){loadCustomLeaveTypes();initFormTab('leave');}}
+function showPage(pg){
+  document.querySelectorAll('.page').forEach(p=>p.style.display='none');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const pe=document.getElementById('page-'+pg);if(pe)pe.style.display='block';
+  const ne=document.getElementById('nav-'+pg);if(ne)ne.classList.add('active');
+  updateBottomNavActive(pg);
+  if(pg==='emp'){if(compView==='comprehensive'){allLeaves=getLeaves();allExtras=getExtras();allInfos=getInfos();}renderEmpTbl();}
+  if(pg==='sh')renderShTbl();
+  if(pg==='prof')showProf();
+  if(pg==='set')loadSets();
+  if(pg==='cal')initCalendar();
+  if(pg==='forms'){loadCustomLeaveTypes();initFormTab('leave');}
+  // Scroll to top on mobile
+  const mc=document.querySelector('.main-content');if(mc)mc.scrollTop=0;
+}
 
 // UTILS
 function openM(id){document.getElementById(id).classList.add('active');}
@@ -1480,7 +1830,7 @@ function switchRole(r){
   }
   VR=r;U.viewRole=r;
   sessionStorage.setItem('seU',JSON.stringify(U));
-  buildSidebar();updateTop();buildDash();showPage('db');
+  buildSidebar();buildBottomNav();updateTop();buildDash();showPage('db');
   toast('تم التبديل إلى: '+r,'info');
 }
 
@@ -1828,6 +2178,11 @@ function setText(id,txt){const el=document.getElementById(id);if(el)el.textConte
 // ---- LEAVE BALANCES ----
 function getBalances(empId){ try{return JSON.parse(localStorage.getItem('seBAL_'+empId)||'{"annual":0,"scheduled":0}');}catch(e){return{annual:0,scheduled:0};} }
 function saveBalanceData(empId,data){ localStorage.setItem('seBAL_'+empId,JSON.stringify(data)); }
+async function fetchBalances(empId){
+  const r=await gas('ارصدة_جلب',{empId});
+  if(r.ok&&r.data) return r.data;
+  return getBalances(empId);
+}
 
 function onLeaveEmpChange(){
   const id=document.getElementById('fLeaveEmp').value;
@@ -1852,6 +2207,11 @@ function saveBalances(){
   if(!id){toast('اختر موظفاً أولاً','info');return;}
   const an=parseFloat(document.getElementById('balAnnual').value)||0;
   const sc=parseFloat(document.getElementById('balScheduled').value)||0;
+  const empObj2=emps.find(e=>String(e.empId)===String(id));
+  const ___gasUrl=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
+  if(___gasUrl){ gas('ارصدة_حفظ',{empId:id,empName:empObj2?empObj2.name:'',annual:an,scheduled:sc}).then(r=>{if(!r.ok)console.warn('GAS bal:',r.error);}); }
+  else { saveBalanceData(id,{annual:an,scheduled:sc}); }
+  // Update localStorage mirror
   saveBalanceData(id,{annual:an,scheduled:sc});
   loadBalancesDisplay(id);
   toast('✅ تم حفظ الأرصدة','success');
@@ -1921,21 +2281,29 @@ function addLeaveType(){
   const sel=document.getElementById('fLeaveType');
   const o=document.createElement('option');o.value=name.trim();o.textContent=name.trim();sel.appendChild(o);
   sel.value=name.trim();
-  // Save custom types
-  const types=JSON.parse(localStorage.getItem('seLeaveTypes')||'[]');
-  types.push(name.trim());
-  localStorage.setItem('seLeaveTypes',JSON.stringify(types));
+  const gasUrl7=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
+  if(gasUrl7){ gas('نوع_اضافة',{type:name.trim()}).then(r=>{if(!r.ok)console.warn('type add:',r.error);}); }
+  else{const ts=JSON.parse(localStorage.getItem('seLeaveTypes')||'[]');ts.push(name.trim());localStorage.setItem('seLeaveTypes',JSON.stringify(ts));}
   toast('✅ تم إضافة نوع الإجازة','success');
 }
-function loadCustomLeaveTypes(){
+async function loadCustomLeaveTypes(){
   const sel=document.getElementById('fLeaveType');if(!sel)return;
-  const types=JSON.parse(localStorage.getItem('seLeaveTypes')||'[]');
+  const gasUrl6=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
+  let types=JSON.parse(localStorage.getItem('seLeaveTypes')||'[]');
+  if(gasUrl6){const r=await gas('انواع_جلب',{});if(r.ok&&r.data)types=r.data;}
   types.forEach(t=>{if(![...sel.options].find(o=>o.value===t)){const o=document.createElement('option');o.value=t;o.textContent=t;sel.appendChild(o);}});
 }
 
 // ---- LEAVES ----
 function getLeaves(){try{return JSON.parse(localStorage.getItem('seLeaves')||'[]');}catch(e){return[];}}
 function saveLeaves(arr){localStorage.setItem('seLeaves',JSON.stringify(arr));}
+// جلب من قاعدة البيانات (يُستخدم عند الاتصال)
+async function fetchLeaves(empId){
+  const p=empId?{empId}:{};
+  const r=await gas('اجازات_جلب',p);
+  if(r.ok&&r.data) return r.data;
+  return getLeaves();
+}
 
 function saveLeave(){
   const empId=isMgrOrSup()?document.getElementById('fLeaveEmp').value:getCurrentEmpId();
@@ -1950,15 +2318,20 @@ function saveLeave(){
   const empObj=emps.find(e=>String(e.empId)===String(empId));
   const info=getInfos().find(x=>x.empId===String(empId))||{};
   const arr=getLeaves();
-  arr.unshift({id:Date.now(),empId,empName:empObj?empObj.name:empId,empShift:empObj?empObj.shift:'',region:info.region||'',center:info.center||'',type,start,end,days,note});
-  saveLeaves(arr);
-  // Deduct from balance
-  if(type==='سنوية'||type==='مجدولة'){
-    const b=getBalances(empId);
-    if(type==='سنوية') b.annual=Math.max(0,b.annual-days);
-    else b.scheduled=Math.max(0,b.scheduled-days);
-    saveBalanceData(empId,b);
-    loadBalancesDisplay(empId);
+  const leaveObj={id:Date.now(),empId,empName:empObj?empObj.name:empId,empShift:empObj?empObj.shift:'',region:info.region||'',center:info.center||'',type,start,end,days,note};
+  const gasUrl=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
+  if(gasUrl){
+    // حفظ في قاعدة البيانات
+    gas('اجازة_اضافة',leaveObj).then(r=>{if(!r.ok)console.warn('GAS leave save:',r.error);});
+  } else {
+    // وضع تجريبي
+    arr.unshift(leaveObj);saveLeaves(arr);
+    if(type==='سنوية'||type==='مجدولة'){
+      const b=getBalances(empId);
+      if(type==='سنوية') b.annual=Math.max(0,b.annual-days);
+      else b.scheduled=Math.max(0,b.scheduled-days);
+      saveBalanceData(empId,b);
+    }
   }
   showAl('leaveAl','s','✅ تم حفظ طلب الإجازة');
   renderLeaveTable();
@@ -1966,9 +2339,11 @@ function saveLeave(){
   document.getElementById('leaveDeductPreview').style.display='none';
 }
 
-function renderLeaveTable(){
+async function renderLeaveTable(){
   const tb=document.getElementById('leaveTb');if(!tb)return;
-  const arr=getLeaves();
+  const gasUrl=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
+  const empId=isMgrOrSup()?null:getCurrentEmpId();
+  const arr = gasUrl ? await fetchLeaves(empId) : getLeaves();
   tb.innerHTML=arr.length?arr.map(l=>`<tr>
     <td><b>${l.empName}</b>${l.region?'<br><small style="color:var(--text3)">'+l.region+(l.center?' / '+l.center:'')+'</small>':''}</td>
     <td>${l.type}</td><td>${l.start}</td><td>${l.end||'-'}</td>
@@ -1976,11 +2351,21 @@ function renderLeaveTable(){
     <td><button class="btn btn-dng btn-sm" onclick="deleteLeave(${l.id})">🗑️</button></td>
   </tr>`).join(''):'<tr><td colspan="7" class="no-data">لا يوجد طلبات</td></tr>';
 }
-function deleteLeave(id){if(!confirm('حذف؟'))return;saveLeaves(getLeaves().filter(l=>l.id!==id));renderLeaveTable();}
+async function deleteLeave(id){if(!confirm('حذف طلب الإجازة؟'))return;
+  const gasUrl4=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
+  if(gasUrl4){const r=await gas('اجازة_حذف',{id:String(id)});if(!r.ok){toast('خطأ: '+(r.error||''),'error');return;}}
+  else{saveLeaves(getLeaves().filter(l=>l.id!==id));}
+  renderLeaveTable();}
 
 // ---- EXTRA HOURS ----
 function getExtras(){try{return JSON.parse(localStorage.getItem('seExtras')||'[]');}catch(e){return[];}}
 function saveExtras(arr){localStorage.setItem('seExtras',JSON.stringify(arr));}
+async function fetchExtras(empId){
+  const p=empId?{empId}:{};
+  const r=await gas('اضافي_جلب',p);
+  if(r.ok&&r.data) return r.data;
+  return getExtras();
+}
 
 function saveExtra(){
   const empId=isMgrOrSup()?document.getElementById('fExtraEmp').value:getCurrentEmpId();
@@ -1993,26 +2378,40 @@ function saveExtra(){
   if(isNaN(hrs)||hrs<=0){showAl('extraAl','d','يرجى إدخال عدد ساعات صحيح (مثال: 3 أو 0.5 أو 0.25)');return;}
   const empObj=emps.find(e=>String(e.empId)===String(empId));
   const arr=getExtras();
-  arr.unshift({id:Date.now(),empId,empName:empObj?empObj.name:empId,date,hrs,type,note});
-  saveExtras(arr);
+  const extraObj={id:Date.now(),empId,empName:empObj?empObj.name:empId,empShift:empObj?empObj.shift:'',date,hrs,type,note};
+  const _gasUrl=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
+  if(_gasUrl){ gas('اضافي_اضافة',extraObj).then(r=>{if(!r.ok)console.warn('GAS extra:',r.error);}); }
+  else { arr.unshift(extraObj);saveExtras(arr); }
   showAl('extraAl','s','✅ تم حفظ الساعات الإضافية');
   renderExtraTable();
   ['fExtraDate','fExtraHrs','fExtraNote'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
 }
-function renderExtraTable(){
+async function renderExtraTable(){
   const tb=document.getElementById('extraTb');if(!tb)return;
-  const arr=getExtras();
+  const gasUrl2=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
+  const empId2=isMgrOrSup()?null:getCurrentEmpId();
+  const arr = gasUrl2 ? await fetchExtras(empId2) : getExtras();
   tb.innerHTML=arr.length?arr.map(x=>`<tr>
     <td><b>${x.empName}</b></td><td>${x.date}</td><td>${x.hrs} ساعة</td>
     <td>${x.type}</td><td>${x.note||'-'}</td>
     <td><button class="btn btn-dng btn-sm" onclick="deleteExtra(${x.id})">🗑️</button></td>
   </tr>`).join(''):'<tr><td colspan="6" class="no-data">لا يوجد سجلات</td></tr>';
 }
-function deleteExtra(id){if(!confirm('حذف؟'))return;saveExtras(getExtras().filter(x=>x.id!==id));renderExtraTable();}
+async function deleteExtra(id){if(!confirm('حذف السجل؟'))return;
+  const gasUrl5=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
+  if(gasUrl5){const r=await gas('اضافي_حذف',{id:String(id)});if(!r.ok){toast('خطأ: '+(r.error||''),'error');return;}}
+  else{saveExtras(getExtras().filter(x=>x.id!==id));}
+  renderExtraTable();}
 
 // ---- EMP INFO ----
 function getInfos(){try{return JSON.parse(localStorage.getItem('seInfos')||'[]');}catch(e){return[];}}
 function saveInfos(arr){localStorage.setItem('seInfos',JSON.stringify(arr));}
+async function fetchInfos(empId){
+  const p=empId?{empId}:{};
+  const r=await gas('بيانات_جلب',p);
+  if(r.ok&&r.data) return r.data;
+  return getInfos();
+}
 
 function onInfoEmpChange(){
   const id=document.getElementById('fInfoEmp').value;
@@ -2046,17 +2445,18 @@ function saveInfo(){
   };
   const arr=getInfos();
   const idx=arr.findIndex(x=>String(x.empId)===String(empId));
-  if(idx>=0) arr[idx]={...arr[idx],...data};
-  else arr.push(data);
-  saveInfos(arr);
+  const __gasUrl=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
+  if(__gasUrl){ gas('بيانات_حفظ',data).then(r=>{if(!r.ok)console.warn('GAS info:',r.error);}); }
+  else { if(idx>=0) arr[idx]={...arr[idx],...data}; else arr.push(data); saveInfos(arr); }
   showAl('infoAl','s','✅ تم حفظ البيانات الوظيفية');
   renderInfoTable();
   // Refresh leave bar region/center
   if(!isMgrOrSup()) autoFillLeaveBar();
 }
-function renderInfoTable(){
+async function renderInfoTable(){
   const tb=document.getElementById('infoTb');if(!tb)return;
-  const arr=getInfos();
+  const gasUrl3=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
+  const arr = gasUrl3 ? await fetchInfos() : getInfos();
   tb.innerHTML=arr.length?arr.map(x=>`<tr>
     <td><b>${x.empName}</b></td><td>${x.region||'-'}</td><td>${x.center||'-'}</td>
     <td>${x.car||'-'}</td>
@@ -2174,6 +2574,365 @@ document.addEventListener('click',function(e){
   if(m&&btn&&!m.contains(e.target)&&!btn.contains(e.target)) m.style.display='none';
 });
 
+
+// ============================================================
+// حذف البيانات التجريبية المحلية
+// ============================================================
+function clearDemoData() {
+  if(!confirm('هل تريد حذف جميع البيانات التجريبية المحلية؟\nهذا لن يؤثر على Google Sheets.')) return;
+  const keys = ['seDB','seLeaves','seExtras','seInfos','seLeaveTypes','seUsage'];
+  keys.forEach(k => localStorage.removeItem(k));
+  // حذف أرصدة الموظفين
+  Object.keys(localStorage).filter(k=>k.startsWith('seBAL_')).forEach(k=>localStorage.removeItem(k));
+  toast('✅ تم حذف البيانات التجريبية - سيتم جلب البيانات من Google Sheets', 'success');
+  setTimeout(()=>loadAll(), 1000);
+}
+
+
+// ============================================================
+// الجدول الشامل للموظفين
+// ============================================================
+let compView = 'comprehensive'; // 'comprehensive' | 'simple'
+let allLeaves = [], allExtras = [], allInfos = [];
+
+function toggleEmpView(){
+  compView = compView === 'comprehensive' ? 'simple' : 'comprehensive';
+  const btn = document.getElementById('viewToggleBtn');
+  const compCard = document.getElementById('comprehensiveCard');
+  const simpleCard = document.getElementById('simpleEmpCard');
+  if(compView === 'comprehensive'){
+    if(compCard) compCard.style.display = '';
+    if(simpleCard) simpleCard.style.display = 'none';
+    if(btn) btn.textContent = '📊 عرض مبسط';
+    renderComprehensiveTable();
+  } else {
+    if(compCard) compCard.style.display = 'none';
+    if(simpleCard) simpleCard.style.display = '';
+    if(btn) btn.textContent = '📋 عرض شامل';
+    renderSimpleEmpTbl();
+  }
+}
+
+async function refreshComprehensive(){
+  toast('⏳ جاري تحديث بيانات الجدول...','info');
+  await loadAll();
+  const gasUrl = window._GAS_URL_OVERRIDE || localStorage.getItem('seGasUrl') || GAS_URL;
+  if(gasUrl){
+    const [lr, er, ir] = await Promise.all([
+      gas('اجازات_جلب',{}),
+      gas('اضافي_جلب',{}),
+      gas('بيانات_جلب',{})
+    ]);
+    if(lr.ok && lr.data) allLeaves = lr.data;
+    if(er.ok && er.data) allExtras = er.data;
+    if(ir.ok && ir.data) allInfos  = ir.data;
+  } else {
+    allLeaves = getLeaves();
+    allExtras = getExtras();
+    allInfos  = getInfos();
+  }
+  renderComprehensiveTable();
+  toast('✅ تم تحديث البيانات','success');
+}
+
+// حساب تاريخ انتهاء البطاقة والمدة المتبقية
+function getDaysLeft(expiryDateStr){
+  if(!expiryDateStr || expiryDateStr==='-' || expiryDateStr==='') return null;
+  const exp = new Date(expiryDateStr);
+  if(isNaN(exp)) return null;
+  const diff = Math.ceil((exp - new Date()) / 86400000);
+  return diff;
+}
+
+function expiryBadge(daysLeft, label){
+  if(daysLeft === null) return '<span style="color:var(--text3);font-size:11px">—</span>';
+  if(daysLeft < 0) return '<span class="exp-soon">منتهي</span>';
+  if(daysLeft <= 30) return `<span class="exp-soon">${daysLeft} يوم</span>`;
+  if(daysLeft <= 90) return `<span class="exp-warn">${daysLeft} يوم</span>`;
+  return `<span class="exp-ok">${daysLeft} يوم</span>`;
+}
+
+function balBadge(val){
+  const n = Number(val)||0;
+  const cls = n<=0?'days-red':n<=5?'days-warn':'days-ok';
+  return `<span class="days-badge ${cls}">${n}</span>`;
+}
+
+function renderComprehensiveTable(){
+  const thead = document.getElementById('comprehensiveThead');
+  const tbody = document.getElementById('empTb');
+  if(!thead || !tbody) return;
+
+  // ── رؤوس الأعمدة مجمعة ──
+  const groups = [
+    { label:'🪪 بيانات الموظف', cls:'th-group-id', count:8 },
+    { label:'📍 الموقع والمركز', cls:'th-group-info', count:3 },
+    { label:'🏖️ الإجازات والأرصدة', cls:'th-group-leave', count:7 },
+    { label:'⏰ الساعات الإضافية', cls:'th-group-extra', count:3 },
+    { label:'👕 المقاسات والتجهيزات', cls:'th-group-cloth', count:7 },
+    { label:'🛠️ إجراءات', cls:'th-group-id', count:1 },
+  ];
+
+  const cols = [
+    // بيانات الموظف (8)
+    { label:'رقم الوظيفي', cls:'th-group-id' },
+    { label:'الاسم الكامل', cls:'th-group-id' },
+    { label:'رقم الجوال', cls:'th-group-id' },
+    { label:'الوردية', cls:'th-group-id' },
+    { label:'الدور', cls:'th-group-id' },
+    { label:'القسم', cls:'th-group-id' },
+    { label:'الحالة', cls:'th-group-id' },
+    { label:'تاريخ النقل', cls:'th-group-id' },
+    // الموقع (3)
+    { label:'المنطقة', cls:'th-group-info' },
+    { label:'المركز', cls:'th-group-info' },
+    { label:'رقم السيارة', cls:'th-group-info' },
+    // الإجازات (7)
+    { label:'رصيد سنوية', cls:'th-group-leave' },
+    { label:'رصيد مجدولة', cls:'th-group-leave' },
+    { label:'إجازات هذا الشهر', cls:'th-group-leave' },
+    { label:'آخر إجازة', cls:'th-group-leave' },
+    { label:'نوع آخر إجازة', cls:'th-group-leave' },
+    { label:'أيام آخر إجازة', cls:'th-group-leave' },
+    { label:'إجمالي الإجازات', cls:'th-group-leave' },
+    // الإضافي (3)
+    { label:'ساعات إضافية', cls:'th-group-extra' },
+    { label:'آخر إضافي', cls:'th-group-extra' },
+    { label:'نوع آخر إضافي', cls:'th-group-extra' },
+    // المقاسات (7)
+    { label:'قميص CAT2', cls:'th-group-cloth' },
+    { label:'بنطلون CAT2', cls:'th-group-cloth' },
+    { label:'بدلة CAT4', cls:'th-group-cloth' },
+    { label:'حذاء', cls:'th-group-cloth' },
+    { label:'عدد قمصان', cls:'th-group-cloth' },
+    { label:'عدد بدلات', cls:'th-group-cloth' },
+    { label:'عدد أحذية', cls:'th-group-cloth' },
+    // إجراءات (1)
+    { label:'إجراءات', cls:'th-group-id' },
+  ];
+
+  // Row 1: group headers
+  let r1 = '<tr>';
+  groups.forEach(g => {
+    r1 += `<th colspan="${g.count}" class="${g.cls}" style="text-align:center;font-size:12px;border-left:2px solid var(--border)">${g.label}</th>`;
+  });
+  r1 += '</tr>';
+
+  // Row 2: column headers
+  let r2 = '<tr>';
+  cols.forEach(col => {
+    r2 += `<th class="${col.cls}" style="font-size:10px">${col.label}</th>`;
+  });
+  r2 += '</tr>';
+
+  thead.innerHTML = r1 + r2;
+
+  if(!emps.length){
+    tbody.innerHTML = `<tr><td colspan="${cols.length}" class="no-data">لا يوجد موظفون</td></tr>`;
+    return;
+  }
+
+  const now = new Date();
+  const thisMonth = now.getMonth();
+  const thisYear  = now.getFullYear();
+
+  const rows = emps.map((e,i) => {
+    const info   = allInfos.find(x=>String(x.empId)===String(e.empId)) || {};
+    const balObj = getBalances(e.empId);
+    const empLeaves = allLeaves.filter(l=>String(l.empId)===String(e.empId));
+    const empExtras = allExtras.filter(x=>String(x.empId)===String(e.empId));
+
+    // إجازات هذا الشهر
+    const monthLeaves = empLeaves.filter(l=>{
+      const d = new Date(l.start);
+      return d.getMonth()===thisMonth && d.getFullYear()===thisYear;
+    });
+    const monthLeaveDays = monthLeaves.reduce((s,l)=>s+(Number(l.days)||0),0);
+
+    // آخر إجازة
+    const lastLeave = empLeaves.sort((a,b)=>b.start.localeCompare(a.start))[0];
+
+    // إجمالي الإجازات
+    const totalLeaveDays = empLeaves.reduce((s,l)=>s+(Number(l.days)||0),0);
+
+    // الساعات الإضافية
+    const totalHrs = empExtras.reduce((s,x)=>s+(Number(x.hrs)||0),0);
+    const lastExtra = empExtras.sort((a,b)=>b.date.localeCompare(a.date))[0];
+
+    // حالة النقل
+    const isTransferred = e.transferDate && (now-new Date(e.transferDate))<7*24*60*60*1000;
+
+    return `<tr${isTransferred?' class="transferred"':''}>
+      <td><b style="color:var(--primary)">${e.empId}</b></td>
+      <td style="text-align:right;min-width:130px"><b>${e.name}</b></td>
+      <td dir="ltr">${e.phone}</td>
+      <td>${shTag(e.shift)}</td>
+      <td>${e.role==='مشرف'?'<span class="badge b-sup">⭐ مشرف</span>':'<span style="font-size:11px;color:var(--text2)">موظف</span>'}</td>
+      <td>${e.dept||'—'}</td>
+      <td>${stBadge(e.status)}</td>
+      <td style="font-size:10px;color:var(--text3)">${e.transferDate?e.transferDate.split(' ')[0]:'—'}</td>
+      <td>${info.region||'—'}</td>
+      <td style="min-width:100px">${info.center||'—'}</td>
+      <td>${info.car||'—'}</td>
+      <td>${balBadge(balObj.annual)}</td>
+      <td>${balBadge(balObj.scheduled)}</td>
+      <td>${monthLeaveDays>0?`<span class="days-badge days-warn">${monthLeaveDays}</span>`:'<span class="days-badge days-ok">0</span>'}</td>
+      <td style="font-size:10px">${lastLeave?lastLeave.start:'—'}</td>
+      <td style="font-size:10px">${lastLeave?lastLeave.type:'—'}</td>
+      <td>${lastLeave?`<span class="days-badge days-ok">${lastLeave.days}</span>`:'—'}</td>
+      <td>${totalLeaveDays>0?`<b style="color:var(--primary)">${totalLeaveDays}</b>`:'0'}</td>
+      <td>${totalHrs>0?`<b style="color:var(--warning)">${totalHrs}</b>`:'0'}</td>
+      <td style="font-size:10px">${lastExtra?lastExtra.date:'—'}</td>
+      <td style="font-size:10px">${lastExtra?lastExtra.type:'—'}</td>
+      <td>${info.shirt2||'—'}</td>
+      <td>${info.pants2||'—'}</td>
+      <td>${info.suit4||'—'}</td>
+      <td>${info.shoes||'—'}</td>
+      <td>${info.shirt2Qty||'—'}</td>
+      <td>${info.suit4Qty||'—'}</td>
+      <td>${info.shoeQty||'—'}</td>
+      <td style="white-space:nowrap">
+        ${VR==='مدير'?`<select onchange="if(this.value){transferEmployee('${e.empId}',this.value);this.value=''}" style="padding:4px 6px;border-radius:8px;background:var(--ibg);border:1px solid var(--border);color:var(--text);font-family:Cairo,sans-serif;font-size:10px;cursor:pointer;margin-left:2px"><option value="">↕️</option>${SHIFTS.map(s=>s!==e.shift?'<option value="'+s+'">'+SHNAMES[s]+'</option>':'').join('')}</select>`:''}
+        <button class="btn btn-sec btn-sm" style="padding:4px 8px;font-size:11px" onclick="editEmp(${i})">✏️</button>
+        ${VR==='مدير'?`<button class="btn btn-dng btn-sm" style="padding:4px 8px;font-size:11px;margin-right:2px" onclick="delEmp(${i})">🗑️</button>`:''}
+      </td>
+    </tr>`;
+  });
+
+  tbody.innerHTML = rows.join('');
+
+  // Summary stats
+  const statsEl = document.getElementById('empSummaryStats');
+  if(statsEl){
+    const totalLeave = allLeaves.reduce((s,l)=>s+(Number(l.days)||0),0);
+    const totalHrs2  = allExtras.reduce((s,x)=>s+(Number(x.hrs)||0),0);
+    const activeNow  = allLeaves.filter(l=>{const t=new Date();return new Date(l.start)<=t&&new Date(l.end)>=t;}).length;
+    statsEl.innerHTML = [
+      {i:'👥',v:emps.length,l:'إجمالي الموظفين',c:'si-b'},
+      {i:'✅',v:emps.filter(e=>e.status==='نشط').length,l:'نشطون',c:'si-g'},
+      {i:'🏖️',v:activeNow,l:'في إجازة الآن',c:'si-p'},
+      {i:'📅',v:totalLeave,l:'إجمالي أيام إجازات',c:'si-b'},
+      {i:'⏰',v:totalHrs2,l:'إجمالي ساعات إضافية',c:'si-o'},
+      {i:'📋',v:allInfos.length,l:'لديهم بيانات وظيفية',c:'si-g'},
+    ].map(x=>`<div class="sc" style="padding:12px;flex-direction:column;align-items:flex-start;gap:3px">
+      <div style="display:flex;align-items:center;justify-content:space-between;width:100%">
+        <div class="si ${x.c}" style="width:32px;height:32px;font-size:14px">${x.i}</div>
+        <div style="font-size:20px;font-weight:900">${x.v}</div>
+      </div>
+      <div style="font-size:10px;color:var(--text2)">${x.l}</div>
+    </div>`).join('');
+  }
+
+  // Update count
+  const countEl = document.getElementById('empCount');
+  if(countEl) countEl.textContent = `${emps.length} موظف`;
+}
+
+// Simple table for quick view
+function renderSimpleEmpTbl(){
+  const tb = document.getElementById('empTbSimple');
+  if(!tb) return;
+  if(!emps.length){ tb.innerHTML='<tr><td colspan="8" class="no-data">لا يوجد موظفون</td></tr>'; return; }
+  tb.innerHTML = emps.map((e,i) => {
+    const isT = e.transferDate && (Date.now()-new Date(e.transferDate).getTime())<7*24*60*60*1000;
+    return `<tr${isT?' class="transferred"':''}>
+      <td><b>${e.empId}</b></td><td>${e.name}</td><td dir="ltr">${e.phone}</td>
+      <td>${e.dept||'-'}</td><td>${shTag(e.shift)}</td>
+      <td>${e.role==='مشرف'?'<span class="badge b-sup">⭐ مشرف</span>':'موظف'}</td>
+      <td>${stBadge(e.status)}</td>
+      <td>
+        ${VR==='مدير'?`<select onchange="if(this.value){transferEmployee('${e.empId}',this.value);this.value=''}" style="padding:4px 6px;border-radius:8px;background:var(--ibg);border:1px solid var(--border);color:var(--text);font-family:Cairo,sans-serif;font-size:10px;cursor:pointer;margin-left:2px"><option value="">↕️ نقل</option>${SHIFTS.map(s=>s!==e.shift?'<option value="'+s+'">'+SHNAMES[s]+'</option>':'').join('')}</select>`:''}
+        <button class="btn btn-sec btn-sm" onclick="editEmp(${i})">✏️</button>
+        ${VR==='مدير'?`<button class="btn btn-dng btn-sm" onclick="delEmp(${i})" style="margin-right:4px">🗑️</button>`:''}
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+
+// ============================================================
+// BOTTOM NAVIGATION
+// ============================================================
+const BN_PAGES = {
+  db:    { icon:'📊', label:'الرئيسية',   role:['مدير','مشرف','موظف'] },
+  emp:   { icon:'👥', label:'الموظفون',   role:['مدير'] },
+  sh:    { icon:'📋', label:'ورديتي',     role:['مشرف'] },
+  cal:   { icon:'📅', label:'التقويم',    role:['مدير','مشرف','موظف'] },
+  forms: { icon:'📝', label:'النماذج',    role:['مدير','مشرف','موظف'] },
+  prof:  { icon:'👤', label:'ملفي',       role:['مدير','مشرف','موظف'] },
+  set:   { icon:'⚙️', label:'الإعدادات', role:['مدير'] },
+};
+
+// Max primary tabs shown in bottom bar (rest go to "more")
+const BN_MAX = 5;
+
+function buildBottomNav(){
+  const list = document.getElementById('bnList');
+  const moreList = document.getElementById('bnMoreList');
+  if(!list || !moreList) return;
+
+  const role = VR;
+  const visible = Object.entries(BN_PAGES).filter(([pg, cfg]) => cfg.role.includes(role));
+
+  const primary = visible.slice(0, BN_MAX - 1);
+  const overflow = visible.slice(BN_MAX - 1);
+
+  let html = '';
+  primary.forEach(([pg, cfg]) => {
+    html += `<button class="bn-item" id="bn-${pg}" onclick="showPage('${pg}');closeBnMore()">
+      <span class="bn-icon">${cfg.icon}</span>
+      <span class="bn-lbl">${cfg.label}</span>
+    </button>`;
+  });
+
+  // "More" button if overflow
+  if(overflow.length > 0){
+    html += `<button class="bn-item" id="bn-more" onclick="toggleBnMore()">
+      <span class="bn-icon">☰</span>
+      <span class="bn-lbl">المزيد</span>
+    </button>`;
+  }
+  list.innerHTML = html;
+
+  // Build overflow menu
+  let moreHtml = '';
+  overflow.forEach(([pg, cfg]) => {
+    moreHtml += `<div class="bnm-item" id="bnm-${pg}" onclick="showPage('${pg}');closeBnMore()">
+      <span class="bnm-icon">${cfg.icon}</span>
+      <span>${cfg.label}</span>
+    </div>`;
+  });
+  moreList.innerHTML = moreHtml || '<p style="text-align:center;color:var(--text3);font-size:13px">لا يوجد المزيد</p>';
+}
+
+function updateBottomNavActive(pg){
+  // Reset all
+  document.querySelectorAll('.bn-item').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.bnm-item').forEach(b => b.classList.remove('active'));
+  // Activate current
+  const el = document.getElementById('bn-' + pg);
+  if(el) { el.classList.add('active'); }
+  else {
+    // It's in overflow menu - activate "more" button
+    const moreBtn = document.getElementById('bn-more');
+    if(moreBtn) moreBtn.classList.add('active');
+    const moreItem = document.getElementById('bnm-' + pg);
+    if(moreItem) moreItem.classList.add('active');
+  }
+}
+
+function toggleBnMore(){
+  const menu = document.getElementById('bnMoreMenu');
+  const overlay = document.getElementById('bnMoreOverlay');
+  const isOpen = menu.style.display === 'block';
+  menu.style.display = isOpen ? 'none' : 'block';
+  overlay.style.display = isOpen ? 'none' : 'block';
+}
+function closeBnMore(){
+  document.getElementById('bnMoreMenu').style.display = 'none';
+  document.getElementById('bnMoreOverlay').style.display = 'none';
+}
+
 window.onload=()=>{
   applyTheme();
   cleanOldHighlights();
@@ -2197,7 +2956,6 @@ window.onload=()=>{
 </script>
 
 <!-- SHIFT DETAIL MODAL -->
-
 <div class="mo" id="mShift">
   <div class="modal" style="max-width:680px">
     <div class="m-hd">
@@ -2216,7 +2974,6 @@ window.onload=()=>{
     <div class="m-ft"><button class="btn btn-sec" onclick="closeM('mShift')">إغلاق</button></div>
   </div>
 </div>
-
 
 </body>
 </html>
