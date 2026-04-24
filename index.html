@@ -1536,11 +1536,29 @@ async function empDashAsync(){
   const todLabel=tod==='صباح'?'صباح (7ص-7م)':tod==='مساء'?'مساء (7م-7ص)':'إجازة اليوم';
   const shiftCardCls=dispU.shift?(dispU.shift==='أ'?'shc-a':dispU.shift==='ب'?'shc-b':dispU.shift==='ج'?'shc-c':'shc-d'):'shc-a';
 
-  const fmtD=d=>{ if(!d||d==='-')return'-'; const x=String(d); return x.includes('T')?x.split('T')[0]:x.includes(' ')?x.split(' ')[0]:x.includes('GMT')?x.split(' ').slice(0,4).join(' '):x; };
+  const fmtD=d=>{
+    if(!d||d==='-')return'-';
+    const x=String(d).trim();
+    // ISO format: 2026-03-30 or 2026-03-30T...
+    if(/^\d{4}-\d{2}-\d{2}/.test(x)) return x.substring(0,10);
+    // JS Date.toString: "Mon Mar 30 2026 00:00:00 GMT+0300..."
+    if(/^[A-Za-z]{3} [A-Za-z]{3} \d{1,2} \d{4}/.test(x)){
+      const parts=x.split(' ');
+      const mNames={Jan:'01',Feb:'02',Mar:'03',Apr:'04',May:'05',Jun:'06',Jul:'07',Aug:'08',Sep:'09',Oct:'10',Nov:'11',Dec:'12'};
+      const m=mNames[parts[1]]||'01';
+      const dd=parts[2].padStart(2,'0');
+      return parts[3]+'-'+m+'-'+dd;
+    }
+    // Unix timestamp
+    if(/^\d{10,13}$/.test(x)){const dt=new Date(x.length===10?+x*1000:+x);return dt.toISOString().substring(0,10);}
+    return x.includes(' ')?x.split(' ')[0]:x;
+  };
 
   const now=new Date();now.setHours(0,0,0,0);
-  const activeLeave=empLeaves.find(l=>new Date(fmtD(l.start))<=now&&new Date(fmtD(l.end))>=now);
-  const futureLeave=empLeaves.filter(l=>new Date(fmtD(l.start))>now).sort((a,b)=>String(a.start).localeCompare(String(b.start)))[0];
+  // Normalize dates for comparison
+  const parseLS=s=>{ const x=String(s||'').trim(); if(!x||x==='-')return new Date(0); if(/^\d{4}-\d{2}-\d{2}/.test(x))return new Date(x.substring(0,10)); if(/^[A-Za-z]{3} [A-Za-z]{3} \d{1,2} \d{4}/.test(x)){const p=x.split(' ');const mN={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};return new Date(+p[3],mN[p[1]],+p[2]);} if(/^\d{10,13}$/.test(x))return new Date(x.length===10?+x*1000:+x); return new Date(x); };
+  const activeLeave=empLeaves.find(l=>parseLS(l.start)<=now&&parseLS(l.end)>=now);
+  const futureLeave=empLeaves.filter(l=>parseLS(l.start)>now).sort((a,b)=>parseLS(a.start)-parseLS(b.start))[0];
   const totalHrs=empExtras.reduce((s,x)=>s+(Number(x.hrs)||0),0);
   const pendingExtras=empExtras.filter(x=>!x.received);
 
@@ -1596,11 +1614,11 @@ async function empDashAsync(){
       <div class="tw"><table>
         <thead><tr><th>النوع</th><th>من</th><th>إلى</th><th>الأيام</th><th>الحالة</th></tr></thead>
         <tbody>${empLeaves.length?empLeaves.map(l=>{
-          const ls=fmtD(l.start),le=fmtD(l.end);
-          const lEnd=new Date(ls); const lStart=new Date(le);
-          const isActive=new Date(ls)<=now&&new Date(le)>=now;
-          const isExpired=new Date(le)<now;
-          const remaining=isActive?Math.max(0,Math.ceil((new Date(le)-now)/86400000))+1:0;
+          const fmtLS=s=>{ const x=String(s||'').trim(); if(!x||x==='-')return'-'; if(/^\d{4}-\d{2}-\d{2}/.test(x))return x.substring(0,10); if(/^[A-Za-z]{3} [A-Za-z]{3} \d{1,2} \d{4}/.test(x)){const p=x.split(' ');const mN={Jan:'01',Feb:'02',Mar:'03',Apr:'04',May:'05',Jun:'06',Jul:'07',Aug:'08',Sep:'09',Oct:'10',Nov:'11',Dec:'12'};return p[3]+'-'+(mN[p[1]]||'01')+'-'+p[2].padStart(2,'0');} return x.includes('T')?x.split('T')[0]:x.includes(' ')?x.split(' ')[0]:x; };
+          const ls=fmtLS(l.start),le=fmtLS(l.end);
+          const isActive=parseLS(l.start)<=now&&parseLS(l.end)>=now;
+          const isExpired=parseLS(l.end)<now;
+          const remaining=isActive?Math.max(0,Math.ceil((parseLS(l.end)-now)/86400000))+1:0;
           return `<tr>
             <td>${l.type}</td><td>${ls}</td><td>${le||'-'}</td>
             <td>${l.days}</td>
@@ -1620,13 +1638,14 @@ async function empDashAsync(){
     </div>
     <div style="display:none">
       <div class="tw"><table>
-        <thead><tr><th>التاريخ</th><th>الساعات</th><th>النوع</th><th>الاستلام</th></tr></thead>
+        <thead><tr><th>التاريخ</th><th>الساعات</th><th>النوع</th><th>الاستلام</th><th>تعديل</th></tr></thead>
         <tbody>${empExtras.length?empExtras.map(x=>`<tr>
-          <td>${fmtD(x.date)}</td>
+          <td>${fmtD(String(x.date))}</td>
           <td><b>${x.hrs}</b> ساعة</td>
           <td>${x.type}</td>
-          <td><button class="btn btn-sm" style="border-radius:var(--rp);padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;background:${x.received?'rgba(0,200,150,.15)':'rgba(239,68,68,.1)'};color:${x.received?'var(--success)':'var(--danger)'};border:1px solid ${x.received?'rgba(0,200,150,.3)':'rgba(239,68,68,.25)'}" onclick="toggleExtraReceived('${x.id}',this)">${x.received?'✅ مُستلم':'⏳ لم يُستلم'}</button></td>
-        </tr>`).join(''):'<tr><td colspan="4" class="no-data">لا يوجد سجلات</td></tr>'}</tbody>
+          <td><button class="btn btn-sm" style="border-radius:var(--rp);padding:4px 8px;font-size:11px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;background:${x.received?'rgba(0,200,150,.15)':'rgba(239,68,68,.1)'};color:${x.received?'var(--success)':'var(--danger)'};border:1px solid ${x.received?'rgba(0,200,150,.3)':'rgba(239,68,68,.25)'}" onclick="toggleExtraReceived('${x.id}',this)">${x.received?'✅ مُستلم':'⏳ لم يُستلم'}</button></td>
+          <td><button class="btn btn-sec btn-sm" style="padding:3px 7px;font-size:11px" onclick="showPage('forms');switchFormTab('extra');editExtraRow('${x.id}')">✏️</button></td>
+        </tr>`).join(''):'<tr><td colspan="5" class="no-data">لا يوجد سجلات</td></tr>'}</tbody>
       </table></div>
       <div style="padding:10px 16px"><button class="btn btn-primary btn-sm" style="width:auto" onclick="showPage('forms');switchFormTab('extra')">➕ إضافة ساعات</button></div>
     </div>
@@ -2596,7 +2615,15 @@ async function renderExtraTable(){
   const gasUrl2=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
   const empId2=isMgrOrSup()?null:getCurrentEmpId();
   const arr = gasUrl2 ? await fetchExtras(empId2) : getExtras();
-  const fmtExtraDate=d=>{ if(!d)return'-'; const s=String(d); if(s.includes('T'))return s.split('T')[0]; if(s.includes('GMT'))return s.replace(/\s*\(.*\)/, '').replace(/\s*(GMT|UTC)[+-]\d+:\d+/,'').replace(/\s+\d{4}$/,'').trim(); if(s.includes(' '))return s.split(' ')[0]; return s; };
+  const fmtExtraDate=d=>{
+    if(!d)return'-'; const s=String(d).trim();
+    if(/^\d{4}-\d{2}-\d{2}/.test(s)) return s.substring(0,10);
+    if(/^[A-Za-z]{3} [A-Za-z]{3} \d{1,2} \d{4}/.test(s)){
+      const p=s.split(' '); const mN={Jan:'01',Feb:'02',Mar:'03',Apr:'04',May:'05',Jun:'06',Jul:'07',Aug:'08',Sep:'09',Oct:'10',Nov:'11',Dec:'12'};
+      return p[3]+'-'+(mN[p[1]]||'01')+'-'+p[2].padStart(2,'0');
+    }
+    if(s.includes('T'))return s.split('T')[0]; if(s.includes(' '))return s.split(' ')[0]; return s;
+  };
   tb.innerHTML=arr.length?arr.map(x=>{
     const rec=x.received||false;
     const recBtn=`<button class="btn btn-sm" style="border-radius:var(--rp);padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;background:${rec?'rgba(0,200,150,.15)':'rgba(239,68,68,.1)'};color:${rec?'var(--success)':'var(--danger)'};border:1px solid ${rec?'rgba(0,200,150,.3)':'rgba(239,68,68,.25)'}" onclick="toggleExtraReceived('${x.id}',this)">${rec?'✅ مُستلم':'⏳ لم يُستلم'}</button>`;
