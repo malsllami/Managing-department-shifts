@@ -539,11 +539,8 @@ transition: background-color 5000s ease-in-out 0s;
       <h1>السعودية للطاقة</h1>
       <p>نظام إدارة ورديات الموظفين</p>
     </div>
-    <div class="login-tabs">
-      <button class="login-tab active" onclick="switchTab('e')">🏢 موظف / مشرف</button>
-      <button class="login-tab" onclick="switchTab('m')">👑 مدير</button>
-    </div>
     <div id="loginAlert" class="al al-d"></div>
+    <!-- EMPLOYEE/SUPERVISOR FORM (default) -->
     <div id="eForm">
       <div class="form-group"><label>رقم الوظيفي <span>*</span></label>
         <div class="fw"><span class="fic r"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></span>
@@ -554,17 +551,26 @@ transition: background-color 5000s ease-in-out 0s;
         <button type="button" class="fic l" onclick="ep(this,'ePw')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
       <button class="btn btn-primary" onclick="loginEmp()" id="eBtn"><span>تسجيل الدخول</span></button>
     </div>
+    <!-- MANAGER FORM (hidden, shown via small link) -->
     <div id="mForm" style="display:none">
-      <div class="form-group"><label>رقم دخول المدير <span>*</span></label>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <button onclick="switchTab('e')" style="background:none;border:none;color:var(--text2);font-size:12px;cursor:pointer;font-family:Cairo,sans-serif;text-decoration:underline">← رجوع</button>
+        <span style="font-size:14px;font-weight:800;color:var(--text)">🔐 دخول المدير</span>
+      </div>
+      <div class="form-group"><label>رقم المدير <span>*</span></label>
         <div class="fw"><span class="fic r" style="color:var(--warning)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
-        <input type="text" id="mId" placeholder="أدخل رقم المدير" oninput="norm(this)" style="padding-right:42px;padding-left:14px"></div></div>
+        <input type="text" id="mId" placeholder="رقم المدير" oninput="norm(this)" style="padding-right:42px;padding-left:14px"></div></div>
       <div class="form-group"><label>كلمة المرور <span>*</span></label>
         <div class="fw"><span class="fic r"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
-        <input type="password" id="mPw" placeholder="أدخل كلمة المرور">
+        <input type="password" id="mPw" placeholder="كلمة المرور">
         <button type="button" class="fic l" onclick="ep(this,'mPw')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
-      <button class="btn btn-primary" onclick="loginMgr()" id="mBtn"><span>دخول المدير</span></button>
+      <button class="btn btn-primary" onclick="loginMgr()" id="mBtn"><span>🔐 دخول</span></button>
     </div>
     <p style="text-align:center;font-size:11px;color:var(--text3);margin-top:16px">© 2025 السعودية للطاقة</p>
+    <!-- Manager access link at bottom -->
+    <div id="mgrLinkArea" style="text-align:center;margin-top:10px">
+      <button onclick="switchTab('m')" id="mgrSmallBtn" style="background:none;border:1px solid rgba(255,255,255,.1);color:var(--text3);font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:8px 18px;border-radius:20px;transition:all .2s" onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'" onmouseout="this.style.borderColor='rgba(255,255,255,.1)';this.style.color='var(--text3)'">🔒 دخول المدير</button>
+    </div>
   </div>
 </div>
 
@@ -1461,7 +1467,7 @@ function mgrDash(){
 
   return `
   <!-- KPI ROW -->
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:14px">
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:14px">
     ${[
       {i:'👥',v:tot,l:'إجمالي الموظفين',c:'si-b',fn:''},
       {i:'⭐',v:sup,l:'إجمالي المشرفين',c:'si-o',fn:''},
@@ -3737,24 +3743,36 @@ function supTransfer(sel, eid){
 }
 
 window.onload=()=>{
-  applyTheme();
-  cleanOldHighlights();
+  try{applyTheme();}catch(e){}
+  try{cleanOldHighlights();}catch(e){}
   // Restore saved GAS URL
-  const savedGasUrl=localStorage.getItem('seGasUrl');
-  if(savedGasUrl){window._GAS_URL_OVERRIDE=savedGasUrl;const gi=document.getElementById('gasUrlInput');if(gi)gi.value=savedGasUrl;}
-  setTimeout(()=>{
-    document.getElementById('loadingScreen').style.display='none';
-    const sv=sessionStorage.getItem('seU');
-    if(sv){
-      U=JSON.parse(sv);
-      VR=U.viewRole||U.role;
-      // Restore mgrEmpId if saved
-      if(U.mgrEmpId) document.addEventListener('DOMContentLoaded',()=>{
-        const el=document.getElementById('sMgrEmpId');if(el)el.value=U.mgrEmpId;
-      });
-      startApp();
-    } else document.getElementById('loginPage').classList.add('active');
-  },1400);
+  try{
+    const savedGasUrl=localStorage.getItem('seGasUrl');
+    if(savedGasUrl){window._GAS_URL_OVERRIDE=savedGasUrl;const gi=document.getElementById('gasUrlInput');if(gi)gi.value=savedGasUrl;}
+  }catch(e){}
+
+  function showApp(){
+    try{
+      const ls=document.getElementById('loadingScreen');
+      if(ls) ls.style.display='none';
+    }catch(e){}
+    try{
+      const sv=sessionStorage.getItem('seU');
+      if(sv){
+        U=JSON.parse(sv); VR=U.viewRole||U.role;
+        startApp();
+      } else {
+        document.getElementById('loginPage').classList.add('active');
+      }
+    }catch(err){
+      console.error('Startup error:',err);
+      try{document.getElementById('loginPage').classList.add('active');}catch(e){}
+    }
+  }
+  // Show app after 1.2s, with safety fallback at 3s
+  var didStart=false;
+  var t1=setTimeout(function(){didStart=true;showApp();},1200);
+  var t2=setTimeout(function(){if(!didStart){clearTimeout(t1);didStart=true;showApp();}},3000);
 };
 </script>
 
