@@ -1142,6 +1142,7 @@ body.light input:-webkit-autofill:focus {
     <div class="m-hd"><h3 id="mEmpTit">إضافة موظف</h3><button class="btn-x" onclick="closeM('mEmp')">✕</button></div>
     <div class="m-bd">
       <div id="mEmpAl" class="al"></div>
+      <!-- بيانات أساسية -->
       <div class="fgrid">
         <div class="form-group"><label>رقم الوظيفي <span>*</span></label><input type="text" id="fId" class="finp" placeholder="مثال: 1001" oninput="norm(this)"></div>
         <div class="form-group"><label>الاسم الكامل <span>*</span></label><input type="text" id="fNm" class="finp" placeholder="الاسم الكامل"></div>
@@ -1154,6 +1155,44 @@ body.light input:-webkit-autofill:focus {
           <select id="fRegion" class="finp"><option value="">-- اختر --</option><option>شمال</option><option>وسط</option><option>جنوب</option><option>غرب</option><option>شرق</option></select></div>
         <div class="form-group"><label>المركز</label><input type="text" id="fCenter" class="finp" placeholder="اسم المركز"></div>
         <div class="form-group full"><label>ملاحظات</label><input type="text" id="fNt" class="finp" placeholder="اختيارية"></div>
+      </div>
+
+      <!-- قسم البطاقات -->
+      <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <span style="font-size:13px;font-weight:800;color:var(--text)">🪪 تواريخ انتهاء البطاقات</span>
+          <button type="button" class="btn btn-sec btn-sm" style="width:auto;padding:5px 12px" onclick="addBadgeField()">➕ إضافة بطاقة</button>
+        </div>
+        <div id="badgesContainer" class="fgrid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px">
+          <!-- بطاقة العمل -->
+          <div class="badge-field-wrap" data-badge-id="badge1">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+              <label style="font-size:12px;font-weight:700;color:var(--text2)" id="fBadgeLabel_badge1">بطاقة العمل</label>
+              <button type="button" onclick="renameBadgeField('badge1')" style="background:none;border:none;color:var(--primary);font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0" title="تغيير الاسم">✏️</button>
+            </div>
+            <input type="date" id="fBadge_badge1" class="finp" style="font-size:13px">
+            <div id="fBadgePreview_badge1" style="margin-top:4px;min-height:20px;font-size:11px"></div>
+          </div>
+          <!-- بطاقة المصدر -->
+          <div class="badge-field-wrap" data-badge-id="badge2">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+              <label style="font-size:12px;font-weight:700;color:var(--text2)" id="fBadgeLabel_badge2">بطاقة المصدر</label>
+              <button type="button" onclick="renameBadgeField('badge2')" style="background:none;border:none;color:var(--primary);font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0">✏️</button>
+            </div>
+            <input type="date" id="fBadge_badge2" class="finp" style="font-size:13px">
+            <div id="fBadgePreview_badge2" style="margin-top:4px;min-height:20px;font-size:11px"></div>
+          </div>
+          <!-- بطاقة المستلم -->
+          <div class="badge-field-wrap" data-badge-id="badge3">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+              <label style="font-size:12px;font-weight:700;color:var(--text2)" id="fBadgeLabel_badge3" id="fBadge3Label">بطاقة المستلم</label>
+              <button type="button" onclick="renameBadgeField('badge3')" style="background:none;border:none;color:var(--primary);font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0">✏️</button>
+            </div>
+            <input type="date" id="fBadge_badge3" class="finp" style="font-size:13px">
+            <div id="fBadgePreview_badge3" style="margin-top:4px;min-height:20px;font-size:11px"></div>
+          </div>
+          <!-- حقول البطاقات الإضافية تُضاف هنا ديناميكياً -->
+        </div>
       </div>
     </div>
     <div class="m-ft"><button class="btn btn-sec" onclick="closeM('mEmp')">إلغاء</button><button class="btn btn-primary" style="width:auto" onclick="saveEmp()" id="saveEmpBtn">💾 حفظ</button></div>
@@ -1860,18 +1899,20 @@ function filterSh(){const q=document.getElementById('shSrch').value.toLowerCase(
 
 // ADD/EDIT EMP
 function openAdd(){editIdx=-1;document.getElementById('mEmpTit').textContent='إضافة موظف جديد';['fId','fNm','fPh','fDp','fNt'].forEach(x=>{const el=document.getElementById(x);el.value='';el.disabled=false;});['fSh','fRl','fSt'].forEach(x=>{const el=document.getElementById(x);el.selectedIndex=0;el.disabled=false;});const fr=document.getElementById('fRegion');if(fr){fr.value='';fr.disabled=false;}const fc=document.getElementById('fCenter');if(fc){fc.value='';fc.disabled=false;}
-  ['fBadge1','fBadge2','fBadge3'].forEach(id=>{const el=document.getElementById(id);if(el){el.value='';el.disabled=false;}});
+  loadCustomBadgeFields(); clearAllBadgeFields();
   hideAl('mEmpAl');openM('mEmp');}
 function openAddShift(){editIdx=-1;document.getElementById('mEmpTit').textContent='إضافة موظف للوردية';['fId','fNm','fPh','fDp','fNt'].forEach(x=>{const el=document.getElementById(x);el.value='';el.disabled=false;});document.getElementById('fSh').value=U.shift;document.getElementById('fSh').disabled=true;document.getElementById('fRl').value='موظف';document.getElementById('fRl').disabled=true;document.getElementById('fSt').selectedIndex=0;document.getElementById('fSt').disabled=false;const fr=document.getElementById('fRegion');if(fr){fr.value='';fr.disabled=false;}const fc=document.getElementById('fCenter');if(fc){fc.value='';fc.disabled=false;}
-  ['fBadge1','fBadge2','fBadge3'].forEach(id=>{const el=document.getElementById(id);if(el){el.value='';el.disabled=false;}});
+  loadCustomBadgeFields(); clearAllBadgeFields();
   hideAl('mEmpAl');openM('mEmp');}
 function editEmp(i){const e=emps[i];if(!e)return;editIdx=i;document.getElementById('mEmpTit').textContent='تعديل بيانات الموظف';document.getElementById('fId').value=e.empId;document.getElementById('fId').disabled=false;document.getElementById('fNm').value=e.name;document.getElementById('fPh').value=e.phone;document.getElementById('fDp').value=e.dept||'';document.getElementById('fSh').value=e.shift;document.getElementById('fSh').disabled=false;document.getElementById('fRl').value=e.role;document.getElementById('fRl').disabled=false;document.getElementById('fSt').value=e.status;document.getElementById('fSt').disabled=false;document.getElementById('fNt').value=e.note||'';
   const ei=getInfos().find(x=>String(x.empId)===String(e.empId))||{};
   const fr=document.getElementById('fRegion');if(fr){fr.value=ei.region||'';fr.disabled=false;}
   const fc=document.getElementById('fCenter');if(fc){fc.value=ei.center||'';fc.disabled=false;}
-  const b1=document.getElementById('fBadge1');if(b1){b1.value=ei.badge1||'';b1.disabled=false;}
-  const b2=document.getElementById('fBadge2');if(b2){b2.value=ei.badge2||'';b2.disabled=false;}
-  const b3=document.getElementById('fBadge3');if(b3){b3.value=ei.badge3||'';b3.disabled=false;}
+  loadCustomBadgeFields();
+  // Build badge data from info object
+  const badgeData={};
+  Object.keys(ei).filter(k=>k.startsWith('badge')).forEach(k=>{ badgeData[k]=ei[k]||''; });
+  setAllBadgeValues(badgeData);
   hideAl('mEmpAl');openM('mEmp');}
 function editShEmp(eid){const e=emps.find(x=>String(x.empId)===String(eid));if(!e)return;editEmp(emps.indexOf(e));document.getElementById('fSh').disabled=true;document.getElementById('fRl').disabled=true;}
 async function saveEmp(){
@@ -1892,10 +1933,8 @@ async function saveEmp(){
   if(fr2||fc2){
     const empObj2=emps.find(ex=>String(ex.empId)===String(id))||{empId:id,name:nm};
     const existI=getInfos().find(x=>String(x.empId)===String(id))||{};
-    const b1v=document.getElementById('fBadge1')?.value||'';
-    const b2v=document.getElementById('fBadge2')?.value||'';
-    const b3v=document.getElementById('fBadge3')?.value||'';
-    const infoRow={...existI,empId:String(id),empName:nm,region:fr2?fr2.value:existI.region||'',center:fc2?fc2.value.trim():existI.center||'',badge1:b1v||existI.badge1||'',badge2:b2v||existI.badge2||'',badge3:b3v||existI.badge3||''};
+    const allBadges=getAllBadgeValues();
+    const infoRow={...existI,empId:String(id),empName:nm,region:fr2?fr2.value:existI.region||'',center:fc2?fc2.value.trim():existI.center||'',...allBadges};
     const ia=getInfos();const ii=ia.findIndex(x=>String(x.empId)===String(id));
     if(ii>=0)ia[ii]={...ia[ii],...infoRow};else ia.push(infoRow);
     saveInfos(ia);
@@ -3785,13 +3824,134 @@ function supTransfer(sel, eid){
 // ============================================================
 // BADGE EXPIRY UTILITIES
 // ============================================================
-var badge3Name = localStorage.getItem('badge3Name') || 'المستلم';
 
-function renameBadge3(){
-  const n=prompt('اسم البطاقة الإضافية:',badge3Name);
-  if(n&&n.trim()){badge3Name=n.trim();localStorage.setItem('badge3Name',badge3Name);}
-  const lbl=document.getElementById('fBadge3Label');
-  if(lbl) lbl.childNodes[0].textContent='بطاقة '+badge3Name+' ';
+// Load badge names from localStorage
+function getBadgeNames(){
+  try{ return JSON.parse(localStorage.getItem('seBadgeNames')||'{}'); }catch(e){ return {}; }
+}
+function saveBadgeNames(obj){ localStorage.setItem('seBadgeNames',JSON.stringify(obj)); }
+
+function getBadgeName(id){
+  const defaults={badge1:'بطاقة العمل',badge2:'بطاقة المصدر',badge3:'بطاقة المستلم'};
+  return getBadgeNames()[id]||defaults[id]||id;
+}
+
+// Rename a badge field
+function renameBadgeField(id){
+  const current=getBadgeName(id);
+  const n=prompt('اسم البطاقة:',current);
+  if(!n||!n.trim()) return;
+  const names=getBadgeNames(); names[id]=n.trim(); saveBadgeNames(names);
+  const lbl=document.getElementById('fBadgeLabel_'+id);
+  if(lbl) lbl.textContent=n.trim();
+}
+
+// Add a new badge field dynamically
+var _badgeCounter=10; // start from badge10 for custom ones
+function addBadgeField(){
+  _badgeCounter++;
+  const id='badge'+_badgeCounter;
+  const name=prompt('اسم البطاقة الجديدة:','بطاقة جديدة');
+  if(!name||!name.trim()) return;
+  const names=getBadgeNames(); names[id]=name.trim(); saveBadgeNames(names);
+  // Save to list of custom badges
+  const customs=JSON.parse(localStorage.getItem('seCustomBadges')||'[]');
+  customs.push(id); localStorage.setItem('seCustomBadges',JSON.stringify(customs));
+  // Add HTML
+  const container=document.getElementById('badgesContainer');
+  if(!container) return;
+  const div=document.createElement('div');
+  div.className='badge-field-wrap';
+  div.setAttribute('data-badge-id',id);
+  div.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+    <label style="font-size:12px;font-weight:700;color:var(--text2)" id="fBadgeLabel_${id}">${name.trim()}</label>
+    <div style="display:flex;gap:4px">
+      <button type="button" onclick="renameBadgeField('${id}')" style="background:none;border:none;color:var(--primary);font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0">✏️</button>
+      <button type="button" onclick="removeBadgeField('${id}')" style="background:none;border:none;color:var(--danger);font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0">✕</button>
+    </div></div>
+    <input type="date" id="fBadge_${id}" class="finp" style="font-size:13px" onchange="previewBadge('${id}')">
+    <div id="fBadgePreview_${id}" style="margin-top:4px;min-height:20px;font-size:11px"></div>`;
+  container.appendChild(div);
+}
+
+function removeBadgeField(id){
+  const el=document.querySelector('[data-badge-id="'+id+'"]');
+  if(el) el.remove();
+  const customs=JSON.parse(localStorage.getItem('seCustomBadges')||'[]');
+  localStorage.setItem('seCustomBadges',JSON.stringify(customs.filter(x=>x!==id)));
+  const names=getBadgeNames(); delete names[id]; saveBadgeNames(names);
+}
+
+// Preview badge expiry status inline
+function previewBadge(id){
+  const inp=document.getElementById('fBadge_'+id);
+  const prev=document.getElementById('fBadgePreview_'+id);
+  if(!inp||!prev) return;
+  prev.innerHTML=inp.value?badgeBadge(inp.value):'';
+}
+
+// Load custom badge fields on modal open
+function loadCustomBadgeFields(){
+  const customs=JSON.parse(localStorage.getItem('seCustomBadges')||'[]');
+  const container=document.getElementById('badgesContainer');
+  if(!container) return;
+  // Remove existing custom fields
+  container.querySelectorAll('[data-badge-id]').forEach(el=>{
+    const bid=el.getAttribute('data-badge-id');
+    if(!['badge1','badge2','badge3'].includes(bid)) el.remove();
+  });
+  // Re-add
+  customs.forEach(id=>{
+    const name=getBadgeName(id);
+    const div=document.createElement('div');
+    div.className='badge-field-wrap';
+    div.setAttribute('data-badge-id',id);
+    div.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <label style="font-size:12px;font-weight:700;color:var(--text2)" id="fBadgeLabel_${id}">${name}</label>
+      <div style="display:flex;gap:4px">
+        <button type="button" onclick="renameBadgeField('${id}')" style="background:none;border:none;color:var(--primary);font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0">✏️</button>
+        <button type="button" onclick="removeBadgeField('${id}')" style="background:none;border:none;color:var(--danger);font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0">✕</button>
+      </div></div>
+      <input type="date" id="fBadge_${id}" class="finp" style="font-size:13px" onchange="previewBadge('${id}')">
+      <div id="fBadgePreview_${id}" style="margin-top:4px;min-height:20px;font-size:11px"></div>`;
+    container.appendChild(div);
+  });
+  // Restore names for static badges
+  ['badge1','badge2','badge3'].forEach(id=>{
+    const lbl=document.getElementById('fBadgeLabel_'+id);
+    if(lbl) lbl.textContent=getBadgeName(id);
+  });
+}
+
+// Get all badge values from the modal
+function getAllBadgeValues(){
+  const result={};
+  document.querySelectorAll('#badgesContainer [data-badge-id]').forEach(wrap=>{
+    const id=wrap.getAttribute('data-badge-id');
+    const inp=document.getElementById('fBadge_'+id);
+    if(inp) result[id]=inp.value||'';
+  });
+  return result;
+}
+
+// Set badge values in modal
+function setAllBadgeValues(badgeData){
+  document.querySelectorAll('#badgesContainer [data-badge-id]').forEach(wrap=>{
+    const id=wrap.getAttribute('data-badge-id');
+    const inp=document.getElementById('fBadge_'+id);
+    if(inp){ inp.value=badgeData[id]||''; previewBadge(id); }
+  });
+}
+
+// Clear all badge fields
+function clearAllBadgeFields(){
+  document.querySelectorAll('#badgesContainer [data-badge-id]').forEach(wrap=>{
+    const id=wrap.getAttribute('data-badge-id');
+    const inp=document.getElementById('fBadge_'+id);
+    if(inp) inp.value='';
+    const prev=document.getElementById('fBadgePreview_'+id);
+    if(prev) prev.innerHTML='';
+  });
 }
 
 function badgeDaysLeft(dateStr){
@@ -3805,28 +3965,27 @@ function badgeDaysLeft(dateStr){
 function badgeBadge(dateStr){
   const d=badgeDaysLeft(dateStr);
   if(d===null) return '<span style="color:var(--text3);font-size:11px">—</span>';
-  let cls, icon;
-  if(d<=0){ cls='background:rgba(239,68,68,.15);color:var(--danger);border:1px solid rgba(239,68,68,.3)'; icon='🔴'; }
-  else if(d<=30){ cls='background:rgba(239,68,68,.1);color:var(--danger);border:1px solid rgba(239,68,68,.2)'; icon='🟠'; }
-  else if(d<=60){ cls='background:rgba(245,158,11,.12);color:var(--warning);border:1px solid rgba(245,158,11,.25)'; icon='🟡'; }
-  else { cls='background:rgba(0,200,150,.1);color:var(--success);border:1px solid rgba(0,200,150,.2)'; icon='🟢'; }
-  const label = d<=0?'منتهية':d+' يوم';
-  return '<span style="'+cls+';border-radius:var(--rp);padding:3px 8px;font-size:11px;font-weight:700;white-space:nowrap">'+icon+' '+label+'</span>';
+  let cls,icon;
+  if(d<=0){cls='background:rgba(239,68,68,.15);color:var(--danger);border:1px solid rgba(239,68,68,.3)';icon='🔴';}
+  else if(d<=30){cls='background:rgba(239,68,68,.1);color:var(--danger);border:1px solid rgba(239,68,68,.2)';icon='🟠';}
+  else if(d<=60){cls='background:rgba(245,158,11,.12);color:var(--warning);border:1px solid rgba(245,158,11,.25)';icon='🟡';}
+  else{cls='background:rgba(0,200,150,.1);color:var(--success);border:1px solid rgba(0,200,150,.2)';icon='🟢';}
+  return '<span style="'+cls+';border-radius:var(--rp);padding:3px 8px;font-size:11px;font-weight:700;white-space:nowrap">'+icon+' '+(d<=0?'منتهية':d+' يوم')+'</span>';
 }
 
 function badgeDate(dateStr){
   if(!dateStr||dateStr==='-') return '<span style="color:var(--text3)">—</span>';
-  const d=parseAnyDate(dateStr);
-  if(!d) return '<span style="color:var(--text3)">—</span>';
   return fmtAr(dateStr);
 }
 
-// Compute used leave days from leave records
-function getLeaveUsed(empId, type){
+function getLeaveUsed(empId,type){
   const leaves=getLeaves().filter(l=>String(l.empId)===String(empId));
   if(type==='all') return leaves.reduce((s,l)=>s+(Number(l.days)||0),0);
   return leaves.filter(l=>l.type===type).reduce((s,l)=>s+(Number(l.days)||0),0);
 }
+
+// Legacy compat
+function renameBadge3(){ renameBadgeField('badge3'); }
 
 window.onload=()=>{
   applyTheme(); // run sync before anything else
