@@ -710,7 +710,10 @@ body.light input:-webkit-autofill:focus {
         <div class="card" id="comprehensiveCard">
           <div class="card-hd">
             <h3 id="empTableTitle">📋 الجدول الشامل للموظفين</h3>
-            <span id="empCount" style="font-size:12px;color:var(--text2)"></span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span id="empCount" style="font-size:12px;color:var(--text2)"></span>
+              <button class="btn btn-sm" onclick="exportComprehensiveExcel()" style="width:auto;background:rgba(0,200,150,.12);border:1px solid rgba(0,200,150,.4);color:var(--success);border-radius:var(--rp);padding:6px 14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;font-size:12px">📥 Excel</button>
+            </div>
           </div>
           <div class="card-bd" style="padding:0;overflow:hidden">
             <div style="overflow-x:auto;overflow-y:auto;max-height:65vh;-webkit-overflow-scrolling:touch">
@@ -736,7 +739,7 @@ body.light input:-webkit-autofill:focus {
 
       <!-- MY SHIFT -->
       <div id="page-sh" class="page" style="display:none">
-        <div class="ph"><h2>📋 موظفو ورديتي</h2><p id="supLbl">-</p></div>
+        <div class="ph" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px"><div><h2>📋 موظفو ورديتي</h2><p id="supLbl">-</p></div><button onclick="exportComprehensiveExcel()" style="flex-shrink:0;background:rgba(0,200,150,.12);border:1px solid rgba(0,200,150,.4);color:var(--success);border-radius:var(--rp);padding:8px 16px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;font-size:13px">📥 تصدير Excel</button></div>
         <div class="card">
           <div class="card-hd"><h3 id="shTitle">الوردية</h3><button class="btn btn-primary btn-sm" style="width:auto" onclick="openAddShift()">➕ إضافة موظف</button></div>
           <div class="card-bd">
@@ -1393,7 +1396,7 @@ function buildSidebar(){
 
   // Sidebar nav: always based on original role, BUT if manager views as employee hide manager items
   if(baseRole==='مدير'){
-    document.getElementById('nav-emp').style.display=r==='مدير'?'flex':'none';
+    document.getElementById('nav-emp').style.display=(r==='مدير'||r==='مشرف')?'flex':'none';
     document.getElementById('nav-set').style.display=r==='مدير'?'flex':'none';
     document.getElementById('sSec').style.display=r==='مدير'?'block':'none';
     document.getElementById('nav-sh').style.display='none';
@@ -1731,6 +1734,9 @@ async function empDashAsync(){
   if(!el) return;
   el.innerHTML = `
   <!-- Info strip - compact on mobile -->
+  <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center;justify-content:space-between">
+    <button onclick="exportComprehensiveExcel()" style="background:rgba(0,200,150,.12);border:1px solid rgba(0,200,150,.4);color:var(--success);border-radius:var(--rp);padding:6px 14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;font-size:12px;flex-shrink:0">📥 تصدير بياناتي</button>
+  </div>
   <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center">
     ${info.region||info.center?`<span style="font-size:12px;font-weight:700;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rp);padding:4px 12px">📍 ${info.region||''} ${info.center?'· '+info.center:''}</span>`:''}
     ${info.car?`<span style="font-size:12px;font-weight:700;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rp);padding:4px 12px">🚗 ${info.car}</span>`:''}
@@ -3356,7 +3362,7 @@ function renderSimpleEmpTbl(){
 // ============================================================
 const BN_PAGES = {
   db:    { icon:'📊', label:'الرئيسية',   role:['مدير','مشرف','موظف'] },
-  emp:   { icon:'👥', label:'الموظفون',   role:['مدير'] },
+  emp:   { icon:'👥', label:'الموظفون',   role:['مدير','مشرف'] },
   sh:    { icon:'📋', label:'ورديتي',     role:['مشرف'] },
   cal:   { icon:'📅', label:'التقويم',    role:['مدير','مشرف','موظف'] },
   forms: { icon:'📝', label:'النماذج',    role:['مدير','مشرف','موظف'] },
