@@ -312,7 +312,8 @@ tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 
 #comprehensiveTbl th.th-group-leave  { background:rgba(139,92,246,.08); }
 #comprehensiveTbl th.th-group-extra  { background:rgba(245,158,11,.08); }
 #comprehensiveTbl th.th-group-cloth  { background:rgba(239,68,68,.06); }
-#comprehensiveTbl th.th-group-card   { background:rgba(0,149,217,.06); }
+#comprehensiveTbl th.th-group-card    { background:rgba(0,149,217,.10); }
+#comprehensiveTbl th.th-group-leave2   { background:rgba(99,102,241,.08); }
 #comprehensiveTbl td{border-bottom:1px solid var(--border)!important;
   padding:9px 10px;text-align:center;font-size:12px;
   border-bottom:1px solid var(--border);border-left:1px solid rgba(255,255,255,.03);
@@ -1858,13 +1859,19 @@ function renderShTbl(){
 function filterSh(){const q=document.getElementById('shSrch').value.toLowerCase();document.querySelectorAll('#shTb tr').forEach(r=>r.style.display=r.textContent.toLowerCase().includes(q)?'':'none');}
 
 // ADD/EDIT EMP
-function openAdd(){editIdx=-1;document.getElementById('mEmpTit').textContent='إضافة موظف جديد';['fId','fNm','fPh','fDp','fNt'].forEach(x=>{const el=document.getElementById(x);el.value='';el.disabled=false;});['fSh','fRl','fSt'].forEach(x=>{const el=document.getElementById(x);el.selectedIndex=0;el.disabled=false;});const fr=document.getElementById('fRegion');if(fr){fr.value='';fr.disabled=false;}const fc=document.getElementById('fCenter');if(fc){fc.value='';fc.disabled=false;}hideAl('mEmpAl');openM('mEmp');}
-function openAddShift(){editIdx=-1;document.getElementById('mEmpTit').textContent='إضافة موظف للوردية';['fId','fNm','fPh','fDp','fNt'].forEach(x=>{const el=document.getElementById(x);el.value='';el.disabled=false;});document.getElementById('fSh').value=U.shift;document.getElementById('fSh').disabled=true;document.getElementById('fRl').value='موظف';document.getElementById('fRl').disabled=true;document.getElementById('fSt').selectedIndex=0;document.getElementById('fSt').disabled=false;const fr=document.getElementById('fRegion');if(fr){fr.value='';fr.disabled=false;}const fc=document.getElementById('fCenter');if(fc){fc.value='';fc.disabled=false;}hideAl('mEmpAl');openM('mEmp');}
+function openAdd(){editIdx=-1;document.getElementById('mEmpTit').textContent='إضافة موظف جديد';['fId','fNm','fPh','fDp','fNt'].forEach(x=>{const el=document.getElementById(x);el.value='';el.disabled=false;});['fSh','fRl','fSt'].forEach(x=>{const el=document.getElementById(x);el.selectedIndex=0;el.disabled=false;});const fr=document.getElementById('fRegion');if(fr){fr.value='';fr.disabled=false;}const fc=document.getElementById('fCenter');if(fc){fc.value='';fc.disabled=false;}
+  ['fBadge1','fBadge2','fBadge3'].forEach(id=>{const el=document.getElementById(id);if(el){el.value='';el.disabled=false;}});
+  hideAl('mEmpAl');openM('mEmp');}
+function openAddShift(){editIdx=-1;document.getElementById('mEmpTit').textContent='إضافة موظف للوردية';['fId','fNm','fPh','fDp','fNt'].forEach(x=>{const el=document.getElementById(x);el.value='';el.disabled=false;});document.getElementById('fSh').value=U.shift;document.getElementById('fSh').disabled=true;document.getElementById('fRl').value='موظف';document.getElementById('fRl').disabled=true;document.getElementById('fSt').selectedIndex=0;document.getElementById('fSt').disabled=false;const fr=document.getElementById('fRegion');if(fr){fr.value='';fr.disabled=false;}const fc=document.getElementById('fCenter');if(fc){fc.value='';fc.disabled=false;}
+  ['fBadge1','fBadge2','fBadge3'].forEach(id=>{const el=document.getElementById(id);if(el){el.value='';el.disabled=false;}});
+  hideAl('mEmpAl');openM('mEmp');}
 function editEmp(i){const e=emps[i];if(!e)return;editIdx=i;document.getElementById('mEmpTit').textContent='تعديل بيانات الموظف';document.getElementById('fId').value=e.empId;document.getElementById('fId').disabled=false;document.getElementById('fNm').value=e.name;document.getElementById('fPh').value=e.phone;document.getElementById('fDp').value=e.dept||'';document.getElementById('fSh').value=e.shift;document.getElementById('fSh').disabled=false;document.getElementById('fRl').value=e.role;document.getElementById('fRl').disabled=false;document.getElementById('fSt').value=e.status;document.getElementById('fSt').disabled=false;document.getElementById('fNt').value=e.note||'';
-  // Load region/center
   const ei=getInfos().find(x=>String(x.empId)===String(e.empId))||{};
   const fr=document.getElementById('fRegion');if(fr){fr.value=ei.region||'';fr.disabled=false;}
   const fc=document.getElementById('fCenter');if(fc){fc.value=ei.center||'';fc.disabled=false;}
+  const b1=document.getElementById('fBadge1');if(b1){b1.value=ei.badge1||'';b1.disabled=false;}
+  const b2=document.getElementById('fBadge2');if(b2){b2.value=ei.badge2||'';b2.disabled=false;}
+  const b3=document.getElementById('fBadge3');if(b3){b3.value=ei.badge3||'';b3.disabled=false;}
   hideAl('mEmpAl');openM('mEmp');}
 function editShEmp(eid){const e=emps.find(x=>String(x.empId)===String(eid));if(!e)return;editEmp(emps.indexOf(e));document.getElementById('fSh').disabled=true;document.getElementById('fRl').disabled=true;}
 async function saveEmp(){
@@ -1885,7 +1892,10 @@ async function saveEmp(){
   if(fr2||fc2){
     const empObj2=emps.find(ex=>String(ex.empId)===String(id))||{empId:id,name:nm};
     const existI=getInfos().find(x=>String(x.empId)===String(id))||{};
-    const infoRow={...existI,empId:String(id),empName:nm,region:fr2?fr2.value:existI.region||'',center:fc2?fc2.value.trim():existI.center||''};
+    const b1v=document.getElementById('fBadge1')?.value||'';
+    const b2v=document.getElementById('fBadge2')?.value||'';
+    const b3v=document.getElementById('fBadge3')?.value||'';
+    const infoRow={...existI,empId:String(id),empName:nm,region:fr2?fr2.value:existI.region||'',center:fc2?fc2.value.trim():existI.center||'',badge1:b1v||existI.badge1||'',badge2:b2v||existI.badge2||'',badge3:b3v||existI.badge3||''};
     const ia=getInfos();const ii=ia.findIndex(x=>String(x.empId)===String(id));
     if(ii>=0)ia[ii]={...ia[ii],...infoRow};else ia.push(infoRow);
     saveInfos(ia);
@@ -3102,49 +3112,54 @@ function renderComprehensiveTable(){
   if(!thead || !tbody) return;
 
   // ── رؤوس الأعمدة مجمعة ──
+  const b3n=localStorage.getItem('badge3Name')||'المستلم';
   const groups = [
-    { label:'🪪 بيانات الموظف', cls:'th-group-id', count:8 },
-    { label:'📍 الموقع والمركز', cls:'th-group-info', count:3 },
-    { label:'🏖️ الإجازات والأرصدة', cls:'th-group-leave', count:7 },
-    { label:'⏰ الساعات الإضافية', cls:'th-group-extra', count:3 },
-    { label:'👕 المقاسات والتجهيزات', cls:'th-group-cloth', count:7 },
+    { label:'👤 بيانات الموظف', cls:'th-group-id', count:4 },
+    { label:'🪪 البطاقات وانتهاء الصلاحية', cls:'th-group-card', count:6 },
+    { label:'📅 رصيد الإجازة السنوية', cls:'th-group-leave', count:3 },
+    { label:'📋 رصيد الإجازة المجدولة', cls:'th-group-leave2', count:3 },
+    { label:'🏥 إجازات أخرى (أيام)', cls:'th-group-extra', count:6 },
+    { label:'📍 الموقع', cls:'th-group-info', count:2 },
+    { label:'👕 مقاسات الملابس', cls:'th-group-cloth', count:4 },
     { label:'🛠️ إجراءات', cls:'th-group-id', count:1 },
   ];
 
   const cols = [
-    // بيانات الموظف (8)
-    { label:'رقم الوظيفي', cls:'th-group-id' },
+    // بيانات الموظف (4) - sticky
     { label:'الاسم الكامل', cls:'th-group-id' },
+    { label:'رقم الوظيفي', cls:'th-group-id' },
     { label:'رقم الجوال', cls:'th-group-id' },
     { label:'الوردية', cls:'th-group-id' },
-    { label:'الدور', cls:'th-group-id' },
-    { label:'القسم', cls:'th-group-id' },
-    { label:'الحالة', cls:'th-group-id' },
-    { label:'تاريخ النقل', cls:'th-group-id' },
-    // الموقع (3)
+    // البطاقات (6)
+    { label:'تاريخ انتهاء الهوية', cls:'th-group-card' },
+    { label:'متبقي الهوية', cls:'th-group-card' },
+    { label:'تاريخ انتهاء المصدر', cls:'th-group-card' },
+    { label:'متبقي المصدر', cls:'th-group-card' },
+    { label:'تاريخ انتهاء '+b3n, cls:'th-group-card' },
+    { label:'متبقي '+b3n, cls:'th-group-card' },
+    // السنوية (3)
+    { label:'رصيد سنوية', cls:'th-group-leave' },
+    { label:'مُستهلك سنوية', cls:'th-group-leave' },
+    { label:'متبقي سنوية', cls:'th-group-leave' },
+    // المجدولة (3)
+    { label:'رصيد مجدولة', cls:'th-group-leave2' },
+    { label:'مُستهلك مجدولة', cls:'th-group-leave2' },
+    { label:'متبقي مجدولة', cls:'th-group-leave2' },
+    // إجازات أخرى (6)
+    { label:'مرضية (أيام)', cls:'th-group-extra' },
+    { label:'وفاة (أيام)', cls:'th-group-extra' },
+    { label:'مولود (أيام)', cls:'th-group-extra' },
+    { label:'زواج (أيام)', cls:'th-group-extra' },
+    { label:'اختبارات (أيام)', cls:'th-group-extra' },
+    { label:'دورة عمل (أيام)', cls:'th-group-extra' },
+    // الموقع (2)
     { label:'المنطقة', cls:'th-group-info' },
     { label:'المركز', cls:'th-group-info' },
-    { label:'رقم السيارة', cls:'th-group-info' },
-    // الإجازات (7)
-    { label:'رصيد سنوية', cls:'th-group-leave' },
-    { label:'رصيد مجدولة', cls:'th-group-leave' },
-    { label:'إجازات هذا الشهر', cls:'th-group-leave' },
-    { label:'آخر إجازة', cls:'th-group-leave' },
-    { label:'نوع آخر إجازة', cls:'th-group-leave' },
-    { label:'أيام آخر إجازة', cls:'th-group-leave' },
-    { label:'إجمالي الإجازات', cls:'th-group-leave' },
-    // الإضافي (3)
-    { label:'ساعات إضافية', cls:'th-group-extra' },
-    { label:'آخر إضافي', cls:'th-group-extra' },
-    { label:'نوع آخر إضافي', cls:'th-group-extra' },
-    // المقاسات (7)
+    // المقاسات (4)
     { label:'قميص CAT2', cls:'th-group-cloth' },
     { label:'بنطلون CAT2', cls:'th-group-cloth' },
     { label:'بدلة CAT4', cls:'th-group-cloth' },
     { label:'حذاء', cls:'th-group-cloth' },
-    { label:'عدد قمصان', cls:'th-group-cloth' },
-    { label:'عدد بدلات', cls:'th-group-cloth' },
-    { label:'عدد أحذية', cls:'th-group-cloth' },
     // إجراءات (1)
     { label:'إجراءات', cls:'th-group-id' },
   ];
@@ -3170,71 +3185,71 @@ function renderComprehensiveTable(){
     return;
   }
 
-  const now = new Date();
-  const thisMonth = now.getMonth();
-  const thisYear  = now.getFullYear();
+  const now = new Date(); now.setHours(0,0,0,0);
 
   const rows = emps.map((e,i) => {
     const info   = allInfos.find(x=>String(x.empId)===String(e.empId)) || {};
     const balObj = getBalances(e.empId);
     const empLeaves = allLeaves.filter(l=>String(l.empId)===String(e.empId));
-    const empExtras = allExtras.filter(x=>String(x.empId)===String(e.empId));
 
-    // إجازات هذا الشهر
-    const monthLeaves = empLeaves.filter(l=>{
-      const d = new Date(l.start);
-      return d.getMonth()===thisMonth && d.getFullYear()===thisYear;
-    });
-    const monthLeaveDays = monthLeaves.reduce((s,l)=>s+(Number(l.days)||0),0);
+    // Leave calculations by type
+    const usedAnnual    = empLeaves.filter(l=>l.type==='سنوية').reduce((s,l)=>s+(Number(l.days)||0),0);
+    const usedScheduled = empLeaves.filter(l=>l.type==='مجدولة').reduce((s,l)=>s+(Number(l.days)||0),0);
+    const usedSick      = empLeaves.filter(l=>l.type==='مرضية').reduce((s,l)=>s+(Number(l.days)||0),0);
+    const usedDeath     = empLeaves.filter(l=>l.type==='وفاة').reduce((s,l)=>s+(Number(l.days)||0),0);
+    const usedBaby      = empLeaves.filter(l=>l.type==='مولود').reduce((s,l)=>s+(Number(l.days)||0),0);
+    const usedWedding   = empLeaves.filter(l=>l.type==='زواج').reduce((s,l)=>s+(Number(l.days)||0),0);
+    const usedExam      = empLeaves.filter(l=>l.type==='اختبارات').reduce((s,l)=>s+(Number(l.days)||0),0);
+    const usedCourse    = empLeaves.filter(l=>l.type==='دورة عمل').reduce((s,l)=>s+(Number(l.days)||0),0);
 
-    // آخر إجازة
-    const lastLeave = empLeaves.sort((a,b)=>b.start.localeCompare(a.start))[0];
+    const remAnnual    = balObj.annual - usedAnnual;
+    const remScheduled = balObj.scheduled - usedScheduled;
 
-    // إجمالي الإجازات
-    const totalLeaveDays = empLeaves.reduce((s,l)=>s+(Number(l.days)||0),0);
+    const isTransferred = e.transferDate && (now-parseAnyDate(e.transferDate))<7*24*60*60*1000;
 
-    // الساعات الإضافية
-    const totalHrs = empExtras.reduce((s,x)=>s+(Number(x.hrs)||0),0);
-    const lastExtra = empExtras.sort((a,b)=>b.date.localeCompare(a.date))[0];
+    const _tOpts=SHIFTS.filter(function(s){return s!==e.shift;}).map(function(s){return '<option value="'+s+'">'+SHNAMES[s]+'</option>';}).join('');
+    const transSel=VR==='مدير'?('<select data-eid="'+e.empId+'" onchange="supTransfer(this,this.getAttribute(\'data-eid\'))" style="padding:3px 6px;border-radius:8px;background:var(--ibg);border:1px solid var(--border);color:var(--text);font-family:Cairo,sans-serif;font-size:10px;cursor:pointer;max-width:70px"><option value="">↕️</option>'+_tOpts+'</select>'):'';
 
-    // حالة النقل
-    const isTransferred = e.transferDate && (now-new Date(e.transferDate))<7*24*60*60*1000;
-
-    return `<tr${isTransferred?' class="transferred"':''}>
-      <td><b style="color:var(--primary)">${e.empId}</b></td>
-      <td style="text-align:right;min-width:130px"><b>${e.name}</b></td>
-      <td dir="ltr">${e.phone}</td>
-      <td>${shTag(e.shift)}</td>
-      <td>${e.role==='مشرف'?'<span class="badge b-sup">⭐ مشرف</span>':'<span style="font-size:11px;color:var(--text2)">موظف</span>'}</td>
-      <td>${e.dept||'—'}</td>
-      <td>${stBadge(e.status)}</td>
-      <td style="font-size:10px;color:var(--text3)">${e.transferDate?e.transferDate.split(' ')[0]:'—'}</td>
-      <td>${info.region||'—'}</td>
-      <td style="min-width:100px">${info.center||'—'}</td>
-      <td>${info.car||'—'}</td>
-      <td>${balBadge(balObj.annual)}</td>
-      <td>${balBadge(balObj.scheduled)}</td>
-      <td>${monthLeaveDays>0?`<span class="days-badge days-warn">${monthLeaveDays}</span>`:'<span class="days-badge days-ok">0</span>'}</td>
-      <td style="font-size:10px">${lastLeave?lastLeave.start:'—'}</td>
-      <td style="font-size:10px">${lastLeave?lastLeave.type:'—'}</td>
-      <td>${lastLeave?`<span class="days-badge days-ok">${lastLeave.days}</span>`:'—'}</td>
-      <td>${totalLeaveDays>0?`<b style="color:var(--primary)">${totalLeaveDays}</b>`:'0'}</td>
-      <td>${totalHrs>0?`<b style="color:var(--warning)">${totalHrs}</b>`:'0'}</td>
-      <td style="font-size:10px">${lastExtra?lastExtra.date:'—'}</td>
-      <td style="font-size:10px">${lastExtra?lastExtra.type:'—'}</td>
-      <td>${info.shirt2||'—'}</td>
-      <td>${info.pants2||'—'}</td>
-      <td>${info.suit4||'—'}</td>
-      <td>${info.shoes||'—'}</td>
-      <td>${info.shirt2Qty||'—'}</td>
-      <td>${info.suit4Qty||'—'}</td>
-      <td>${info.shoeQty||'—'}</td>
-      <td style="white-space:nowrap">
-        ${VR==='مدير'?`<select onchange="if(this.value){transferEmployee('${e.empId}',this.value);this.value=''}" style="padding:4px 6px;border-radius:8px;background:var(--ibg);border:1px solid var(--border);color:var(--text);font-family:Cairo,sans-serif;font-size:10px;cursor:pointer;margin-left:2px"><option value="">↕️</option>${SHIFTS.map(s=>s!==e.shift?'<option value="'+s+'">'+SHNAMES[s]+'</option>':'').join('')}</select>`:''}
-        <button class="btn btn-sec btn-sm" style="padding:4px 8px;font-size:11px" onclick="editEmp(${i})">✏️</button>
-        ${VR==='مدير'?`<button class="btn btn-dng btn-sm" style="padding:4px 8px;font-size:11px;margin-right:2px" onclick="delEmp(${i})">🗑️</button>`:''}
-      </td>
-    </tr>`;
+    return '<tr'+(isTransferred?' class="transferred"':'')+'>'
+      +'<td style="text-align:right;min-width:130px"><b>'+e.name+'</b></td>'
+      +'<td><b style="color:var(--primary)">'+e.empId+'</b></td>'
+      +'<td dir="ltr">'+e.phone+'</td>'
+      +'<td>'+shTag(e.shift)+'</td>'
+      // بطاقات
+      +'<td style="font-size:11px">'+badgeDate(info.badge1)+'</td>'
+      +'<td>'+badgeBadge(info.badge1)+'</td>'
+      +'<td style="font-size:11px">'+badgeDate(info.badge2)+'</td>'
+      +'<td>'+badgeBadge(info.badge2)+'</td>'
+      +'<td style="font-size:11px">'+badgeDate(info.badge3)+'</td>'
+      +'<td>'+badgeBadge(info.badge3)+'</td>'
+      // سنوية
+      +'<td>'+balBadge(balObj.annual)+'</td>'
+      +'<td>'+(usedAnnual>0?'<span class="days-badge days-warn">'+usedAnnual+'</span>':'<span class="days-badge days-ok">0</span>')+'</td>'
+      +'<td>'+(remAnnual<0?'<span class="days-badge days-red">'+remAnnual+'</span>':balBadge(remAnnual))+'</td>'
+      // مجدولة
+      +'<td>'+balBadge(balObj.scheduled)+'</td>'
+      +'<td>'+(usedScheduled>0?'<span class="days-badge days-warn">'+usedScheduled+'</span>':'<span class="days-badge days-ok">0</span>')+'</td>'
+      +'<td>'+(remScheduled<0?'<span class="days-badge days-red">'+remScheduled+'</span>':balBadge(remScheduled))+'</td>'
+      // إجازات أخرى
+      +'<td style="text-align:center">'+(usedSick||'—')+'</td>'
+      +'<td style="text-align:center">'+(usedDeath||'—')+'</td>'
+      +'<td style="text-align:center">'+(usedBaby||'—')+'</td>'
+      +'<td style="text-align:center">'+(usedWedding||'—')+'</td>'
+      +'<td style="text-align:center">'+(usedExam||'—')+'</td>'
+      +'<td style="text-align:center">'+(usedCourse||'—')+'</td>'
+      // الموقع
+      +'<td>'+(info.region||'—')+'</td>'
+      +'<td style="min-width:100px">'+(info.center||'—')+'</td>'
+      // مقاسات
+      +'<td>'+(info.shirt2?info.shirt2+' ('+( info.shirt2Qty||0)+')':'—')+'</td>'
+      +'<td>'+(info.pants2?info.pants2+' ('+(info.pants2Qty||0)+')':'—')+'</td>'
+      +'<td>'+(info.suit4?info.suit4+' ('+(info.suit4Qty||0)+')':'—')+'</td>'
+      +'<td>'+(info.shoes?info.shoes+' ('+(info.shoeQty||0)+')':'—')+'</td>'
+      // إجراءات
+      +'<td style="white-space:nowrap">'+transSel
+      +'<button class="btn btn-sec btn-sm" style="padding:4px 8px;font-size:11px" onclick="editEmp('+i+')">✏️</button>'
+      +(VR==='مدير'?'<button class="btn btn-dng btn-sm" style="padding:4px 8px;font-size:11px;margin-right:2px" onclick="delEmp('+i+')">🗑️</button>':'')
+      +'</td></tr>';
   });
 
   tbody.innerHTML = rows.join('');
@@ -3756,6 +3771,53 @@ function supTransfer(sel, eid){
     sel.value = '';
     transferEmployee(eid, v);
   }
+}
+
+
+// ============================================================
+// BADGE EXPIRY UTILITIES
+// ============================================================
+var badge3Name = localStorage.getItem('badge3Name') || 'المستلم';
+
+function renameBadge3(){
+  const n=prompt('اسم البطاقة الإضافية:',badge3Name);
+  if(n&&n.trim()){badge3Name=n.trim();localStorage.setItem('badge3Name',badge3Name);}
+  const lbl=document.getElementById('fBadge3Label');
+  if(lbl) lbl.childNodes[0].textContent='بطاقة '+badge3Name+' ';
+}
+
+function badgeDaysLeft(dateStr){
+  if(!dateStr||dateStr==='-') return null;
+  const exp=parseAnyDate(dateStr);
+  if(!exp) return null;
+  const now=new Date(); now.setHours(0,0,0,0);
+  return Math.ceil((exp-now)/86400000);
+}
+
+function badgeBadge(dateStr){
+  const d=badgeDaysLeft(dateStr);
+  if(d===null) return '<span style="color:var(--text3);font-size:11px">—</span>';
+  let cls, icon;
+  if(d<=0){ cls='background:rgba(239,68,68,.15);color:var(--danger);border:1px solid rgba(239,68,68,.3)'; icon='🔴'; }
+  else if(d<=30){ cls='background:rgba(239,68,68,.1);color:var(--danger);border:1px solid rgba(239,68,68,.2)'; icon='🟠'; }
+  else if(d<=60){ cls='background:rgba(245,158,11,.12);color:var(--warning);border:1px solid rgba(245,158,11,.25)'; icon='🟡'; }
+  else { cls='background:rgba(0,200,150,.1);color:var(--success);border:1px solid rgba(0,200,150,.2)'; icon='🟢'; }
+  const label = d<=0?'منتهية':d+' يوم';
+  return '<span style="'+cls+';border-radius:var(--rp);padding:3px 8px;font-size:11px;font-weight:700;white-space:nowrap">'+icon+' '+label+'</span>';
+}
+
+function badgeDate(dateStr){
+  if(!dateStr||dateStr==='-') return '<span style="color:var(--text3)">—</span>';
+  const d=parseAnyDate(dateStr);
+  if(!d) return '<span style="color:var(--text3)">—</span>';
+  return fmtAr(dateStr);
+}
+
+// Compute used leave days from leave records
+function getLeaveUsed(empId, type){
+  const leaves=getLeaves().filter(l=>String(l.empId)===String(empId));
+  if(type==='all') return leaves.reduce((s,l)=>s+(Number(l.days)||0),0);
+  return leaves.filter(l=>l.type===type).reduce((s,l)=>s+(Number(l.days)||0),0);
 }
 
 window.onload=()=>{
