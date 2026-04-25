@@ -531,7 +531,7 @@ body.light input:-webkit-autofill:focus {
 <script>
 // Apply theme class BEFORE CSS loads to prevent flash
 (function(){
-  var t=localStorage.getItem('seTheme')||'dark';
+  var t=localStorage.getItem('seTheme')||localStorage.getItem('seTh')||'dark';
   document.documentElement.className=t; // apply on html element too
   document.addEventListener('DOMContentLoaded',function(){
     document.body.className=t;
@@ -1267,8 +1267,23 @@ const SHIFTS=['أ','ب','ج','د'];
 let U=null,VR=null,emps=[],editIdx=-1;
 
 // THEME
-function toggleTheme(){const l=document.body.classList.contains('light');document.body.className=l?'dark':'light';document.getElementById('themeBtn').textContent=l?'🌙':'☀️';localStorage.setItem('seTh',l?'dark':'light');}
-function applyTheme(){const t=localStorage.getItem('seTh')||'dark';document.body.className=t;document.getElementById('themeBtn').textContent=t==='dark'?'🌙':'☀️';}
+function toggleTheme(){
+  const isLight=document.body.classList.contains('light');
+  const newTheme=isLight?'dark':'light';
+  document.body.className=newTheme;
+  document.documentElement.className=newTheme;
+  const btn=document.getElementById('themeBtn');
+  if(btn)btn.textContent=isLight?'🌙':'☀️';
+  localStorage.setItem('seTheme',newTheme);
+  localStorage.setItem('seTh',newTheme); // backward compat
+}
+function applyTheme(){
+  const t=localStorage.getItem('seTheme')||localStorage.getItem('seTh')||'dark';
+  document.body.className=t;
+  document.documentElement.className=t;
+  const btn=document.getElementById('themeBtn');
+  if(btn)btn.textContent=t==='dark'?'🌙':'☀️';
+}
 
 // PASS EYE
 function ep(btn,id){const i=document.getElementById(id);const s=i.type==='password';i.type=s?'text':'password';btn.querySelector('svg').innerHTML=s?'<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>':'<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';btn.style.color=s?'var(--primary)':'';}
@@ -2350,21 +2365,30 @@ function goToday() {
   monthSel.value = now.getMonth();
   yearSel.value = now.getFullYear();
   renderCalendar();
-  setTimeout(()=>{
-    const todayCell = document.querySelector('.cal-day.today');
-    if(todayCell){
-      todayCell.scrollIntoView({behavior:'smooth', block:'center'});
-      todayCell.style.outline = '3px solid var(--danger)';
-      setTimeout(()=>todayCell.style.outline='',2000);
-    }
-  }, 350);
+  // Use requestAnimationFrame after DOM update
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      const todayCell = document.querySelector('.cal-day.today');
+      if(todayCell){
+        todayCell.scrollIntoView({behavior:'smooth', block:'center'});
+        todayCell.style.outline = '3px solid var(--danger)';
+        todayCell.style.transition = 'outline .3s';
+        setTimeout(()=>{ todayCell.style.outline=''; todayCell.style.transition=''; },2500);
+      } else {
+        // fallback: scroll to approximate position
+        const calGrid=document.getElementById('calGrid');
+        if(calGrid) calGrid.scrollIntoView({behavior:'smooth',block:'start'});
+      }
+    });
+  });
 }
 
 function renderCalendar() {
   const month = parseInt(document.getElementById('calMonth').value);
   const year = parseInt(document.getElementById('calYear').value);
   const filter = document.getElementById('calFilter').value; // 'all' or shift letter
-  const today = new Date(); today.setHours(0,0,0,0);
+  const _tnow=new Date();
+  const today=new Date(_tnow.getFullYear(),_tnow.getMonth(),_tnow.getDate());
 
   // Title
   document.getElementById('calTitle').textContent = AR_MONTHS[month] + ' ' + year;
@@ -2409,7 +2433,10 @@ function renderCalendar() {
 }
 
 function buildDayCell(day, today, filter, otherMonth) {
-  const isToday = day.getTime() === today.getTime();
+  // Compare by local date components to avoid timezone issues
+  const isToday = day.getFullYear()===today.getFullYear() &&
+                  day.getMonth()===today.getMonth() &&
+                  day.getDate()===today.getDate();
   const hij = toHijri(day);
   const shifts = filter === 'all' ? ['أ','ب','ج','د'] : [filter];
 
@@ -2440,7 +2467,8 @@ function renderMiniSchedule(filter, month, year) {
     // Show the 8-day cycle
     const cycleOff = SHIFT_OFF[sh];
     // Find next cycle start from today
-    const today = new Date(); today.setHours(0,0,0,0);
+    const _tnow=new Date();
+  const today=new Date(_tnow.getFullYear(),_tnow.getMonth(),_tnow.getDate());
     const diffToRef = Math.round((today.getTime() - CAL_REF.getTime()) / 86400000);
     const posInCycle = ((cycleOff + diffToRef) % 8 + 8) % 8;
     const daysToStart = (8 - posInCycle) % 8;
