@@ -683,6 +683,7 @@ body.light input:-webkit-autofill:focus {
             <input type="text" id="empSrch" placeholder="بحث بالاسم أو الرقم أو المركز..." oninput="filterEmp()" style="width:100%">
           </div>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="btn btn-sec btn-sm" onclick="exportComprehensiveExcel()" style="width:auto;background:rgba(0,200,150,.12);border-color:rgba(0,200,150,.3);color:var(--success)">📊 تصدير Excel</button>
             <select id="filterShift" class="finp" style="width:110px;padding:8px 10px" onchange="filterEmp()">
               <option value="">كل الورديات</option>
               <option value="أ">وردية أ</option>
@@ -3986,6 +3987,172 @@ function getLeaveUsed(empId,type){
 
 // Legacy compat
 function renameBadge3(){ renameBadgeField('badge3'); }
+
+
+// ============================================================
+// EXCEL EXPORT - الجدول الشامل
+// ============================================================
+async function exportComprehensiveExcel(){
+  toast('⏳ جاري إنشاء ملف Excel...','info');
+
+  // Ensure we have latest data
+  if(!allLeaves.length) allLeaves=getLeaves();
+  if(!allExtras.length) allExtras=getExtras();
+  if(!allInfos.length)  allInfos=getInfos();
+
+  // Filter employees by role
+  let exportEmps = emps;
+  if(VR==='مشرف') exportEmps = emps.filter(e=>e.shift===U.shift);
+  else if(VR==='موظف'){
+    const me=emps.find(e=>String(e.empId)===String(getCurrentEmpId()));
+    exportEmps = me?[me]:[];
+  }
+
+  // Sort: by shift (أ,ب,ج,د) then supervisors first
+  exportEmps = [...exportEmps].sort((a,b)=>{
+    const shOrder={'أ':0,'ب':1,'ج':2,'د':3};
+    const sd=(shOrder[a.shift]||0)-(shOrder[b.shift]||0);
+    if(sd!==0) return sd;
+    if(a.role==='مشرف'&&b.role!=='مشرف') return -1;
+    if(b.role==='مشرف'&&a.role!=='مشرف') return 1;
+    return 0;
+  });
+
+  const b3n=getBadgeName('badge3');
+  const now=new Date(); now.setHours(0,0,0,0);
+
+  // Build rows
+  const headers=[
+    'الاسم الكامل','رقم الوظيفي','رقم الجوال','الوردية','الدور',
+    'تاريخ انتهاء بطاقة العمل','متبقي بطاقة العمل (يوم)',
+    'تاريخ انتهاء بطاقة المصدر','متبقي بطاقة المصدر (يوم)',
+    'تاريخ انتهاء '+b3n,'متبقي '+b3n+' (يوم)',
+    'رصيد سنوية','مستهلك سنوية','متبقي سنوية',
+    'رصيد مجدولة','مستهلك مجدولة','متبقي مجدولة',
+    'مرضية (يوم)','وفاة (يوم)','مولود (يوم)','زواج (يوم)','اختبارات (يوم)','دورة عمل (يوم)',
+    'المنطقة','المركز',
+    'قميص CAT2','بنطلون CAT2','بدلة CAT4','حذاء'
+  ];
+
+  const data=[headers];
+  let lastShift='';
+
+  exportEmps.forEach(e=>{
+    // Add shift separator row
+    if(e.shift!==lastShift){
+      lastShift=e.shift;
+      data.push(['── وردية '+( SHNAMES[e.shift]||e.shift)+' ──','','','','','','','','','','','','','','','','','','','','','','','','','','','','']);
+    }
+    const info=allInfos.find(x=>String(x.empId)===String(e.empId))||{};
+    const bal=getBalances(e.empId);
+    const el=allLeaves.filter(l=>String(l.empId)===String(e.empId));
+    const usedA=el.filter(l=>l.type==='سنوية').reduce((s,l)=>s+(Number(l.days)||0),0);
+    const usedS=el.filter(l=>l.type==='مجدولة').reduce((s,l)=>s+(Number(l.days)||0),0);
+    const fn=t=>el.filter(l=>l.type===t).reduce((s,l)=>s+(Number(l.days)||0),0);
+
+    const dLeft=d=>{ if(!d) return ''; const dt=parseAnyDate(d); if(!dt) return ''; return Math.ceil((dt-now)/86400000); };
+
+    data.push([
+      e.name, e.empId, e.phone,
+      SHNAMES[e.shift]||e.shift, e.role,
+      info.badge1||'', dLeft(info.badge1),
+      info.badge2||'', dLeft(info.badge2),
+      info.badge3||'', dLeft(info.badge3),
+      bal.annual||0, usedA, (bal.annual||0)-usedA,
+      bal.scheduled||0, usedS, (bal.scheduled||0)-usedS,
+      fn('مرضية'), fn('وفاة'), fn('مولود'), fn('زواج'), fn('اختبارات'), fn('دورة عمل'),
+      info.region||'', info.center||'',
+      (info.shirt2||'')+(info.shirt2Qty?' ('+info.shirt2Qty+')':''),
+      (info.pants2||'')+(info.pants2Qty?' ('+info.pants2Qty+')':''),
+      (info.suit4||'')+(info.suit4Qty?' ('+info.suit4Qty+')':''),
+      (info.shoes||'')+(info.shoeQty?' ('+info.shoeQty+')':'')
+    ]);
+  });
+
+  // Use SheetJS
+  if(typeof XLSX==='undefined'){
+    // Load SheetJS dynamically
+    const scr=document.createElement('script');
+    scr.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+    scr.onload=()=>_doExport(data,exportEmps.length);
+    scr.onerror=()=>toast('❌ فشل تحميل مكتبة Excel','error');
+    document.head.appendChild(scr);
+  } else {
+    _doExport(data,exportEmps.length);
+  }
+}
+
+function _doExport(data, count){
+  const wb=XLSX.utils.book_new();
+  const ws=XLSX.utils.aoa_to_sheet(data);
+
+  // Column widths
+  const widths=[{wch:22},{wch:12},{wch:14},{wch:10},{wch:8},
+    {wch:18},{wch:10},{wch:18},{wch:10},{wch:18},{wch:10},
+    {wch:8},{wch:8},{wch:8},{wch:8},{wch:8},{wch:8},
+    {wch:8},{wch:8},{wch:8},{wch:8},{wch:8},{wch:8},
+    {wch:10},{wch:12},{wch:12},{wch:12},{wch:12},{wch:10}];
+  ws['!cols']=widths;
+
+  // Style header row
+  const hdrRange=XLSX.utils.decode_range(ws['!ref']);
+  for(let c=hdrRange.s.c;c<=hdrRange.e.c;c++){
+    const addr=XLSX.utils.encode_cell({r:0,c});
+    if(ws[addr]){
+      ws[addr].s={
+        font:{bold:true,color:{rgb:'FFFFFF'},sz:11},
+        fill:{fgColor:{rgb:'0277BD'}},
+        alignment:{horizontal:'center',vertical:'center',wrapText:true}
+      };
+    }
+  }
+
+  // Style separator rows (shift dividers)
+  for(let r=1;r<data.length;r++){
+    if(data[r][0]&&String(data[r][0]).startsWith('── وردية')){
+      for(let cc=0;cc<data[r].length;cc++){
+        const addr=XLSX.utils.encode_cell({r,c:cc});
+        if(ws[addr]){
+          ws[addr].s={
+            fill:{fgColor:{rgb:'1565C0'}},
+            font:{bold:true,color:{rgb:'FFFFFF'},sz:11},
+            alignment:{horizontal:'center'}
+          };
+        }
+      }
+    }
+  }
+
+  // Badge expiry color coding (col indices 5,7,9 = badge days)
+  for(let r=1;r<data.length;r++){
+    [6,8,10].forEach(ci=>{
+      const addr=XLSX.utils.encode_cell({r,c:ci});
+      if(!ws[addr]||ws[addr].v==='') return;
+      const d=Number(ws[addr].v);
+      if(isNaN(d)) return;
+      let bg='';
+      if(d<=0) bg='FFCDD2';
+      else if(d<=30) bg='FFE0B2';
+      else if(d<=60) bg='FFF9C4';
+      else bg='C8E6C9';
+      ws[addr].s={fill:{fgColor:{rgb:bg}},font:{bold:d<=60},alignment:{horizontal:'center'}};
+    });
+  }
+
+  // Row height for header
+  ws['!rows']=[{hpt:30}];
+
+  XLSX.utils.book_append_sheet(wb,ws,'الجدول الشامل');
+
+  // Generate filename
+  const d=new Date();
+  const dateStr=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  const role=VR==='مشرف'?'_وردية_'+(SHNAMES[U.shift]||U.shift):'_كامل';
+  const fname='الجدول_الشامل'+role+'_'+dateStr+'.xlsx';
+
+  XLSX.writeFile(wb,fname);
+  toast('✅ تم تصدير '+count+' موظف إلى '+fname,'success');
+}
 
 window.onload=()=>{
   applyTheme(); // run sync before anything else
