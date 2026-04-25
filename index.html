@@ -2346,41 +2346,40 @@ function initCalendar() {
 
 function goToday() {
   const now = new Date();
-  const calPage = document.getElementById('page-cal');
-  // Open calendar page if not open
-  if(!calPage || calPage.style.display === 'none' || calPage.style.display === '') {
-    showPage('cal');
-    setTimeout(goToday, 450);
-    return;
-  }
-  // Set month/year to today
-  const monthSel = document.getElementById('calMonth');
-  const yearSel  = document.getElementById('calYear');
-  if(!monthSel || !yearSel) { initCalendar(); setTimeout(goToday,300); return; }
-  if(!yearSel.options.length) { initCalendar(); setTimeout(goToday,300); return; }
-  monthSel.value = now.getMonth();
-  yearSel.value  = now.getFullYear();
-  renderCalendar();
-
-  // Scroll to today cell - try multiple times in case DOM is slow
-  function scrollToToday(attempts){
-    const cell = document.querySelector('.cal-day.today');
-    if(cell){
-      // Scroll the main-content container, not window
-      const mc = document.querySelector('.main-content');
-      if(mc){
-        const cellTop = cell.getBoundingClientRect().top + mc.scrollTop - mc.getBoundingClientRect().top - 80;
-        mc.scrollTo({top: cellTop, behavior: 'smooth'});
+  // Always navigate to calendar page first
+  showPage('cal');
+  // Wait for page to render
+  setTimeout(function(){
+    const monthSel = document.getElementById('calMonth');
+    const yearSel  = document.getElementById('calYear');
+    if(!monthSel || !yearSel) return;
+    if(!yearSel.options.length) initCalendar();
+    monthSel.value = now.getMonth();
+    yearSel.value  = now.getFullYear();
+    renderCalendar();
+    // Find and highlight today cell
+    setTimeout(function(){
+      const cells = document.querySelectorAll('.cal-day');
+      let todayCell = null;
+      cells.forEach(function(cell){
+        const numEl = cell.querySelector('.cal-day-num');
+        if(numEl && parseInt(numEl.textContent)===now.getDate() && !cell.classList.contains('other-month')){
+          todayCell = cell;
+        }
+      });
+      if(!todayCell) todayCell = document.querySelector('.cal-day.today');
+      if(todayCell){
+        const mc = document.querySelector('.main-content');
+        if(mc){
+          const top = todayCell.offsetTop - 120;
+          mc.scrollTo({top: Math.max(0, top), behavior:'smooth'});
+        }
+        todayCell.style.outline = '3px solid var(--danger)';
+        todayCell.style.boxShadow = '0 0 16px rgba(239,68,68,.6)';
+        setTimeout(function(){ todayCell.style.outline=''; todayCell.style.boxShadow=''; }, 3000);
       }
-      cell.scrollIntoView({behavior:'smooth', block:'nearest'});
-      cell.style.outline = '3px solid var(--danger)';
-      cell.style.boxShadow = '0 0 12px rgba(239,68,68,.5)';
-      setTimeout(()=>{ cell.style.outline=''; cell.style.boxShadow=''; }, 2500);
-    } else if(attempts > 0){
-      setTimeout(()=>scrollToToday(attempts-1), 150);
-    }
-  }
-  setTimeout(()=>scrollToToday(5), 100);
+    }, 200);
+  }, 150);
 }
 
 function renderCalendar() {
