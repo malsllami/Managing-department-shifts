@@ -2345,42 +2345,42 @@ function initCalendar() {
 }
 
 function goToday() {
-  // Make sure calendar page is visible
-  if(document.getElementById('page-cal').style.display==='none'){
-    showPage('cal');
-    setTimeout(goToday, 400);
-    return;
-  }
   const now = new Date();
-  const monthSel = document.getElementById('calMonth');
-  const yearSel = document.getElementById('calYear');
-  if(!monthSel || !yearSel || !yearSel.options.length){
-    initCalendar();
-    setTimeout(()=>{
-      const todayCell = document.querySelector('.cal-day.today');
-      if(todayCell){ todayCell.scrollIntoView({behavior:'smooth',block:'center'}); todayCell.style.outline='3px solid var(--danger)'; setTimeout(()=>todayCell.style.outline='',2000); }
-    }, 400);
+  const calPage = document.getElementById('page-cal');
+  // Open calendar page if not open
+  if(!calPage || calPage.style.display === 'none' || calPage.style.display === '') {
+    showPage('cal');
+    setTimeout(goToday, 450);
     return;
   }
+  // Set month/year to today
+  const monthSel = document.getElementById('calMonth');
+  const yearSel  = document.getElementById('calYear');
+  if(!monthSel || !yearSel) { initCalendar(); setTimeout(goToday,300); return; }
+  if(!yearSel.options.length) { initCalendar(); setTimeout(goToday,300); return; }
   monthSel.value = now.getMonth();
-  yearSel.value = now.getFullYear();
+  yearSel.value  = now.getFullYear();
   renderCalendar();
-  // Use requestAnimationFrame after DOM update
-  requestAnimationFrame(()=>{
-    requestAnimationFrame(()=>{
-      const todayCell = document.querySelector('.cal-day.today');
-      if(todayCell){
-        todayCell.scrollIntoView({behavior:'smooth', block:'center'});
-        todayCell.style.outline = '3px solid var(--danger)';
-        todayCell.style.transition = 'outline .3s';
-        setTimeout(()=>{ todayCell.style.outline=''; todayCell.style.transition=''; },2500);
-      } else {
-        // fallback: scroll to approximate position
-        const calGrid=document.getElementById('calGrid');
-        if(calGrid) calGrid.scrollIntoView({behavior:'smooth',block:'start'});
+
+  // Scroll to today cell - try multiple times in case DOM is slow
+  function scrollToToday(attempts){
+    const cell = document.querySelector('.cal-day.today');
+    if(cell){
+      // Scroll the main-content container, not window
+      const mc = document.querySelector('.main-content');
+      if(mc){
+        const cellTop = cell.getBoundingClientRect().top + mc.scrollTop - mc.getBoundingClientRect().top - 80;
+        mc.scrollTo({top: cellTop, behavior: 'smooth'});
       }
-    });
-  });
+      cell.scrollIntoView({behavior:'smooth', block:'nearest'});
+      cell.style.outline = '3px solid var(--danger)';
+      cell.style.boxShadow = '0 0 12px rgba(239,68,68,.5)';
+      setTimeout(()=>{ cell.style.outline=''; cell.style.boxShadow=''; }, 2500);
+    } else if(attempts > 0){
+      setTimeout(()=>scrollToToday(attempts-1), 150);
+    }
+  }
+  setTimeout(()=>scrollToToday(5), 100);
 }
 
 function renderCalendar() {
