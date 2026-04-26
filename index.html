@@ -1291,7 +1291,7 @@ body.light input:-webkit-autofill:focus {
 
 <script>
 const SHEET_ID='11iUjLsOz64NaVi6MxPqf8acMl9--vXg8QuJpm0yWVL4';
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbyv-FNYOKeO07QhEXmsGWAUFu3mUPE9rL2YzjdfwUrUTQT6Xv2TOdTCbODMnwGyEOw/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzXGoYsPJJOAHWOAS6t7jU_JI-pYh4eHVXCxQz-74vXrYQysO3elSW1rhAmffZZ0XIA/exec';
 const SHL={a:'وردية أ',b:'وردية ب',c:'وردية ج',d:'وردية د'};
 const SHK={'أ':'sh-a','ب':'sh-b','ج':'sh-c','د':'sh-d'};
 const SHC={'أ':'shc-a','ب':'shc-b','ج':'shc-c','د':'shc-d'};
@@ -4190,94 +4190,169 @@ function renameBadge3(){ renameBadgeField('badge3'); }
 // EXCEL EXPORT - الجدول الشامل
 // ============================================================
 async function exportComprehensiveExcel(){
-  toast('⏳ جاري إنشاء ملف Excel...','info');
-
-  // Ensure we have latest data
+  toast('📊 جاري تحضير البيانات...','info');
+  
+  // Ensure data is loaded
   if(!allLeaves.length) allLeaves=getLeaves();
   if(!allExtras.length) allExtras=getExtras();
   if(!allInfos.length)  allInfos=getInfos();
 
-  // Filter employees by role
-  let exportEmps = emps;
-  if(VR==='مشرف') exportEmps = emps.filter(e=>e.shift===U.shift);
+  // Filter employees
+  let exportEmps=emps;
+  if(VR==='مشرف') exportEmps=emps.filter(e=>e.shift===U.shift);
   else if(VR==='موظف'){
     const me=emps.find(e=>String(e.empId)===String(getCurrentEmpId()));
-    exportEmps = me?[me]:[];
+    exportEmps=me?[me]:[];
   }
 
-  // Sort: by shift (أ,ب,ج,د) then supervisors first
-  exportEmps = [...exportEmps].sort((a,b)=>{
-    const shOrder={'أ':0,'ب':1,'ج':2,'د':3};
-    const sd=(shOrder[a.shift]||0)-(shOrder[b.shift]||0);
+  if(!exportEmps.length){ toast('⚠️ لا يوجد موظفون للتصدير','error'); return; }
+
+  // Sort by shift then supervisors first
+  const shOrd={'أ':0,'ب':1,'ج':2,'د':3};
+  exportEmps=[...exportEmps].sort((a,b)=>{
+    const sd=(shOrd[a.shift]||0)-(shOrd[b.shift]||0);
     if(sd!==0) return sd;
     if(a.role==='مشرف'&&b.role!=='مشرف') return -1;
     if(b.role==='مشرف'&&a.role!=='مشرف') return 1;
     return 0;
   });
 
-  const b3n=getBadgeName('badge3');
+  const b3n=typeof getBadgeName==='function'?getBadgeName('badge3'):'المستلم';
   const now=new Date(); now.setHours(0,0,0,0);
 
-  // Build rows
+  // ── Sheet 1: الجدول الشامل ──
   const headers=[
     'الاسم الكامل','رقم الوظيفي','رقم الجوال','الوردية','الدور',
-    'تاريخ انتهاء بطاقة العمل','متبقي بطاقة العمل (يوم)',
-    'تاريخ انتهاء بطاقة المصدر','متبقي بطاقة المصدر (يوم)',
-    'تاريخ انتهاء '+b3n,'متبقي '+b3n+' (يوم)',
+    'تاريخ انتهاء بطاقة العمل','متبقي (يوم)',
+    'تاريخ انتهاء المصدر','متبقي (يوم)',
+    'تاريخ انتهاء '+b3n,'متبقي (يوم)',
     'رصيد سنوية','مستهلك سنوية','متبقي سنوية',
     'رصيد مجدولة','مستهلك مجدولة','متبقي مجدولة',
-    'مرضية (يوم)','وفاة (يوم)','مولود (يوم)','زواج (يوم)','اختبارات (يوم)','دورة عمل (يوم)',
+    'مرضية(يوم)','وفاة(يوم)','مولود(يوم)','زواج(يوم)','اختبارات(يوم)','دورة عمل(يوم)',
     'المنطقة','المركز',
-    'قميص CAT2','بنطلون CAT2','بدلة CAT4','حذاء'
+    'قميص CAT2','بنطلون CAT2','بدلة CAT4','حذاء',
+    'تاريخ النقل'
   ];
-
   const data=[headers];
-  let lastShift='';
+  let lastSh='';
 
   exportEmps.forEach(e=>{
-    // Add shift separator row
-    if(e.shift!==lastShift){
-      lastShift=e.shift;
-      data.push(['── وردية '+( SHNAMES[e.shift]||e.shift)+' ──','','','','','','','','','','','','','','','','','','','','','','','','','','','','']);
+    if(e.shift!==lastSh){
+      lastSh=e.shift;
+      const sep=new Array(headers.length).fill('');
+      sep[0]='── وردية '+(SHNAMES[e.shift]||e.shift)+' ──';
+      data.push(sep);
     }
     const info=allInfos.find(x=>String(x.empId)===String(e.empId))||{};
     const bal=getBalances(e.empId);
     const el=allLeaves.filter(l=>String(l.empId)===String(e.empId));
-    const usedA=el.filter(l=>l.type==='سنوية').reduce((s,l)=>s+(Number(l.days)||0),0);
-    const usedS=el.filter(l=>l.type==='مجدولة').reduce((s,l)=>s+(Number(l.days)||0),0);
     const fn=t=>el.filter(l=>l.type===t).reduce((s,l)=>s+(Number(l.days)||0),0);
-
-    const dLeft=d=>{ if(!d) return ''; const dt=parseAnyDate(d); if(!dt) return ''; return Math.ceil((dt-now)/86400000); };
-
+    const usedA=fn('سنوية'), usedS=fn('مجدولة');
+    const dL=d=>{ if(!d)return''; const dt=parseAnyDate(d); if(!dt)return''; return Math.ceil((dt-now)/86400000); };
     data.push([
-      e.name, e.empId, e.phone,
-      SHNAMES[e.shift]||e.shift, e.role,
-      info.badge1||'', dLeft(info.badge1),
-      info.badge2||'', dLeft(info.badge2),
-      info.badge3||'', dLeft(info.badge3),
-      bal.annual||0, usedA, (bal.annual||0)-usedA,
-      bal.scheduled||0, usedS, (bal.scheduled||0)-usedS,
-      fn('مرضية'), fn('وفاة'), fn('مولود'), fn('زواج'), fn('اختبارات'), fn('دورة عمل'),
-      info.region||'', info.center||'',
+      e.name,e.empId,e.phone,
+      SHNAMES[e.shift]||e.shift,e.role,
+      info.badge1||'',dL(info.badge1),
+      info.badge2||'',dL(info.badge2),
+      info.badge3||'',dL(info.badge3),
+      bal.annual||0,usedA,(bal.annual||0)-usedA,
+      bal.scheduled||0,usedS,(bal.scheduled||0)-usedS,
+      fn('مرضية'),fn('وفاة'),fn('مولود'),fn('زواج'),fn('اختبارات'),fn('دورة عمل'),
+      info.region||'',info.center||'',
       (info.shirt2||'')+(info.shirt2Qty?' ('+info.shirt2Qty+')':''),
       (info.pants2||'')+(info.pants2Qty?' ('+info.pants2Qty+')':''),
       (info.suit4||'')+(info.suit4Qty?' ('+info.suit4Qty+')':''),
-      (info.shoes||'')+(info.shoeQty?' ('+info.shoeQty+')':'')
+      (info.shoes||'')+(info.shoeQty?' ('+info.shoeQty+')':''),
+      e.transferDate||''
     ]);
   });
 
-  // Use SheetJS
+  // ── Sheet 2: الإجازات ──
+  const lH=['الاسم','رقم الوظيفي','الوردية','نوع الإجازة','من','إلى','الأيام','ملاحظات'];
+  const lData=[lH];
+  let lastShL='';
+  exportEmps.forEach(e=>{
+    const empL=allLeaves.filter(l=>String(l.empId)===String(e.empId));
+    if(!empL.length) return;
+    if(e.shift!==lastShL){lastShL=e.shift;lData.push(['── وردية '+(SHNAMES[e.shift]||e.shift)+' ──','','','','','','','']);}
+    empL.forEach(l=>lData.push([e.name,e.empId,SHNAMES[e.shift]||e.shift,l.type,l.start,l.end||'',l.days,l.note||'']));
+  });
+
+  // ── Sheet 3: الساعات الإضافية ──
+  const xH=['الاسم','رقم الوظيفي','الوردية','التاريخ','الساعات','النوع','الاستلام','ملاحظات'];
+  const xData=[xH];
+  let lastShX='';
+  exportEmps.forEach(e=>{
+    const empX=allExtras.filter(x=>String(x.empId)===String(e.empId));
+    if(!empX.length) return;
+    if(e.shift!==lastShX){lastShX=e.shift;xData.push(['── وردية '+(SHNAMES[e.shift]||e.shift)+' ──','','','','','','','']);}
+    empX.forEach(x=>xData.push([e.name,e.empId,SHNAMES[e.shift]||e.shift,x.date,x.hrs,x.type,x.received?'مُستلم':'لم يُستلم',x.note||'']));
+  });
+
+  // Load XLSX then export
+  function doExport(){
+    try{
+      const wb=XLSX.utils.book_new();
+      function addSheet(wb,data,name,hdrColor){
+        const ws=XLSX.utils.aoa_to_sheet(data);
+        // Col widths
+        ws['!cols']=data[0].map(()=>({wch:16}));
+        ws['!cols'][0]={wch:22}; ws['!cols'][1]={wch:12};
+        // Header style
+        const r=XLSX.utils.decode_range(ws['!ref']);
+        for(let cc=r.s.c;cc<=r.e.c;cc++){
+          const addr=XLSX.utils.encode_cell({r:0,c:cc});
+          if(ws[addr]) ws[addr].s={font:{bold:true,color:{rgb:'FFFFFF'},sz:10},fill:{fgColor:{rgb:hdrColor}},alignment:{horizontal:'center',wrapText:true}};
+        }
+        // Separator rows
+        for(let ri=1;ri<data.length;ri++){
+          if(data[ri][0]&&String(data[ri][0]).startsWith('── وردية')){
+            for(let cc=r.s.c;cc<=r.e.c;cc++){
+              const a=XLSX.utils.encode_cell({r:ri,c:cc});
+              if(ws[a]) ws[a].s={fill:{fgColor:{rgb:'1565C0'}},font:{bold:true,color:{rgb:'FFFFFF'},sz:10},alignment:{horizontal:'center'}};
+            }
+          }
+        }
+        // Badge days coloring (cols 6,8,10 in comprehensive = index 6,8,10)
+        if(name==='الجدول الشامل'){
+          for(let ri=1;ri<data.length;ri++){
+            [6,8,10].forEach(ci=>{
+              const a=XLSX.utils.encode_cell({r:ri,c:ci});
+              if(!ws[a]||ws[a].v==='') return;
+              const dv=Number(ws[a].v); if(isNaN(dv)) return;
+              let bg=dv<=0?'FFCDD2':dv<=30?'FFE0B2':dv<=60?'FFF9C4':'C8E6C9';
+              ws[a].s={fill:{fgColor:{rgb:bg}},font:{bold:dv<=60,sz:10},alignment:{horizontal:'center'}};
+            });
+          }
+        }
+        ws['!rows']=[{hpt:28}];
+        XLSX.utils.book_append_sheet(wb,ws,name);
+      }
+      addSheet(wb,data,'الجدول الشامل','0277BD');
+      addSheet(wb,lData,'الإجازات','1B5E20');
+      addSheet(wb,xData,'الساعات الإضافية','4A148C');
+      const d=new Date();
+      const ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+      const role=VR==='مشرف'?'_وردية_'+(SHNAMES[U.shift]||U.shift):VR==='موظف'?'_بياناتي':'_كامل';
+      const fname='تقرير_الورديات'+role+'_'+ds+'.xlsx';
+      XLSX.writeFile(wb,fname);
+      toast('✅ تم تصدير '+exportEmps.length+' موظف - '+wb.SheetNames.join(' | '),'success');
+    }catch(err){
+      console.error('Excel export error:',err);
+      toast('❌ خطأ في التصدير: '+err.message,'error');
+    }
+  }
+
   if(typeof XLSX==='undefined'){
     toast('⏳ جاري تحميل مكتبة Excel...','info');
     const scr=document.createElement('script');
     scr.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
-    scr.onload=function(){ _doExport(data,exportEmps.length); };
-    scr.onerror=function(){ toast('❌ فشل تحميل مكتبة Excel - تحقق من الاتصال','error'); };
+    scr.onload=doExport;
+    scr.onerror=()=>toast('❌ فشل تحميل مكتبة Excel - تحقق من الاتصال','error');
     document.head.appendChild(scr);
-  } else {
-    _doExport(data,exportEmps.length);
-  }
+  } else { doExport(); }
 }
+
 
 function _doExport(data, count){
   const wb=XLSX.utils.book_new();
@@ -4469,4 +4544,32 @@ window.onload=()=>{
 </div>
 
 </body>
-</html>
+</htmlasync function transferEmployee(empId, newShift){
+  if(!newShift) return;
+  const e=emps.find(x=>String(x.empId)===String(empId));
+  if(!e) return;
+  const oldShift=e.shift;
+  if(!confirm('نقل '+e.name+' من '+( SHNAMES[oldShift]||oldShift)+' إلى '+(SHNAMES[newShift]||newShift)+'؟')) return;
+  const prevShift=e.shift;
+  e.shift=newShift;
+  e.transferDate=new Date().toISOString().split('T')[0];
+  // Save locally
+  const idx=emps.findIndex(x=>String(x.empId)===String(empId));
+  if(idx>=0) emps[idx]=e;
+  // Update in GAS
+  const gasUrl=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
+  if(gasUrl){
+    const res=await gas('تعديل_موظف',{...e,originalEmpId:empId,shiftChanged:true,prevShift}).catch(()=>({ok:false}));
+    if(!res.ok) toast('⚠️ تم تحديث محلياً فقط - تحقق من الاتصال','warning');
+    // Trigger comprehensive sheet update
+    gas('تحديث_الجدول_الشامل',{}).catch(()=>{});
+  }
+  toast('✅ تم نقل '+e.name+' إلى '+(SHNAMES[newShift]||newShift),'success');
+  // Refresh all views
+  renderEmpTbl();
+  renderShTbl();
+  buildDash();
+  markTransferredRows();
+}
+
+>
