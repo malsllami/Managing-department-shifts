@@ -739,12 +739,38 @@ body.light input:-webkit-autofill:focus {
 
       <!-- MY SHIFT -->
       <div id="page-sh" class="page" style="display:none">
-        <div class="ph" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px"><div><h2>📋 موظفو ورديتي</h2><p id="supLbl">-</p></div><button onclick="exportComprehensiveExcel()" style="flex-shrink:0;background:rgba(0,200,150,.12);border:1px solid rgba(0,200,150,.4);color:var(--success);border-radius:var(--rp);padding:8px 16px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;font-size:13px">📥 تصدير Excel</button></div>
+        <div class="ph" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <div><h2 id="shTitle">📋 موظفو ورديتي</h2><p id="supLbl">-</p></div>
+        </div>
+
+        <!-- Controls bar -->
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 16px">
+          <div class="sw" style="margin:0;flex:1;min-width:180px">
+            <span class="si2">🔍</span>
+            <input type="text" id="shSrch" placeholder="بحث..." oninput="filterShComp()" style="width:100%">
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="btn btn-primary btn-sm" style="width:auto" onclick="openAddShift()">➕ إضافة موظف</button>
+            <button class="btn btn-sm" onclick="exportComprehensiveExcel()" style="width:auto;background:rgba(0,200,150,.12);border:1px solid rgba(0,200,150,.4);color:var(--success);border-radius:var(--rp);padding:6px 14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;font-size:12px">📥 Excel</button>
+          </div>
+        </div>
+
+        <!-- Summary stats -->
+        <div id="shSummaryStats" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:14px"></div>
+
+        <!-- Comprehensive table for shift -->
         <div class="card">
-          <div class="card-hd"><h3 id="shTitle">الوردية</h3><button class="btn btn-primary btn-sm" style="width:auto" onclick="openAddShift()">➕ إضافة موظف</button></div>
-          <div class="card-bd">
-            <div class="sw"><span class="si2">🔍</span><input type="text" id="shSrch" placeholder="بحث..." oninput="filterSh()"></div>
-            <div class="tw"><table><thead><tr><th>رقم الوظيفي</th><th>الاسم الكامل</th><th>رقم الجوال</th><th>الحالة</th><th>الدور</th><th>إجراءات</th></tr></thead><tbody id="shTb"><tr><td colspan="5" class="no-data">لا يوجد موظفون</td></tr></tbody></table></div>
+          <div class="card-hd">
+            <h3 id="shCompTitle">الجدول الشامل</h3>
+            <span id="shCompCount" style="font-size:12px;color:var(--text2)"></span>
+          </div>
+          <div class="card-bd" style="padding:0;overflow:hidden">
+            <div style="overflow-x:auto;overflow-y:auto;max-height:65vh;-webkit-overflow-scrolling:touch">
+              <table id="shCompTbl" style="min-width:1400px;border-collapse:separate;border-spacing:0">
+                <thead id="shCompThead"></thead>
+                <tbody id="shTb"><tr><td colspan="20" class="no-data">⏳ جاري التحميل...</td></tr></tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -935,13 +961,21 @@ body.light input:-webkit-autofill:focus {
           </div>
           <!-- Balance editor (for manager/supervisor) -->
           <div id="leaveBalanceEditor" class="card" style="max-width:680px;margin-top:14px;display:none">
-            <div class="card-hd"><h3>💰 تعديل أرصدة الإجازات</h3></div>
+            <div class="card-hd"><h3 id="balEditorTitle">💰 تعديل أرصدة الإجازات</h3></div>
             <div class="card-bd">
               <div class="fgrid">
-                <div class="form-group"><label>رصيد سنوية (بالنظام)</label><input type="number" id="balAnnual" class="finp" min="0"></div>
-                <div class="form-group"><label>رصيد مجدولة (بالمشرف)</label><input type="number" id="balScheduled" class="finp" min="0"></div>
+                <div class="form-group">
+                  <label>رصيد سنوية (بالنظام)</label>
+                  <input type="number" id="balAnnual" class="finp" min="0">
+                  <p style="font-size:11px;color:var(--text3);margin-top:3px">يُدار بواسطة المدير/المشرف</p>
+                </div>
+                <div class="form-group">
+                  <label>رصيد مجدولة (بالمشرف)</label>
+                  <input type="number" id="balScheduled" class="finp" min="0">
+                  <p style="font-size:11px;color:var(--text3);margin-top:3px">الإجازات المجدولة في الجدول</p>
+                </div>
               </div>
-              <button class="btn btn-sec" onclick="saveBalances()" style="border-radius:var(--rp)">💾 حفظ الأرصدة</button>
+              <div id="balSaveWrap"><button class="btn btn-sec" onclick="saveBalances()" style="border-radius:var(--rp)">💾 حفظ الأرصدة</button></div>
             </div>
           </div>
           <div class="card" style="margin-top:14px">
@@ -1681,21 +1715,25 @@ function supDash(){
     </div>
     <div class="card" style="margin:0">
       <div class="card-hd"><h3>📊 أرصدة إجازات الوردية</h3></div>
-      <div class="card-bd">
-        <div style="display:flex;flex-direction:column;gap:8px">
-          ${se.map(e=>{
+      <div class="card-bd" style="padding:0">
+        <div class="tw"><table>
+          <thead><tr><th>الموظف</th><th>المركز</th><th>الحالة</th><th>سنوية</th><th>مجدولة</th><th>إضافي</th></tr></thead>
+          <tbody>${allShiftEmps.map(e=>{
             const inf=infos.find(x=>String(x.empId)===String(e.empId))||{};
             const b=getBalances(e.empId);
-            return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">'
-              +'<div><span style="font-size:13px;font-weight:700">'+e.name+'</span>'
-              +(inf.center?'<br><span style="font-size:10px;color:var(--text3)">'+inf.center+'</span>':'')+'</div>'
-              +'<div style="display:flex;gap:6px;align-items:center">'
-              +(e.role==='مشرف'?'<span class="badge b-sup">⭐</span>':'')
-              +'<span style="font-size:11px;color:var(--success)">س:'+b.annual+'</span>'
-              +'<span style="font-size:11px;color:var(--primary)">م:'+b.scheduled+'</span>'
-              +'</div></div>';
+            const onLeave=activeLeaves.some(l=>String(l.empId)===String(e.empId));
+            const pendEmp=shiftExtras.filter(x=>String(x.empId)===String(e.empId)&&!x.received).length;
+            return '<tr>'
+              +'<td><b>'+e.name+'</b>'+(e.role==='مشرف'?' <span class="badge b-sup" style="font-size:9px">⭐</span>':'')+'</td>'
+              +'<td style="font-size:11px;color:var(--text2)">'+(inf.center||'—')+'</td>'
+              +'<td>'+(onLeave?'<span style="color:var(--warning);font-size:11px;font-weight:700">🏖️ إجازة</span>':'<span style="color:var(--success);font-size:11px">نشط</span>')+'</td>'
+              +'<td><span style="font-size:12px;font-weight:800;color:var(--success)">'+b.annual+'</span></td>'
+              +'<td><span style="font-size:12px;font-weight:800;color:var(--primary)">'+b.scheduled+'</span></td>'
+              +'<td>'+(pendEmp>0?'<span style="font-size:11px;font-weight:700;color:var(--danger)">'+pendEmp+' ⏰</span>':'<span style="color:var(--text3);font-size:11px">—</span>')+'</td>'
+              +'</tr>';
           }).join('')}
-        </div>
+          </tbody>
+        </table></div>
       </div>
     </div>
   </div>
@@ -2597,7 +2635,15 @@ function initFormTab(tab){
   if(tab==='leave'){
     const sw=document.getElementById('leaveEmpSelectWrap'); if(sw) sw.style.display=mgr?'block':'none';
     const bar=document.getElementById('leaveEmpBar'); if(bar) bar.style.display=mgr?'none':'flex';
-    const ed=document.getElementById('leaveBalanceEditor'); if(ed) ed.style.display=mgr?'block':'none';
+    // Balance editor: only manager/supervisor can edit; employee sees read-only
+    const ed=document.getElementById('leaveBalanceEditor');
+    if(ed) ed.style.display=isMgrOrSup()?'block':'none';
+    // Read-only for employee
+    const isEmp = VR==='موظف';
+    const annEl=document.getElementById('balAnnual'); if(annEl) annEl.readOnly=isEmp;
+    const schEl=document.getElementById('balScheduled'); if(schEl) schEl.readOnly=isEmp;
+    const saveWrap=document.getElementById('balSaveWrap'); if(saveWrap) saveWrap.style.display=isEmp?'none':'block';
+    const edTitle=document.getElementById('balEditorTitle'); if(edTitle) edTitle.textContent=isEmp?'📊 أرصدة الإجازات':'💰 تعديل أرصدة الإجازات';
     if(mgr) fillSelect('fLeaveEmp');
     else { autoFillLeaveBar(); loadBalancesDisplay(getCurrentEmpId()); }
     renderLeaveTable();
@@ -2902,7 +2948,31 @@ async function renderExtraTable(){
   const tb=document.getElementById('extraTb');if(!tb)return;
   const gasUrl2=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
   const empId2=isMgrOrSup()?null:getCurrentEmpId();
-  const arr = gasUrl2 ? await fetchExtras(empId2) : getExtras();
+  let arr = gasUrl2 ? await fetchExtras(empId2) : getExtras();
+
+  // Populate month filter
+  const monthSel=document.getElementById('extraFilterMonth');
+  if(monthSel){
+    const months=[...new Set(arr.map(x=>{ const d=parseAnyDate(x.date); return d?d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'):''; }).filter(Boolean))].sort().reverse();
+    const curMon=monthSel.value;
+    monthSel.innerHTML='<option value="">كل الأشهر</option>'+months.map(m=>{
+      const [y,mo]=m.split('-');
+      return '<option value="'+m+'"'+(m===curMon?' selected':'')+'>'+(AR_MONTHS_S?AR_MONTHS_S[parseInt(mo)-1]:m)+' '+y+'</option>';
+    }).join('');
+  }
+
+  // Apply filters
+  const filterMonth=monthSel?.value||'';
+  const filterRec=document.getElementById('extraFilterReceived')?.value||'';
+  if(filterMonth) arr=arr.filter(x=>{ const d=parseAnyDate(x.date); if(!d)return false; const m=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); return m===filterMonth; });
+  if(filterRec==='no') arr=arr.filter(x=>!x.received);
+  if(filterRec==='yes') arr=arr.filter(x=>x.received);
+
+  // Show totals
+  const totalHrs=arr.reduce((s,x)=>s+(Number(x.hrs)||0),0);
+  const pending=arr.filter(x=>!x.received).reduce((s,x)=>s+(Number(x.hrs)||0),0);
+  const cnt=document.getElementById('extraFilterCount');
+  if(cnt) cnt.textContent=arr.length+' سجل | '+totalHrs+' ساعة إجمالي'+(pending?' | '+pending+' ⏳':' | ✅ كل مستلمة');
   // fmtExtraDate → global fmtAr
   tb.innerHTML=arr.length?arr.map(x=>{
     const rec=x.received||false;
@@ -4191,14 +4261,44 @@ function _doExport(data, count){
 
   XLSX.utils.book_append_sheet(wb,ws,'الجدول الشامل');
 
+  // ── ورقة الإجازات ──
+  const lHeaders=['الاسم','رقم الوظيفي','الوردية','نوع الإجازة','من','إلى','الأيام','ملاحظات'];
+  const lRows=[lHeaders];
+  let lastShiftL='';
+  exportEmps.forEach(e=>{
+    if(e.shift!==lastShiftL){lastShiftL=e.shift;lRows.push(['── وردية '+(SHNAMES[e.shift]||e.shift)+' ──','','','','','','','']);}
+    allLeaves.filter(l=>String(l.empId)===String(e.empId)).forEach(l=>{
+      lRows.push([e.name,e.empId,SHNAMES[e.shift]||e.shift,l.type,l.start,l.end||'',l.days,l.note||'']);
+    });
+  });
+  const wsL=XLSX.utils.aoa_to_sheet(lRows);
+  wsL['!cols']=[{wch:22},{wch:12},{wch:10},{wch:12},{wch:12},{wch:12},{wch:8},{wch:20}];
+  if(lRows[0]) { const hr2=XLSX.utils.decode_range(wsL['!ref']); for(let cc=hr2.s.c;cc<=hr2.e.c;cc++){const a=XLSX.utils.encode_cell({r:0,c:cc});if(wsL[a])wsL[a].s={font:{bold:true,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'1B5E20'}},alignment:{horizontal:'center'}};} }
+  XLSX.utils.book_append_sheet(wb,wsL,'الإجازات');
+
+  // ── ورقة الساعات الإضافية ──
+  const xHeaders=['الاسم','رقم الوظيفي','الوردية','التاريخ','الساعات','النوع','الاستلام','ملاحظات'];
+  const xRows=[xHeaders];
+  let lastShiftX='';
+  exportEmps.forEach(e=>{
+    if(e.shift!==lastShiftX){lastShiftX=e.shift;xRows.push(['── وردية '+(SHNAMES[e.shift]||e.shift)+' ──','','','','','','','']);}
+    allExtras.filter(x=>String(x.empId)===String(e.empId)).forEach(x=>{
+      xRows.push([e.name,e.empId,SHNAMES[e.shift]||e.shift,x.date,x.hrs,x.type,x.received?'مُستلم':'لم يُستلم',x.note||'']);
+    });
+  });
+  const wsX=XLSX.utils.aoa_to_sheet(xRows);
+  wsX['!cols']=[{wch:22},{wch:12},{wch:10},{wch:12},{wch:8},{wch:12},{wch:10},{wch:20}];
+  if(xRows[0]) { const hr3=XLSX.utils.decode_range(wsX['!ref']); for(let cc=hr3.s.c;cc<=hr3.e.c;cc++){const a=XLSX.utils.encode_cell({r:0,c:cc});if(wsX[a])wsX[a].s={font:{bold:true,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'4A148C'}},alignment:{horizontal:'center'}};} }
+  XLSX.utils.book_append_sheet(wb,wsX,'الساعات الإضافية');
+
   // Generate filename
   const d=new Date();
   const dateStr=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-  const role=VR==='مشرف'?'_وردية_'+(SHNAMES[U.shift]||U.shift):'_كامل';
-  const fname='الجدول_الشامل'+role+'_'+dateStr+'.xlsx';
+  const role=VR==='مشرف'?'_وردية_'+(SHNAMES[U.shift]||U.shift):VR==='موظف'?'_بياناتي':'_كامل';
+  const fname='تقرير_الورديات'+role+'_'+dateStr+'.xlsx';
 
   XLSX.writeFile(wb,fname);
-  toast('✅ تم تصدير '+count+' موظف إلى '+fname,'success');
+  toast('✅ تم تصدير '+count+' موظف ('+wb.SheetNames.length+' أوراق) إلى '+fname,'success');
 }
 
 
