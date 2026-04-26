@@ -1499,7 +1499,7 @@ function updateTop(){
 }
 
 
-async function loadAll(){const r=await gas('getEmployees');if(r.ok)emps=r.data;renderEmpTbl();markTransferredRows();renderShTbl();buildDash();if(VR==='مدير')loadSets();}
+async function loadAll(){const r=await gas('getEmployees');if(r.ok)emps=r.data;renderEmpTbl();markTransferredRows();if(document.getElementById("page-sh").style.display!=="none")renderShTbl();buildDash();if(VR==='مدير')loadSets();}
 async function loadSets(){const r=await gas('getSettings');if(r.ok){const si=document.getElementById('sMId');if(si)si.value=r.data.mgrId||'';const sn=document.getElementById('sMNm');if(sn)sn.value=r.data.mgrName||'';const sd=document.getElementById('sheetId');if(sd)sd.textContent=SHEET_ID;const me=document.getElementById('sMgrEmpId');if(me){const saved=U.mgrEmpId||localStorage.getItem('seMgrEmpId')||'';me.value=saved;if(saved&&!U.mgrEmpId){U.mgrEmpId=saved;sessionStorage.setItem('seU',JSON.stringify(U));}}}}
 
 // DASHBOARD
@@ -1933,39 +1933,119 @@ function filterEmp(){
     row.style.display=(matchQ&&matchSh&&matchRl)?'':'none';
   });
 }
-function renderShTbl(){
+async function renderShTbl(){
   const tb=document.getElementById('shTb');
-  if(!tb||VR!=='مشرف')return;
-  const ms=U.shift;
-  const se=emps.filter(e=>e.shift===ms && String(e.empId)!==String(U.empId));
+  if(!tb) return;
+  const ms=(VR==='مدير')?null:U.shift;
+  const allShiftE = ms ? emps.filter(e=>e.shift===ms) : emps;
+
+  // Titles
   const shTitleEl=document.getElementById('shTitle');
-  if(shTitleEl) shTitleEl.textContent='موظفو '+(SHNAMES[ms]||ms);
+  if(shTitleEl) shTitleEl.textContent='📋 '+(ms?'موظفو '+(SHNAMES[ms]||ms):'جميع الموظفين');
+  const shCompTitleEl=document.getElementById('shCompTitle');
+  if(shCompTitleEl) shCompTitleEl.textContent='الجدول الشامل'+(ms?' - '+(SHNAMES[ms]||ms):'');
   const supLblEl=document.getElementById('supLbl');
-  if(supLblEl) supLblEl.textContent=SHNAMES[ms]||ms;
-  if(!se.length){
-    tb.innerHTML='<tr><td colspan="6" class="no-data">لا يوجد موظفون في ورديتك</td></tr>';
-    return;
+  if(supLblEl) supLblEl.textContent=ms?SHNAMES[ms]||ms:'كل الورديات';
+
+  // Show loading
+  tb.innerHTML='<tr><td colspan="20" class="no-data" style="padding:20px"><span style="color:var(--text2)">⏳ جاري التحميل من قاعدة البيانات...</span></td></tr>';
+
+  // Fetch fresh data from GAS
+  try{
+    const [lr,xr,ir]=await Promise.all([
+      gas('اجازات_جلب',ms?{shift:ms}:{}).catch(()=>({ok:false})),
+      gas('اضافي_جلب',ms?{shift:ms}:{}).catch(()=>({ok:false})),
+      gas('بيانات_جلب',{}).catch(()=>({ok:false}))
+    ]);
+    if(lr.ok&&lr.data) allLeaves=lr.data; else allLeaves=getLeaves();
+    if(xr.ok&&xr.data) allExtras=xr.data; else allExtras=getExtras();
+    if(ir.ok&&ir.data) allInfos=ir.data; else allInfos=getInfos();
+  }catch(e){ allLeaves=getLeaves();allExtras=getExtras();allInfos=getInfos(); }
+
+  // Build header
+  const thead=document.getElementById('shCompThead');
+  const b3n=getBadgeName?getBadgeName('badge3'):'المستلم';
+  if(thead){
+    const groups=[
+      {l:'👤 الموظف',n:4,c:'th-group-id'},
+      {l:'🪪 البطاقات',n:6,c:'th-group-card'},
+      {l:'📅 سنوية',n:3,c:'th-group-leave'},
+      {l:'📋 مجدولة',n:3,c:'th-group-leave2'},
+      {l:'📍 الموقع',n:2,c:'th-group-info'},
+      {l:'🛠️ إجراءات',n:1,c:'th-group-id'}
+    ];
+    const cols=[
+      {l:'الاسم',c:'th-group-id'},{l:'الرقم',c:'th-group-id'},{l:'الجوال',c:'th-group-id'},{l:'الدور',c:'th-group-id'},
+      {l:'انتهاء بطاقة العمل',c:'th-group-card'},{l:'متبقي',c:'th-group-card'},
+      {l:'انتهاء المصدر',c:'th-group-card'},{l:'متبقي',c:'th-group-card'},
+      {l:'انتهاء '+b3n,c:'th-group-card'},{l:'متبقي',c:'th-group-card'},
+      {l:'رصيد سنوية',c:'th-group-leave'},{l:'مستهلك',c:'th-group-leave'},{l:'متبقي',c:'th-group-leave'},
+      {l:'رصيد مجدولة',c:'th-group-leave2'},{l:'مستهلك',c:'th-group-leave2'},{l:'متبقي',c:'th-group-leave2'},
+      {l:'المنطقة',c:'th-group-info'},{l:'المركز',c:'th-group-info'},
+      {l:'إجراءات',c:'th-group-id'}
+    ];
+    thead.innerHTML='<tr>'+groups.map(g=>'<th colspan="'+g.n+'" class="'+g.c+'" style="text-align:center;border-left:2px solid var(--border)">'+g.l+'</th>').join('')+'</tr>'
+      +'<tr>'+cols.map(col=>'<th class="'+col.c+'" style="font-size:10px">'+col.l+'</th>').join('')+'</tr>';
   }
-  const rows=[];
-  se.forEach(function(e){
+
+  // Build rows
+  const now=new Date(); now.setHours(0,0,0,0);
+  const rows=allShiftE.map(function(e){
+    const info=allInfos.find(x=>String(x.empId)===String(e.empId))||{};
+    const bal=getBalances(e.empId);
+    const el2=allLeaves.filter(l=>String(l.empId)===String(e.empId));
+    const usedA=el2.filter(l=>l.type==='سنوية').reduce(function(s,l){return s+(Number(l.days)||0);},0);
+    const usedS=el2.filter(l=>l.type==='مجدولة').reduce(function(s,l){return s+(Number(l.days)||0);},0);
     const isSup=e.role==='مشرف';
     const eid=String(e.empId);
-    const promBtn='<button class="btn btn-sm" style="background:rgba(139,92,246,.15);color:#8B5CF6;border:1px solid rgba(139,92,246,.3);border-radius:20px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif" onclick="promoteEmp(&quot;'+eid+'&quot;)">⬆️ ترقية</button>';
-    const demBtn='<button class="btn btn-dng btn-sm" onclick="demoteEmp(&quot;'+eid+'&quot;)">⬇️ تنزيل</button>';
-    const editBtn='<button class="btn btn-sec btn-sm" onclick="editShEmp(&quot;'+eid+'&quot;)">✏️</button>';
-    // Transfer dropdown - supervisor can transfer to other shifts
-    const toOpts2=SHIFTS.filter(function(s){return s!==ms;}).map(function(s){return '<option value=\''+s+'\'>'+SHNAMES[s]+'</option>';}).join('');
-    const transferSel='<select style="padding:4px 6px;border-radius:10px;background:var(--ibg);border:1px solid var(--border);color:var(--text);font-family:Cairo,sans-serif;font-size:11px;cursor:pointer;max-width:80px" onchange="supTransfer(this,\''+eid+'\')"><option value="">↕️</option>'+toOpts2+'</select>';
-    rows.push('<tr>'
-      +'<td><b>'+e.empId+'</b></td>'
-      +'<td>'+e.name+'</td>'
-      +'<td>'+e.phone+'</td>'
-      +'<td>'+stBadge(e.status)+'</td>'
+    const isMe=eid===String(U.empId);
+    const shiftOpts=SHIFTS.filter(function(s){return s!==e.shift;}).map(function(s){return '<option value="'+s+'">'+SHNAMES[s]+'</option>';}).join('');
+    const transSel='<select data-eid="'+eid+'" onchange="supTransfer(this,this.dataset.eid)" style="padding:3px 5px;border-radius:8px;background:var(--ibg);border:1px solid var(--border);color:var(--text);font-family:Cairo,sans-serif;font-size:10px;max-width:70px"><option value="">↕️</option>'+shiftOpts+'</select>';
+    const promBtn='<button class="btn btn-sm" style="background:rgba(139,92,246,.15);color:#8B5CF6;border:1px solid rgba(139,92,246,.3);border-radius:20px;padding:3px 8px;font-size:10px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif" onclick="promoteEmp(&quot;'+eid+'&quot;)">⬆️</button>';
+    const demBtn='<button class="btn btn-dng btn-sm" style="padding:3px 8px;font-size:10px" onclick="demoteEmp(&quot;'+eid+'&quot;)">⬇️</button>';
+    const editBtn='<button class="btn btn-sec btn-sm" style="padding:3px 8px;font-size:11px" onclick="editShEmp(&quot;'+eid+'&quot;)">✏️</button>';
+    return '<tr>'
+      +'<td style="min-width:130px;text-align:right"><b>'+e.name+'</b>'+(isMe?' <span style="font-size:9px;color:var(--primary)">(أنت)</span>':'')+'</td>'
+      +'<td style="color:var(--primary)"><b>'+e.empId+'</b></td>'
+      +'<td dir="ltr">'+e.phone+'</td>'
       +'<td>'+(isSup?'<span class="badge b-sup">⭐ مشرف</span>':'موظف')+'</td>'
-      +'<td style="white-space:nowrap;display:flex;gap:3px;align-items:center">'+editBtn+' '+(isSup?demBtn:promBtn)+' '+transferSel+'</td>'
-      +'</tr>');
+      +'<td style="font-size:11px">'+badgeDate(info.badge1)+'</td><td>'+badgeBadge(info.badge1)+'</td>'
+      +'<td style="font-size:11px">'+badgeDate(info.badge2)+'</td><td>'+badgeBadge(info.badge2)+'</td>'
+      +'<td style="font-size:11px">'+badgeDate(info.badge3)+'</td><td>'+badgeBadge(info.badge3)+'</td>'
+      +'<td>'+balBadge(bal.annual)+'</td>'
+      +'<td>'+(usedA?'<span class="days-badge days-warn">'+usedA+'</span>':'<span class="days-badge days-ok">0</span>')+'</td>'
+      +'<td>'+balBadge((bal.annual||0)-usedA)+'</td>'
+      +'<td>'+balBadge(bal.scheduled)+'</td>'
+      +'<td>'+(usedS?'<span class="days-badge days-warn">'+usedS+'</span>':'<span class="days-badge days-ok">0</span>')+'</td>'
+      +'<td>'+balBadge((bal.scheduled||0)-usedS)+'</td>'
+      +'<td>'+(info.region||'—')+'</td>'
+      +'<td style="min-width:90px">'+(info.center||'—')+'</td>'
+      +'<td style="white-space:nowrap">'+editBtn+' '+(isSup?demBtn:promBtn)+' '+transSel+'</td>'
+      +'</tr>';
   });
-  tb.innerHTML=rows.join('');
+
+  tb.innerHTML=rows.length?rows.join(''):'<tr><td colspan="20" class="no-data">لا يوجد موظفون</td></tr>';
+
+  // Count badge
+  const cnt=document.getElementById('shCompCount');
+  if(cnt) cnt.textContent=allShiftE.length+' موظف';
+
+  // Summary stats
+  const ss=document.getElementById('shSummaryStats');
+  if(ss){
+    const leavesNow=allLeaves.filter(l=>{const ds=parseAnyDate(l.start),de=parseAnyDate(l.end);return ds&&de&&ds<=now&&de>=now;});
+    ss.innerHTML=[
+      {i:'👥',v:allShiftE.length,l:'إجمالي',c:'si-b'},
+      {i:'⭐',v:allShiftE.filter(e=>e.role==='مشرف').length,l:'مشرفون',c:'si-o'},
+      {i:'🏖️',v:leavesNow.length,l:'في إجازة',c:'si-p'},
+      {i:'✅',v:allShiftE.filter(e=>e.status==='نشط').length,l:'نشطون',c:'si-g'}
+    ].map(x=>'<div class="sc" style="padding:12px;flex-direction:column;gap:3px"><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><div class="si '+x.c+'" style="width:30px;height:30px;font-size:13px">'+x.i+'</div><div style="font-size:20px;font-weight:900">'+x.v+'</div></div><div style="font-size:10px;color:var(--text2)">'+x.l+'</div></div>').join('');
+  }
+}
+
+function filterShComp(){
+  const q=(document.getElementById('shSrch')?.value||'').toLowerCase();
+  document.querySelectorAll('#shTb tr').forEach(r=>{ r.style.display=r.textContent.toLowerCase().includes(q)?'':'none'; });
 }  
 function filterSh(){const q=document.getElementById('shSrch').value.toLowerCase();document.querySelectorAll('#shTb tr').forEach(r=>r.style.display=r.textContent.toLowerCase().includes(q)?'':'none');}
 
@@ -4188,11 +4268,11 @@ async function exportComprehensiveExcel(){
 
   // Use SheetJS
   if(typeof XLSX==='undefined'){
-    // Load SheetJS dynamically
+    toast('⏳ جاري تحميل مكتبة Excel...','info');
     const scr=document.createElement('script');
     scr.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
-    scr.onload=()=>_doExport(data,exportEmps.length);
-    scr.onerror=()=>toast('❌ فشل تحميل مكتبة Excel','error');
+    scr.onload=function(){ _doExport(data,exportEmps.length); };
+    scr.onerror=function(){ toast('❌ فشل تحميل مكتبة Excel - تحقق من الاتصال','error'); };
     document.head.appendChild(scr);
   } else {
     _doExport(data,exportEmps.length);
