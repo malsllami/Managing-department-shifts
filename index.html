@@ -865,7 +865,9 @@ body.light input:-webkit-autofill:focus {
             <div style="display:flex;gap:8px;flex-wrap:wrap">
               <button class="btn btn-primary btn-sm" style="width:auto" onclick="saveGasUrl()">🔗 ربط وتفعيل</button>
               <button class="btn btn-sec btn-sm" onclick="initSheets()">🔧 تهيئة الجداول</button>
+              <button class="btn btn-sec btn-sm" style="background:rgba(0,200,150,.1);border-color:rgba(0,200,150,.3);color:var(--success)" onclick="addMissingColumnsGAS()">➕ إضافة الأعمدة الناقصة</button>
               <button class="btn btn-sec btn-sm" onclick="testGasConnection()">🧪 اختبار الاتصال</button>
+              <button class="btn btn-dng btn-sm" style="margin-top:8px" onclick="clearAllDataGAS()">🗑️ مسح جميع البيانات</button>
               <button class="btn btn-sec btn-sm" onclick="loadAll()">🔄 تحديث</button>
               <button class="btn btn-dng btn-sm" onclick="clearDemoData()">🗑️ حذف البيانات التجريبية</button>
               <button class="btn btn-sec btn-sm" onclick="syncComprehensiveSheet()" title="تحديث الجدول الشامل في Sheets">📊 تحديث الجدول الشامل</button>
@@ -1187,12 +1189,17 @@ body.light input:-webkit-autofill:focus {
         <div class="form-group"><label>رقم الجوال <span>*</span></label><input type="text" id="fPh" class="finp" placeholder="05xxxxxxxx" oninput="norm(this)"></div>
         <div class="form-group"><label>القسم</label><input type="text" id="fDp" class="finp" placeholder="اسم القسم"></div>
         <div class="form-group"><label>الوردية</label><select id="fSh" class="finp"><option value="أ">وردية أ</option><option value="ب">وردية ب</option><option value="ج">وردية ج</option><option value="د">وردية د</option></select></div>
-        <div class="form-group"><label>الدور</label><select id="fRl" class="finp"><option value="موظف">موظف</option><option value="مشرف">مشرف</option></select></div>
+        <div class="form-group"><label>الدور</label><select id="fRl" class="finp" onchange="toggleSupPwField(this.value)"><option value="موظف">موظف</option><option value="مشرف">مشرف</option></select></div>
         <div class="form-group"><label>الحالة</label><select id="fSt" class="finp"><option value="نشط">نشط</option><option value="غير نشط">غير نشط</option></select></div>
         <div class="form-group"><label>المنطقة</label>
           <select id="fRegion" class="finp"><option value="">-- اختر --</option><option>شمال</option><option>وسط</option><option>جنوب</option><option>غرب</option><option>شرق</option></select></div>
         <div class="form-group"><label>المركز</label><input type="text" id="fCenter" class="finp" placeholder="اسم المركز"></div>
         <div class="form-group full"><label>ملاحظات</label><input type="text" id="fNt" class="finp" placeholder="اختيارية"></div>
+        <div class="form-group full" id="fSupPwWrap" style="display:none;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.2);border-radius:var(--rsm);padding:12px">
+          <label style="color:#8B5CF6;font-weight:800">🔐 كلمة مرور المشرف</label>
+          <p style="font-size:11px;color:var(--text2);margin:4px 0 8px">كلمة المرور التي سيستخدمها المشرف لتسجيل الدخول (مختلفة عن رقم الجوال)</p>
+          <input type="text" id="fSupPw" class="finp" placeholder="أدخل كلمة مرور للمشرف..." autocomplete="off">
+        </div>
       </div>
 
       <!-- قسم البطاقات -->
@@ -1406,10 +1413,25 @@ async function loginEmp(){
   if(!r.ok){showAl('loginAlert','d','خطأ في الاتصال');setLd('eBtn',false);return;}
   const e=r.data.find(x=>String(x.empId)===String(id));
   if(!e){showAl('loginAlert','d','رقم الوظيفي غير صحيح');setLd('eBtn',false);return;}
-  if(normPh(pw)!==normPh(e.phone)&&pw!==e.phone){showAl('loginAlert','d','كلمة المرور غير صحيحة');setLd('eBtn',false);return;}
+
+  if(e.role==='مشرف'){
+    // Supervisor: must use supPassword (set by manager), not phone
+    if(!e.supPassword){
+      showAl('loginAlert','d','لم يتم تعيين كلمة مرور للمشرف - تواصل مع المدير');
+      setLd('eBtn',false);return;
+    }
+    if(pw!==e.supPassword){
+      showAl('loginAlert','d','كلمة المرور غير صحيحة');setLd('eBtn',false);return;
+    }
+  } else {
+    // Employee: uses phone number as password
+    if(normPh(pw)!==normPh(e.phone)&&pw!==e.phone){
+      showAl('loginAlert','d','كلمة المرور غير صحيحة');setLd('eBtn',false);return;
+    }
+  }
+
   emps=r.data;U={...e,viewRole:e.role};VR=e.role;
   sessionStorage.setItem('seU',JSON.stringify(U));
-  // Track active session
   trackSession(e.empId, e.name, e.shift);
   setLd('eBtn',false);startApp();
 }
@@ -2052,19 +2074,25 @@ function filterSh(){const q=document.getElementById('shSrch').value.toLowerCase(
 // ADD/EDIT EMP
 function openAdd(){editIdx=-1;document.getElementById('mEmpTit').textContent='إضافة موظف جديد';['fId','fNm','fPh','fDp','fNt'].forEach(x=>{const el=document.getElementById(x);el.value='';el.disabled=false;});['fSh','fRl','fSt'].forEach(x=>{const el=document.getElementById(x);el.selectedIndex=0;el.disabled=false;});const fr=document.getElementById('fRegion');if(fr){fr.value='';fr.disabled=false;}const fc=document.getElementById('fCenter');if(fc){fc.value='';fc.disabled=false;}
   loadCustomBadgeFields(); clearAllBadgeFields();
+  const spw=document.getElementById('fSupPw');if(spw)spw.value='';
+  const spww=document.getElementById('fSupPwWrap');if(spww)spww.style.display='none';
   hideAl('mEmpAl');openM('mEmp');}
 function openAddShift(){editIdx=-1;document.getElementById('mEmpTit').textContent='إضافة موظف للوردية';['fId','fNm','fPh','fDp','fNt'].forEach(x=>{const el=document.getElementById(x);el.value='';el.disabled=false;});document.getElementById('fSh').value=U.shift;document.getElementById('fSh').disabled=true;document.getElementById('fRl').value='موظف';document.getElementById('fRl').disabled=true;document.getElementById('fSt').selectedIndex=0;document.getElementById('fSt').disabled=false;const fr=document.getElementById('fRegion');if(fr){fr.value='';fr.disabled=false;}const fc=document.getElementById('fCenter');if(fc){fc.value='';fc.disabled=false;}
   loadCustomBadgeFields(); clearAllBadgeFields();
+  const spw=document.getElementById('fSupPw');if(spw)spw.value='';
+  const spww=document.getElementById('fSupPwWrap');if(spww)spww.style.display='none';
   hideAl('mEmpAl');openM('mEmp');}
 function editEmp(i){const e=emps[i];if(!e)return;editIdx=i;document.getElementById('mEmpTit').textContent='تعديل بيانات الموظف';document.getElementById('fId').value=e.empId;document.getElementById('fId').disabled=false;document.getElementById('fNm').value=e.name;document.getElementById('fPh').value=e.phone;document.getElementById('fDp').value=e.dept||'';document.getElementById('fSh').value=e.shift;document.getElementById('fSh').disabled=false;document.getElementById('fRl').value=e.role;document.getElementById('fRl').disabled=false;document.getElementById('fSt').value=e.status;document.getElementById('fSt').disabled=false;document.getElementById('fNt').value=e.note||'';
   const ei=getInfos().find(x=>String(x.empId)===String(e.empId))||{};
   const fr=document.getElementById('fRegion');if(fr){fr.value=ei.region||'';fr.disabled=false;}
   const fc=document.getElementById('fCenter');if(fc){fc.value=ei.center||'';fc.disabled=false;}
   loadCustomBadgeFields();
-  // Build badge data from info object
   const badgeData={};
   Object.keys(ei).filter(k=>k.startsWith('badge')).forEach(k=>{ badgeData[k]=ei[k]||''; });
   setAllBadgeValues(badgeData);
+  // Load supPassword
+  const spw=document.getElementById('fSupPw');if(spw)spw.value=e.supPassword||'';
+  toggleSupPwField(e.role);
   hideAl('mEmpAl');openM('mEmp');}
 function editShEmp(eid){const e=emps.find(x=>String(x.empId)===String(eid));if(!e)return;editEmp(emps.indexOf(e));document.getElementById('fSh').disabled=true;document.getElementById('fRl').disabled=true;}
 async function saveEmp(){
@@ -4486,6 +4514,46 @@ function initArabicNumerals(){
       }
     }
   }, true);
+}
+
+
+function toggleSupPwField(role){
+  const wrap=document.getElementById('fSupPwWrap');
+  if(wrap) wrap.style.display=role==='مشرف'?'block':'none';
+}
+
+
+async function addMissingColumnsGAS(){
+  if(!confirm('سيتم إضافة الأعمدة الناقصة دون حذف أي بيانات. متأكد؟')) return;
+  toast('⏳ جاري إضافة الأعمدة...','info');
+  const r = await gas('اضافة_اعمدة',{});
+  if(r.ok){
+    toast('✅ تم!','success');
+    // Show details
+    if(r.details){
+      showInfoModal('نتيجة إضافة الأعمدة', '<div style="font-size:13px;line-height:2">' + r.details.join('<br>') + '</div>');
+    }
+  } else {
+    toast('❌ خطأ: '+(r.error||''),'error');
+  }
+}
+
+async function clearAllDataGAS(){
+  if(!confirm('⚠️ تحذير: مسح جميع البيانات (موظفين، إجازات، إضافي، أرصدة). الاحتفاظ: بيانات المدير + أنواع الإجازات فقط. متأكد؟')) return;
+  if(!confirm('تأكيد ثانٍ - لا يمكن التراجع. اضغط موافق للمتابعة.')) return;
+  toast('⏳ جاري مسح البيانات...','info');
+  const r = await gas('مسح_البيانات',{});
+  if(r.ok){
+    // Clear local cache too
+    emps=[];allLeaves=[];allExtras=[];allInfos=[];
+    localStorage.removeItem('seDB');
+    toast('✅ تم مسح البيانات','success');
+    if(r.details){
+      showInfoModal('نتيجة المسح', '<div style="font-size:13px;line-height:2">' + r.details.join('<br>') + '</div>');
+    }
+  } else {
+    toast('❌ خطأ: '+(r.error||''),'error');
+  }
 }
 
 window.onload=()=>{
