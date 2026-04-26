@@ -1303,6 +1303,30 @@ body.light input:-webkit-autofill:focus {
         <div class="form-group full" style="background:rgba(0,149,217,.06);border:1px solid var(--border);border-radius:var(--rsm);padding:10px 12px">
           <p style="font-size:12px;color:var(--text2);margin:0">💡 جميع الحقول قابلة للتعديل. تغيير الوردية ينقل الموظف للوردية الجديدة.</p>
         </div>
+        <!-- رمز الإشراف - يظهر للمشرف فقط -->
+        <div class="form-group full" id="supCodeWrap" style="display:none;border-top:1px solid var(--border);padding-top:12px;margin-top:4px">
+          <div style="background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.25);border-radius:var(--rsm);padding:14px 16px">
+            <h4 style="font-size:13px;font-weight:800;color:#8B5CF6;margin:0 0 6px">🔐 رمز الإشراف</h4>
+            <p style="font-size:11px;color:var(--text2);margin:0 0 12px">هذا الرمز يُستخدم بدلاً من رقم الجوال لتسجيل الدخول كمشرف. اتركه فارغاً للاستمرار بالجوال.</p>
+            <div class="fgrid" style="grid-template-columns:1fr 1fr;gap:10px">
+              <div class="form-group" style="margin:0">
+                <label style="font-size:11px;font-weight:700">رمز الإشراف الجديد</label>
+                <div class="fw"><span class="fic r">🔐</span>
+                  <input type="password" id="pSupCode" class="nol" placeholder="أدخل رمزاً جديداً..." autocomplete="new-password" style="padding-right:42px">
+                  <button type="button" class="fic l" onclick="ep(this,'pSupCode')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                </div>
+              </div>
+              <div class="form-group" style="margin:0">
+                <label style="font-size:11px;font-weight:700">تأكيد الرمز</label>
+                <div class="fw"><span class="fic r">🔐</span>
+                  <input type="password" id="pSupCode2" class="nol" placeholder="أعد إدخال الرمز..." autocomplete="new-password" style="padding-right:42px">
+                  <button type="button" class="fic l" onclick="ep(this,'pSupCode2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                </div>
+              </div>
+            </div>
+            <div id="supCodeStatus" style="font-size:11px;margin-top:8px;color:var(--text2)"></div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="m-ft"><button class="btn btn-sec" onclick="closeM('mProf')">إلغاء</button><button class="btn btn-primary" style="width:auto" onclick="saveProf()">💾 حفظ</button></div>
@@ -1429,20 +1453,11 @@ async function loginEmp(){
   const e=r.data.find(x=>String(x.empId)===String(id));
   if(!e){showAl('loginAlert','d','رقم الوظيفي غير صحيح');setLd('eBtn',false);return;}
 
-  if(e.role==='مشرف'){
-    // Supervisor: must use supPassword (set by manager), not phone
-    if(!e.supPassword){
-      showAl('loginAlert','d','لم يتم تعيين كلمة مرور للمشرف - تواصل مع المدير');
-      setLd('eBtn',false);return;
-    }
-    if(pw!==e.supPassword){
-      showAl('loginAlert','d','كلمة المرور غير صحيحة');setLd('eBtn',false);return;
-    }
-  } else {
-    // Employee: uses phone number as password
-    if(normPh(pw)!==normPh(e.phone)&&pw!==e.phone){
-      showAl('loginAlert','d','كلمة المرور غير صحيحة');setLd('eBtn',false);return;
-    }
+  // Supervisor: if supPassword set → use it, otherwise fallback to phone
+  // Employee: always uses phone
+  const correctPw = (e.role==='مشرف' && e.supPassword) ? e.supPassword : e.phone;
+  if(normPh(pw)!==normPh(correctPw) && pw!==correctPw){
+    showAl('loginAlert','d','كلمة المرور غير صحيحة');setLd('eBtn',false);return;
   }
 
   emps=r.data;U={...e,viewRole:e.role};VR=e.role;
@@ -2263,6 +2278,12 @@ function openEditProf(){
   const prlWrap=document.getElementById('pRoleWrap'); if(prlWrap) prlWrap.style.display=showRole?'block':'none';
   const prl=document.getElementById('pRl'); if(prl&&showRole) prl.value=editU.role||'موظف';
   document.getElementById('pShiftWrap').style.display='block';
+  // Show supCode section for supervisors (self or managed)
+  const scw=document.getElementById('supCodeWrap');
+  if(scw) scw.style.display=editU.role==='مشرف'?'block':'none';
+  const psc=document.getElementById('pSupCode'); if(psc) psc.value='';
+  const psc2=document.getElementById('pSupCode2'); if(psc2) psc2.value='';
+  const scs=document.getElementById('supCodeStatus'); if(scs) scs.textContent=editU.supPassword?'✅ رمز الإشراف مُعيَّن':'⚠️ لا يوجد رمز بعد - الدخول برقم الجوال';
   // Region/center
   const ei=getInfos().find(x=>String(x.empId)===String(editU.empId))||{};
   const pReg=document.getElementById('pRegion'); if(pReg){pReg.value=ei.region||'';pReg.disabled=false;}
@@ -2293,12 +2314,20 @@ async function saveProf(){
   const newShift = sh || targetEmp.shift;
   const newRole = (rl && VR==='مدير') ? rl : targetEmp.role;
 
+  // Supervisor code validation
+  const _nsc=document.getElementById('pSupCode')?.value.trim()||'';
+  const _nsc2=document.getElementById('pSupCode2')?.value.trim()||'';
+  if(_nsc&&_nsc!==_nsc2){showAl('mProfAl','d','رمز الإشراف غير متطابق');return;}
+  if(_nsc&&_nsc.length<4){showAl('mProfAl','d','رمز الإشراف يجب 4 أحرف على الأقل');return;}
+  const _fsp=_nsc||(targetEmp.supPassword||'');
   const r=await gas('updateEmployee',{
     empId:targetEmp.empId,name:nm,phone:ph,dept:dp,
     shift:newShift,role:newRole,
     status:targetEmp.status||'نشط',note:targetEmp.note||'',
-    originalEmpId:targetEmp.empId
+    originalEmpId:targetEmp.empId,
+    supPassword:newRole==='مشرف'?_fsp:''
   });
+  if(_nsc){const le=emps.find(e=>String(e.empId)===String(targetEmp.empId));if(le)le.supPassword=_nsc;const ss=document.getElementById('supCodeStatus');if(ss)ss.innerHTML='✅ تم حفظ رمز الإشراف';}
   if(!r.ok){showAl('mProfAl','d',r.error||'خطأ');return;}
 
   // Update session if editing own record
