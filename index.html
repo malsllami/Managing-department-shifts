@@ -2327,7 +2327,18 @@ async function saveProf(){
     originalEmpId:targetEmp.empId,
     supPassword:newRole==='مشرف'?_fsp:''
   });
-  if(_nsc){const le=emps.find(e=>String(e.empId)===String(targetEmp.empId));if(le)le.supPassword=_nsc;const ss=document.getElementById('supCodeStatus');if(ss)ss.innerHTML='✅ تم حفظ رمز الإشراف';}
+  if(_nsc){
+    // Update local cache
+    const le=emps.find(e=>String(e.empId)===String(targetEmp.empId));
+    if(le) le.supPassword=_nsc;
+    // Update current session if self
+    if(String(targetEmp.empId)===String(U.empId)){
+      U.supPassword=_nsc;
+      sessionStorage.setItem('seU',JSON.stringify(U));
+    }
+    const ss=document.getElementById('supCodeStatus');
+    if(ss) ss.innerHTML='<span style="color:var(--success);font-weight:700">✅ تم حفظ رمز الإشراف — يُستخدم عند الدخول التالي</span>';
+  }
   if(!r.ok){showAl('mProfAl','d',r.error||'خطأ');return;}
 
   // Update session if editing own record
@@ -3239,7 +3250,7 @@ function loadInfoEdit(empId){
 async function transferEmployee(empId, newShift) {
   const e=emps.find(x=>String(x.empId)===String(empId));
   if(!e)return;
-  const pay={...e, shift:newShift, transferDate:new Date().toISOString(), originalEmpId:e.empId};
+  const pay={...e, shift:newShift, transferDate:new Date().toISOString().split('T')[0], originalEmpId:e.empId};
   const r=await gas('updateEmployee',pay);
   if(r.ok){
     toast('✅ تم نقل الموظف إلى '+SHNAMES[newShift],'success');
