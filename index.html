@@ -528,8 +528,15 @@ caret-color: #0A1628;
 <script>
 // Apply theme class BEFORE CSS loads to prevent flash
 (function(){
+  // Fix CSS en-dash issue (copy-paste artifact from PDF/web)
+  var styles = document.querySelectorAll('style');
+  styles.forEach(function(s){
+    if(s.textContent.indexOf('–') >= 0) {
+      s.textContent = s.textContent.split('–').join('-').split('—').join('-');
+    }
+  });
   var t=localStorage.getItem('seTheme')||localStorage.getItem('seTh')||'dark';
-  document.documentElement.className=t; // apply on html element too
+  document.documentElement.className=t;
   document.addEventListener('DOMContentLoaded',function(){
     document.body.className=t;
   });
@@ -4565,6 +4572,13 @@ async function clearAllDataGAS(){
 }
 
 window.onload=()=>{
+  // Fix any en-dash/em-dash that GitHub Pages may have introduced
+  document.querySelectorAll('style').forEach(function(s){
+    var txt = s.textContent;
+    if(txt.indexOf('–')>=0 || txt.indexOf('—')>=0){
+      s.textContent = txt.split('–').join('-').split('—').join('-');
+    }
+  });
   applyTheme(); // run sync before anything else
   initArabicNumerals();
   // Force latest GAS URL
