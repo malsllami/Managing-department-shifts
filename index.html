@@ -4491,6 +4491,9 @@ function initArabicNumerals(){
 window.onload=()=>{
   applyTheme(); // run sync before anything else
   initArabicNumerals();
+  // Force latest GAS URL
+  localStorage.setItem('seGasUrl','https://script.google.com/macros/s/AKfycbylfXsVUV_3tfOwZen-xPAlV5iPbfH_GVNEyGXQYPjktHsaQAcWndtCahhV4dJrrHjG/exec');
+  window._GAS_URL_OVERRIDE='https://script.google.com/macros/s/AKfycbylfXsVUV_3tfOwZen-xPAlV5iPbfH_GVNEyGXQYPjktHsaQAcWndtCahhV4dJrrHjG/exec';
   try{cleanOldHighlights();}catch(e){}
   // Restore saved GAS URL
   try{
