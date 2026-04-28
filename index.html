@@ -2437,15 +2437,7 @@ function showPage(pg){
   updateBottomNavActive(pg);
   if(pg==='emp'){
   // Restore comprehensive view on desktop
-  if(window.innerWidth > 520 && compView==='simple'){
-    compView='comprehensive';
-    const cv=document.getElementById('comprehensiveCard');
-    const sv=document.getElementById('simpleEmpCard');
-    if(cv) cv.style.removeProperty('display');
-    if(sv) sv.style.display='none';
-    const btn=document.getElementById('viewToggleBtn');
-    if(btn) btn.textContent='📊 عرض مبسط';
-  }
+  // User controls the view toggle - don't force switch
   if(compView==='comprehensive'){allLeaves=getLeaves();allExtras=getExtras();allInfos=getInfos();}
   renderEmpTbl();
 }
