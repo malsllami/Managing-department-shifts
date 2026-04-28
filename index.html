@@ -1579,31 +1579,36 @@ function updateTop(){
 
 
 async function loadAll(){
-  // Load all data fresh from GAS
-  const [er,lr,xr,ir]=await Promise.all([
-    gas('getEmployees').catch(()=>({ok:false})),
-    gas('اجازات_جلب',{}).catch(()=>({ok:false})),
-    gas('اضافي_جلب',{}).catch(()=>({ok:false})),
-    gas('بيانات_جلب',{}).catch(()=>({ok:false}))
-  ]);
-  if(er.ok&&er.data) emps=er.data;
-  if(lr.ok&&lr.data) allLeaves=lr.data;
-  if(xr.ok&&xr.data) allExtras=xr.data;
-  if(ir.ok&&ir.data){
-    // Deduplicate infos by empId (keep last entry)
-    const infoMap={};
-    ir.data.forEach(inf=>{ if(inf.empId) infoMap[String(inf.empId)]=inf; });
-    allInfos=Object.values(infoMap);
-  }
-  // Build balances index from employees balances API
-  const br=await gas('ارصدة_جلب',{}).catch(()=>({ok:false}));
-  if(br.ok&&br.data){
-    allBalances={};
-    if(Array.isArray(br.data)){
-      br.data.forEach(b=>{ if(b&&b.empId) allBalances[String(b.empId)]={annual:Number(b.annual)||0,scheduled:Number(b.scheduled)||0}; });
-    } else if(br.data.empId){
-      allBalances[String(br.data.empId)]={annual:Number(br.data.annual)||0,scheduled:Number(br.data.scheduled)||0};
+  // Load ALL data in ONE request for speed
+  const all=await gas('كل_البيانات',{}).catch(()=>({ok:false}));
+  if(all.ok&&all.data){
+    if(all.data.emps)   emps=all.data.emps;
+    if(all.data.leaves) allLeaves=all.data.leaves;
+    if(all.data.extras) allExtras=all.data.extras;
+    if(all.data.infos){
+      const infoMap={};
+      all.data.infos.forEach(inf=>{ if(inf.empId) infoMap[String(inf.empId)]=inf; });
+      allInfos=Object.values(infoMap);
     }
+    if(all.data.balances){
+      allBalances={};
+      const balArr=Array.isArray(all.data.balances)?all.data.balances:[all.data.balances];
+      balArr.forEach(b=>{ if(b&&b.empId) allBalances[String(b.empId)]={annual:Number(b.annual)||0,scheduled:Number(b.scheduled)||0}; });
+    }
+  } else {
+    // Fallback: parallel individual requests
+    const [er,lr,xr,ir,br]=await Promise.all([
+      gas('getEmployees').catch(()=>({ok:false})),
+      gas('اجازات_جلب',{}).catch(()=>({ok:false})),
+      gas('اضافي_جلب',{}).catch(()=>({ok:false})),
+      gas('بيانات_جلب',{}).catch(()=>({ok:false})),
+      gas('ارصدة_جلب',{}).catch(()=>({ok:false}))
+    ]);
+    if(er.ok&&er.data) emps=er.data;
+    if(lr.ok&&lr.data) allLeaves=lr.data;
+    if(xr.ok&&xr.data) allExtras=xr.data;
+    if(ir.ok&&ir.data){const m={};ir.data.forEach(i=>{if(i.empId)m[String(i.empId)]=i;});allInfos=Object.values(m);}
+    if(br.ok&&br.data){allBalances={};const ba=Array.isArray(br.data)?br.data:[br.data];ba.forEach(b=>{if(b&&b.empId)allBalances[String(b.empId)]={annual:Number(b.annual)||0,scheduled:Number(b.scheduled)||0};});}
   }
   renderEmpTbl();markTransferredRows();
   if(document.getElementById("page-sh").style.display!=="none")renderShTbl();
@@ -2127,7 +2132,7 @@ async function renderShTbl(){
   const now=new Date(); now.setHours(0,0,0,0);
   const rows=allShiftE.map(function(e){
     const info=allInfos.find(x=>String(x.empId)===String(e.empId))||{};
-    const bal=getBalances(e.empId);
+    const bal=allBalances[String(e.empId)]||{annual:0,scheduled:0};
     const el2=allLeaves.filter(l=>String(l.empId)===String(e.empId));
     const usedA=el2.filter(l=>l.type==='سنوية').reduce(function(s,l){return s+(Number(l.days)||0);},0);
     const usedS=el2.filter(l=>l.type==='مجدولة').reduce(function(s,l){return s+(Number(l.days)||0);},0);
@@ -2342,8 +2347,8 @@ async function saveProfBalances(){
   const an=parseFloat(annEl?annEl.value:0)||0;
   const sc=parseFloat(schEl?schEl.value:0)||0;
 
-  // Save locally
-  saveBalanceData(dispU.empId,{annual:an,scheduled:sc});
+  // Update in-memory immediately
+  allBalances[String(dispU.empId)]={annual:an,scheduled:sc};
 
   // Save to GAS
   const gasUrl=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
@@ -2582,6 +2587,7 @@ function switchRole(r){
 // مرجع: الخميس 23 أبريل 2026
 // وردية ب: يوم 1 صباح | وردية ج: يوم 1 مساء | وردية د: يوم 1 أوف | وردية أ: يوم 3 أوف
 const CAL_REF_Y = 2026, CAL_REF_M = 4, CAL_REF_D = 23; // April 23, 2026
+const CAL_REF = new Date(2026, 3, 23); // April 23, 2026 (month is 0-indexed)
 const CYCLE8 = ['صباح','صباح','مساء','مساء','أوف','أوف','أوف','أوف'];
 const SHIFT_OFF = {'أ':6,'ب':0,'ج':2,'د':4};
 const SHIFT_COLORS = {'أ':'sh-a','ب':'sh-b','ج':'sh-c','د':'sh-d'};
@@ -2649,9 +2655,7 @@ function initCalendar() {
 
 function goToday() {
   const now = new Date();
-  // Always navigate to calendar page first
   showPage('cal');
-  // Wait for page to render
   setTimeout(function(){
     const monthSel = document.getElementById('calMonth');
     const yearSel  = document.getElementById('calYear');
@@ -2660,29 +2664,33 @@ function goToday() {
     monthSel.value = now.getMonth();
     yearSel.value  = now.getFullYear();
     renderCalendar();
-    // Find and highlight today cell
     setTimeout(function(){
-      const cells = document.querySelectorAll('.cal-day');
-      let todayCell = null;
-      cells.forEach(function(cell){
-        const numEl = cell.querySelector('.cal-day-num');
-        if(numEl && parseInt(numEl.textContent)===now.getDate() && !cell.classList.contains('other-month')){
-          todayCell = cell;
-        }
-      });
-      if(!todayCell) todayCell = document.querySelector('.cal-day.today');
+      // Find today cell by class first, then by day number
+      let todayCell = document.querySelector('.cal-day.today');
+      if(!todayCell){
+        document.querySelectorAll('.cal-day:not(.other-month)').forEach(function(cell){
+          const numEl = cell.querySelector('.cal-day-num');
+          if(numEl && parseInt(numEl.textContent) === now.getDate()) todayCell = cell;
+        });
+      }
       if(todayCell){
-        const mc = document.querySelector('.main-content');
-        if(mc){
-          const top = todayCell.offsetTop - 120;
-          mc.scrollTo({top: Math.max(0, top), behavior:'smooth'});
-        }
+        // Try all scrollable parents
+        todayCell.scrollIntoView({behavior:'smooth', block:'center'});
+        // Also try explicit scroll on known containers
+        ['.main-content','.main','main','#mainApp'].forEach(function(sel){
+          const el=document.querySelector(sel);
+          if(el&&el.scrollHeight>el.clientHeight){
+            const rect=todayCell.getBoundingClientRect();
+            const elRect=el.getBoundingClientRect();
+            el.scrollBy({top: rect.top - elRect.top - el.clientHeight/2, behavior:'smooth'});
+          }
+        });
         todayCell.style.outline = '3px solid var(--danger)';
         todayCell.style.boxShadow = '0 0 16px rgba(239,68,68,.6)';
         setTimeout(function(){ todayCell.style.outline=''; todayCell.style.boxShadow=''; }, 3000);
       }
-    }, 200);
-  }, 150);
+    }, 300);
+  }, 200);
 }
 
 function renderCalendar() {
@@ -2924,7 +2932,7 @@ function fillSelect(id){
   sel.innerHTML='<option value="">-- اختر الموظف --</option>';
   // Supervisor sees only their shift employees (not themselves); manager sees all
   const list = (VR==='مشرف')
-    ? emps.filter(function(e){ return e.shift===U.shift && String(e.empId)!==String(U.empId); })
+    ? emps.filter(function(e){ return e.shift===U.shift; })
     : emps;
   list.forEach(function(e){
     const o=document.createElement('option');
@@ -2978,11 +2986,19 @@ function onLeaveEmpChange(){
   if(id) loadBalancesDisplay(id);
   if(id&&isMgrOrSup()){ const sd=document.getElementById('balAnnual');const ss=document.getElementById('balScheduled');const b=getBalances(id);if(sd)sd.value=b.annual;if(ss)ss.value=b.scheduled; }
 }
-function loadBalancesDisplay(empId){
+async function loadBalancesDisplay(empId){
   if(!empId) return;
-  const b=getBalances(empId);
   const row=document.getElementById('balancesRow');
   if(!row) return;
+  // Get from memory or fetch from GAS
+  let b = allBalances[String(empId)];
+  if(!b || (Number(b.annual)===0 && Number(b.scheduled)===0)){
+    const br=await gas('ارصدة_جلب',{empId:String(empId)}).catch(()=>({ok:false}));
+    if(br.ok&&br.data&&br.data.empId){
+      b={annual:Number(br.data.annual)||0,scheduled:Number(br.data.scheduled)||0};
+      allBalances[String(empId)]=b;
+    } else { b=b||{annual:0,scheduled:0}; }
+  }
   row.innerHTML=`
     <span style="background:rgba(0,200,150,.12);color:var(--success);border:1px solid rgba(0,200,150,.25);padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700">
       📅 سنوية: <b>${b.annual}</b> يوم
@@ -2990,7 +3006,13 @@ function loadBalancesDisplay(empId){
     <span style="background:rgba(0,149,217,.12);color:var(--primary);border:1px solid var(--border);padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700">
       📋 مجدولة: <b>${b.scheduled}</b> يوم
     </span>`;
+  // Also fill the editor fields if visible
+  const annEl=document.getElementById('balAnnual');
+  const schEl=document.getElementById('balScheduled');
+  if(annEl&&!annEl.readOnly) annEl.value=b.annual||0;
+  if(schEl&&!schEl.readOnly) schEl.value=b.scheduled||0;
 }
+
 function saveBalances(){
   const id=isMgrOrSup()?document.getElementById('fLeaveEmp').value:getCurrentEmpId();
   if(!id){toast('اختر موظفاً أولاً','info');return;}
@@ -2998,10 +3020,9 @@ function saveBalances(){
   const sc=parseFloat(document.getElementById('balScheduled').value)||0;
   const empObj2=emps.find(e=>String(e.empId)===String(id));
   const ___gasUrl=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
+  // Update in-memory immediately
+  allBalances[String(id)]={annual:an,scheduled:sc};
   if(___gasUrl){ gas('ارصدة_حفظ',{empId:id,empName:empObj2?empObj2.name:'',annual:an,scheduled:sc}).then(r=>{if(!r.ok)console.warn('GAS bal:',r.error);}); }
-  else { saveBalanceData(id,{annual:an,scheduled:sc}); }
-  // Update localStorage mirror
-  saveBalanceData(id,{annual:an,scheduled:sc});
   loadBalancesDisplay(id);
   toast('✅ تم حفظ الأرصدة','success');
 }
@@ -3131,18 +3152,24 @@ function saveLeave(){
 async function renderLeaveTable(){
   const tb=document.getElementById('leaveTb');if(!tb)return;
   const gasUrl=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
-  const empId=isMgrOrSup()?null:getCurrentEmpId();
-  const arr = gasUrl ? await fetchLeaves(empId) : getLeaves();
+  // Supervisor sees only their shift; manager sees all; employee sees own
+  const empId = VR==='موظف' ? getCurrentEmpId() : null;
+  let arr = gasUrl ? await fetchLeaves(empId) : getLeaves();
+  // Filter by shift for supervisor
+  if(VR==='مشرف'){
+    const shiftIds = emps.filter(e=>e.shift===U.shift).map(e=>String(e.empId));
+    arr = arr.filter(l=>shiftIds.includes(String(l.empId)));
+  }
   tb.innerHTML=arr.length?arr.map(l=>{
     // dates: use global fmtAr
-    return `<tr>
+    return `<tr data-lid="${l.id}">
       <td><b>${l.empName}</b>${l.region?'<br><small style="color:var(--text3)">'+l.region+(l.center?' / '+l.center:'')+'</small>':''}</td>
       <td>${l.type}</td>
       <td>${fmtAr(l.start)}</td>
       <td>${fmtAr(l.end)}</td>
       <td><b>${l.days}</b> يوم</td>
       <td>${l.note||'-'}</td>
-      <td><button class="btn btn-dng btn-sm" onclick="if(confirm('حذف هذه الإجازة؟'))deleteLeave('${l.id}')">🗑️</button></td>
+      <td style="white-space:nowrap"><button class="btn btn-sec btn-sm" style="margin-left:3px" onclick="editLeaveRow('${l.id}')">✏️</button><button class="btn btn-dng btn-sm" onclick="if(confirm('حذف هذه الإجازة؟'))deleteLeave('${l.id}')">🗑️</button></td>
     </tr>`;
   }).join(''):'<tr><td colspan="7" class="no-data">لا يوجد طلبات</td></tr>';
 }
@@ -3203,8 +3230,13 @@ async function toggleExtraReceived(id,btn){
 async function renderExtraTable(){
   const tb=document.getElementById('extraTb');if(!tb)return;
   const gasUrl2=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
-  const empId2=isMgrOrSup()?null:getCurrentEmpId();
+  const empId2 = VR==='موظف' ? getCurrentEmpId() : null;
   let arr = gasUrl2 ? await fetchExtras(empId2) : getExtras();
+  // Filter by shift for supervisor
+  if(VR==='مشرف'){
+    const shiftIdsX=emps.filter(e=>e.shift===U.shift).map(e=>String(e.empId));
+    arr=arr.filter(x=>shiftIdsX.includes(String(x.empId)));
+  }
 
   // Populate month filter
   const monthSel=document.getElementById('extraFilterMonth');
@@ -3256,7 +3288,7 @@ async function deleteExtra(id){if(!confirm('حذف السجل؟'))return;
 // ---- EMP INFO ----
 function getInfos(){return allInfos;}
 function saveInfos(arr){allInfos=arr;}
-function saveInfos(arr){localStorage.setItem('seInfos',JSON.stringify(arr));}
+
 async function fetchInfos(empId){
   const p=empId?{empId}:{};
   const r=await gas('بيانات_جلب',p);
@@ -3340,9 +3372,17 @@ async function renderInfoTable(){
   </tr>`).join(''):'<tr><td colspan="9" class="no-data">لا يوجد بيانات</td></tr>';
 }
 function loadInfoEdit(empId){
-  if(isMgrOrSup()) document.getElementById('fInfoEmp').value=empId;
+  // Switch to info tab
+  switchFormTab('info');
+  // Set employee selector
+  if(isMgrOrSup()){
+    const sel=document.getElementById('fInfoEmp');
+    if(sel) sel.value=empId;
+  }
   loadInfoEditForEmp(empId);
-  document.getElementById('fsec-info').scrollIntoView({behavior:'smooth'});
+  // Scroll to form top
+  const fsec=document.getElementById('fsec-info');
+  if(fsec) fsec.scrollIntoView({behavior:'smooth'});
 }
 
 // ---- TRANSFER WITH HIGHLIGHT ----
@@ -3465,7 +3505,7 @@ function clearDemoData() {
 // الجدول الشامل للموظفين
 // ============================================================
 let compView = 'comprehensive'; // 'comprehensive' | 'simple'
-let allLeaves = [], allExtras = [], allInfos = [];
+let allLeaves = [], allExtras = [], allInfos = [], allBalances = {};
 
 function toggleEmpView(){
   compView = compView === 'comprehensive' ? 'simple' : 'comprehensive';
@@ -4372,10 +4412,9 @@ function renameBadge3(){ renameBadgeField('badge3'); }
 // EXCEL EXPORT - الجدول الشامل
 // ============================================================
 async function exportComprehensiveExcel(){
-  toast('📊 جاري تحضير البيانات...','info');
-  
-  // Fetch fresh data from GAS for export
-  toast('⏳ جاري تحميل البيانات...','info');
+  toast('⏳ جاري تحميل البيانات الكاملة...','info');
+  // Always reload all data before export to ensure fresh balances
+  await loadAll();
   const gasUrl=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
   if(gasUrl){
     const [lr,xr,ir]=await Promise.all([
@@ -4445,7 +4484,7 @@ async function exportComprehensiveExcel(){
       data.push(sep);
     }
     const info=allInfos.find(x=>String(x.empId)===String(e.empId))||{};
-    const bal=getBalances(e.empId);
+    const bal=allBalances[String(e.empId)]||{annual:0,scheduled:0};
     const el=allLeaves.filter(l=>String(l.empId)===String(e.empId));
     const fn=t=>el.filter(l=>l.type===t).reduce((s,l)=>s+(Number(l.days)||0),0);
     const usedA=fn('سنوية'), usedS=fn('مجدولة');
@@ -4801,5 +4840,4 @@ window.onload=()=>{
 </div>
 
 </body>
-
 </html>
