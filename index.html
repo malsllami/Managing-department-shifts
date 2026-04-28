@@ -1578,7 +1578,38 @@ function updateTop(){
 }
 
 
-async function loadAll(){const r=await gas('getEmployees');if(r.ok)emps=r.data;renderEmpTbl();markTransferredRows();if(document.getElementById("page-sh").style.display!=="none")renderShTbl();buildDash();if(VR==='مدير')loadSets();}
+async function loadAll(){
+  // Load all data fresh from GAS
+  const [er,lr,xr,ir]=await Promise.all([
+    gas('getEmployees').catch(()=>({ok:false})),
+    gas('اجازات_جلب',{}).catch(()=>({ok:false})),
+    gas('اضافي_جلب',{}).catch(()=>({ok:false})),
+    gas('بيانات_جلب',{}).catch(()=>({ok:false}))
+  ]);
+  if(er.ok&&er.data) emps=er.data;
+  if(lr.ok&&lr.data) allLeaves=lr.data;
+  if(xr.ok&&xr.data) allExtras=xr.data;
+  if(ir.ok&&ir.data){
+    // Deduplicate infos by empId (keep last entry)
+    const infoMap={};
+    ir.data.forEach(inf=>{ if(inf.empId) infoMap[String(inf.empId)]=inf; });
+    allInfos=Object.values(infoMap);
+  }
+  // Build balances index from employees balances API
+  const br=await gas('ارصدة_جلب',{}).catch(()=>({ok:false}));
+  if(br.ok&&br.data){
+    allBalances={};
+    if(Array.isArray(br.data)){
+      br.data.forEach(b=>{ if(b&&b.empId) allBalances[String(b.empId)]={annual:Number(b.annual)||0,scheduled:Number(b.scheduled)||0}; });
+    } else if(br.data.empId){
+      allBalances[String(br.data.empId)]={annual:Number(br.data.annual)||0,scheduled:Number(br.data.scheduled)||0};
+    }
+  }
+  renderEmpTbl();markTransferredRows();
+  if(document.getElementById("page-sh").style.display!=="none")renderShTbl();
+  buildDash();
+  if(VR==='مدير')loadSets();
+}
 async function loadSets(){const r=await gas('getSettings');if(r.ok){const si=document.getElementById('sMId');if(si)si.value=r.data.mgrId||'';const sn=document.getElementById('sMNm');if(sn)sn.value=r.data.mgrName||'';const sd=document.getElementById('sheetId');if(sd)sd.textContent=SHEET_ID;const me=document.getElementById('sMgrEmpId');if(me){const saved=U.mgrEmpId||localStorage.getItem('seMgrEmpId')||'';me.value=saved;if(saved&&!U.mgrEmpId){U.mgrEmpId=saved;sessionStorage.setItem('seU',JSON.stringify(U));}}}}
 
 // DASHBOARD
@@ -1623,7 +1654,7 @@ function buildDash(){
 function mgrDash(){
   const tot=emps.length,act=emps.filter(e=>e.status==='نشط').length,sup=emps.filter(e=>e.role==='مشرف').length;
   const ss={};SHIFTS.forEach(s=>{const ex=emps.filter(e=>e.shift===s);ss[s]={t:ex.length,s:ex.filter(e=>e.role==='مشرف').length,e:ex.filter(e=>e.role==='موظف').length,today:getShiftStatus(s,new Date())};});
-  const usage=parseInt(localStorage.getItem('seUsage')||'394');
+  const usage=0; // Removed fake usage tracking
   const pct=Math.min((usage/20000)*100,100).toFixed(1);
   const leaves=getLeaves().filter(l=>{const t=new Date();return new Date(l.start)<=t&&new Date(l.end)>=t;});
   const extras=getExtras();
@@ -2058,7 +2089,12 @@ async function renderShTbl(){
     ]);
     if(lr.ok&&lr.data) allLeaves=lr.data; else allLeaves=getLeaves();
     if(xr.ok&&xr.data) allExtras=xr.data; else allExtras=getExtras();
-    if(ir.ok&&ir.data) allInfos=ir.data; else allInfos=getInfos();
+    if(ir.ok&&ir.data){
+    // Deduplicate infos by empId (keep last entry)
+    const infoMap={};
+    ir.data.forEach(inf=>{ if(inf.empId) infoMap[String(inf.empId)]=inf; });
+    allInfos=Object.values(infoMap);
+  } else allInfos=getInfos();
   }catch(e){ allLeaves=getLeaves();allExtras=getExtras();allInfos=getInfos(); }
 
   // Build header
@@ -2926,7 +2962,10 @@ function autoFillInfoBar(){
 function setText(id,txt){const el=document.getElementById(id);if(el)el.textContent=txt;}
 
 // ---- LEAVE BALANCES ----
-function getBalances(empId){ try{return JSON.parse(localStorage.getItem('seBAL_'+empId)||'{"annual":0,"scheduled":0}');}catch(e){return{annual:0,scheduled:0};} }
+function getBalances(empId){
+  const b=allBalances&&allBalances[String(empId)];
+  return b||{annual:0,scheduled:0};
+}
 function saveBalanceData(empId,data){ localStorage.setItem('seBAL_'+empId,JSON.stringify(data)); }
 async function fetchBalances(empId){
   const r=await gas('ارصدة_جلب',{empId});
@@ -3045,8 +3084,8 @@ async function loadCustomLeaveTypes(){
 }
 
 // ---- LEAVES ----
-function getLeaves(){try{return JSON.parse(localStorage.getItem('seLeaves')||'[]');}catch(e){return[];}}
-function saveLeaves(arr){localStorage.setItem('seLeaves',JSON.stringify(arr));}
+function getLeaves(){return allLeaves;}
+function saveLeaves(arr){allLeaves=arr;}
 // جلب من قاعدة البيانات (يُستخدم عند الاتصال)
 async function fetchLeaves(empId){
   const p=empId?{empId}:{};
@@ -3114,8 +3153,8 @@ async function deleteLeave(id){if(!confirm('هل تريد حذف طلب الإج
   renderLeaveTable();}
 
 // ---- EXTRA HOURS ----
-function getExtras(){try{return JSON.parse(localStorage.getItem('seExtras')||'[]');}catch(e){return[];}}
-function saveExtras(arr){localStorage.setItem('seExtras',JSON.stringify(arr));}
+function getExtras(){return allExtras;}
+function saveExtras(arr){allExtras=arr;}
 async function fetchExtras(empId){
   const p=empId?{empId}:{};
   const r=await gas('اضافي_جلب',p);
@@ -3215,7 +3254,8 @@ async function deleteExtra(id){if(!confirm('حذف السجل؟'))return;
   renderExtraTable();}
 
 // ---- EMP INFO ----
-function getInfos(){try{return JSON.parse(localStorage.getItem('seInfos')||'[]');}catch(e){return[];}}
+function getInfos(){return allInfos;}
+function saveInfos(arr){allInfos=arr;}
 function saveInfos(arr){localStorage.setItem('seInfos',JSON.stringify(arr));}
 async function fetchInfos(empId){
   const p=empId?{empId}:{};
@@ -4345,7 +4385,12 @@ async function exportComprehensiveExcel(){
     ]);
     if(lr.ok&&lr.data) allLeaves=lr.data; else if(!allLeaves.length) allLeaves=getLeaves();
     if(xr.ok&&xr.data) allExtras=xr.data; else if(!allExtras.length) allExtras=getExtras();
-    if(ir.ok&&ir.data) allInfos=ir.data;  else if(!allInfos.length)  allInfos=getInfos();
+    if(ir.ok&&ir.data){
+    // Deduplicate infos by empId (keep last entry)
+    const infoMap={};
+    ir.data.forEach(inf=>{ if(inf.empId) infoMap[String(inf.empId)]=inf; });
+    allInfos=Object.values(infoMap);
+  }  else if(!allInfos.length)  allInfos=getInfos();
   } else {
     if(!allLeaves.length) allLeaves=getLeaves();
     if(!allExtras.length) allExtras=getExtras();
