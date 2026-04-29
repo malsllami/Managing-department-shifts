@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -17,7 +16,6 @@
   --bg:#0A1628;--bg2:#0D1F3C;--surface:#111E35;--surface2:#162540;
   --border:rgba(0,149,217,0.2);--text:#E8F4FD;--text2:#8BAFC8;--text3:#5A8099;
   --ibg:#0D1F3C;--chov:rgba(0,149,217,0.06);
-  --r:18px;--rsm:12px;--rp:30px;--tr:all .25s ease;
   --primary:#0095D9;--accent:#00C896;
   --shift-a:#0095D9;--shift-b:#8B5CF6;--shift-c:#F59E0B;--shift-d:#EF4444;
   --grad:linear-gradient(135deg,#0095D9 0%,#00C896 100%);
@@ -38,41 +36,41 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 @keyframes loadFill{from{width:0}to{width:100%}}
 
 /* LOADING */
-#loadingScreen{position:fixed;inset:0;z-index:9999;background:var(–bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;}
-.loading-bar{width:200px;height:3px;background:var(–surface2,#162540);border-radius:4px;overflow:hidden;}
-.loading-fill{height:100%;background:var(–grad);animation:loadFill 1.5s ease forwards;}
+#loadingScreen{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;}
+.loading-bar{width:200px;height:3px;background:var(--surface2,#162540);border-radius:4px;overflow:hidden;}
+.loading-fill{height:100%;background:var(--grad);animation:loadFill 1.5s ease forwards;}
 .spinner{width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;animation:spin .7s linear infinite;}
 
 /* LOGIN */
 #loginPage{min-height:100vh;display:none;align-items:center;justify-content:center;padding:20px;position:relative;z-index:1;}
 #loginPage.active{display:flex;}
-.login-card{background:var(–surface)!important;border:1px solid var(–border);border-radius:var(–r);padding:36px 28px;width:100%;max-width:460px;box-shadow:var(–shadow);animation:fadeUp .5s ease;}
+.login-card{background:var(--surface)!important;border:1px solid var(--border);border-radius:var(--r);padding:36px 28px;width:100%;max-width:460px;box-shadow:var(--shadow);animation:fadeUp .5s ease;}
 .login-logo{text-align:center;margin-bottom:28px;}
 .login-logo h1{font-size:18px;font-weight:800;margin-top:12px;}
-.login-logo p{font-size:13px;color:var(–text2);margin-top:3px;}
-.login-tabs{display:flex;gap:4px;background:var(–bg2);border-radius:var(–r);padding:4px;margin-bottom:24px;overflow:hidden;}
-.login-tab{flex:1;padding:9px 6px;text-align:center;border-radius:calc(var(–r) - 4px);cursor:pointer;font-size:13px;font-weight:700;color:var(–text2);transition:var(–tr);border:none;background:transparent;font-family:‘Cairo’,sans-serif;white-space:nowrap;}
-.login-tab.active{background:var(–primary);color:#fff;}
+.login-logo p{font-size:13px;color:var(--text2);margin-top:3px;}
+.login-tabs{display:flex;gap:4px;background:var(--bg2);border-radius:var(--r);padding:4px;margin-bottom:24px;overflow:hidden;}
+.login-tab{flex:1;padding:9px 6px;text-align:center;border-radius:calc(var(--r) - 4px);cursor:pointer;font-size:13px;font-weight:700;color:var(--text2);transition:var(--tr);border:none;background:transparent;font-family:'Cairo',sans-serif;white-space:nowrap;}
+.login-tab.active{background:var(--primary);color:#fff;}
 .form-group{margin-bottom:18px;}
-.form-group label{display:block;font-size:13px;font-weight:700;color:var(–text2);margin-bottom:7px;}
-.form-group label span{color:var(–danger);}
+.form-group label{display:block;font-size:13px;font-weight:700;color:var(--text2);margin-bottom:7px;}
+.form-group label span{color:var(--danger);}
 .fw{position:relative;}
-.fw input{width:100%;padding:12px 42px 12px 42px;background:var(–ibg);border:1.5px solid var(–border);border-radius:var(–rsm);color:var(–text);font-size:14px;font-family:‘Cairo’,sans-serif;outline:none;transition:var(–tr);}
+.fw input{width:100%;padding:12px 42px 12px 42px;background:var(--ibg);border:1.5px solid var(--border);border-radius:var(--rsm);color:var(--text);font-size:14px;font-family:'Cairo',sans-serif;outline:none;transition:var(--tr);}
 .fw input.nol{padding-left:14px;}
-.fw input:focus{border-color:var(–primary)!important;box-shadow:0 0 0 3px rgba(0,149,217,.12);}
-.fic{position:absolute;top:50%;transform:translateY(-50%);display:flex;align-items:center;color:var(–text3);}
+.fw input:focus{border-color:var(--primary)!important;box-shadow:0 0 0 3px rgba(0,149,217,.12);}
+.fic{position:absolute;top:50%;transform:translateY(-50%);display:flex;align-items:center;color:var(--text3);}
 .fic.r{right:13px;}
-.fic.l{left:10px;cursor:pointer;padding:4px;border-radius:8px;transition:var(–tr);background:none;border:none;color:var(–text3);}
-.fic.l:hover{color:var(–primary);}
+.fic.l{left:10px;cursor:pointer;padding:4px;border-radius:8px;transition:var(--tr);background:none;border:none;color:var(--text3);}
+.fic.l:hover{color:var(--primary);}
 .fic svg{width:17px;height:17px;display:block;}
 
 /* BUTTONS */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px 22px;border-radius:var(–rp);font-size:13px;font-weight:700;font-family:‘Cairo’,sans-serif;cursor:pointer;border:none;transition:var(–tr);}
-.btn-primary{background:var(–grad);color:#fff;width:100%;}
-.btn-primary:hover{opacity:.9;transform:translateY(-1px);box-shadow:var(–shadow2);}
-.btn-sec{background:var(–surface2);color:var(–text);border:1px solid var(–border);}
-.btn-sec:hover{border-color:var(–primary);color:var(–primary);}
-.btn-dng{background:rgba(239,68,68,.12);color:var(–danger);border:1px solid rgba(239,68,68,.25);}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px 22px;border-radius:var(--rp);font-size:13px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;border:none;transition:var(--tr);}
+.btn-primary{background:var(--grad);color:#fff;width:100%;}
+.btn-primary:hover{opacity:.9;transform:translateY(-1px);box-shadow:var(--shadow2);}
+.btn-sec{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+.btn-sec:hover{border-color:var(--primary);color:var(--primary);}
+.btn-dng{background:rgba(239,68,68,.12);color:var(--danger);border:1px solid rgba(239,68,68,.25);}
 .btn-dng:hover{background:rgba(239,68,68,.22);}
 .btn-sm{padding:7px 14px;font-size:12px;}
 .btn-full{width:100%;}
@@ -82,61 +80,61 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 #mainApp.active{display:block;}
 
 /* TOPBAR */
-.topbar{background:var(–surface);border-bottom:1px solid var(–border);padding:0 12px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.12);}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 12px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.12);}
 .tb-brand{display:flex;align-items:center;gap:8px;min-width:0;}
 .tb-brand h1{font-size:14px;font-weight:800;white-space:nowrap;}
-.tb-brand p{font-size:10px;color:var(–text2);}
+.tb-brand p{font-size:10px;color:var(--text2);}
 .tb-right{display:flex;align-items:center;gap:6px;flex-shrink:0;}
-.user-chip{display:flex;align-items:center;gap:7px;background:var(–surface2);border:1px solid var(–border);border-radius:var(–r);padding:5px 10px;}
-.u-av{width:30px;height:30px;border-radius:12px;background:var(–grad);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;}
+.user-chip{display:flex;align-items:center;gap:7px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:5px 10px;}
+.u-av{width:30px;height:30px;border-radius:12px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;}
 .u-name{font-size:13px;font-weight:700;}
-.u-role{font-size:11px;color:var(–text2);}
-.sync-pill{display:flex;align-items:center;gap:5px;font-size:11px;color:var(–text2);padding:5px 11px;background:var(–surface2);border:1px solid var(–border);border-radius:var(–rp);}
-.sync-dot{width:6px;height:6px;border-radius:50%;background:var(–success);animation:blink 1.5s infinite;}
-.theme-btn{background:var(–surface2);border:1px solid var(–border);border-radius:var(–rp);padding:7px 13px;cursor:pointer;font-size:16px;transition:var(–tr);}
-.theme-btn:hover{border-color:var(–primary);}
+.u-role{font-size:11px;color:var(--text2);}
+.sync-pill{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2);padding:5px 11px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rp);}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--success);animation:blink 1.5s infinite;}
+.theme-btn{background:var(--surface2);border:1px solid var(--border);border-radius:var(--rp);padding:7px 13px;cursor:pointer;font-size:16px;transition:var(--tr);}
+.theme-btn:hover{border-color:var(--primary);}
 
 /* ROLE SWITCH BAR */
-.rs-bar{background:var(–surface);border-bottom:1px solid var(–border);padding:8px 20px;display:flex;align-items:center;justify-content:center;gap:10px;}
-.rs-btn{padding:6px 18px;border-radius:var(–rp);font-size:12px;font-weight:700;cursor:pointer;border:none;font-family:‘Cairo’,sans-serif;transition:var(–tr);}
-.rs-btn.on{background:var(–grad);color:#fff;}
-.rs-btn.off{background:var(–surface2);color:var(–text2);border:1px solid var(–border);}
-.rs-btn.off:hover{border-color:var(–primary);color:var(–primary);}
+.rs-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:8px 20px;display:flex;align-items:center;justify-content:center;gap:10px;}
+.rs-btn{padding:6px 18px;border-radius:var(--rp);font-size:12px;font-weight:700;cursor:pointer;border:none;font-family:'Cairo',sans-serif;transition:var(--tr);}
+.rs-btn.on{background:var(--grad);color:#fff;}
+.rs-btn.off{background:var(--surface2);color:var(--text2);border:1px solid var(--border);}
+.rs-btn.off:hover{border-color:var(--primary);color:var(--primary);}
 
 /* LAYOUT */
 .app-layout{display:flex;height:calc(100vh - 60px);}
-.sidebar{width:228px;background:var(–surface);border-left:1px solid var(–border);padding:14px 9px;overflow-y:auto;flex-shrink:0;}
-.sb-sec{font-size:10px;font-weight:800;color:var(–text3);padding:8px 12px 4px;letter-spacing:1px;}
-.nav-item{display:flex;align-items:center;gap:9px;padding:10px 13px;border-radius:var(–rsm);color:var(–text2);cursor:pointer;font-size:13px;font-weight:600;transition:var(–tr);border:1px solid transparent;margin-bottom:2px;}
-.nav-item:hover{background:var(–surface2);color:var(–text);}
-.nav-item.active{background:rgba(0,149,217,.1);color:var(–primary);border-color:rgba(0,149,217,.2);}
+.sidebar{width:228px;background:var(--surface);border-left:1px solid var(--border);padding:14px 9px;overflow-y:auto;flex-shrink:0;}
+.sb-sec{font-size:10px;font-weight:800;color:var(--text3);padding:8px 12px 4px;letter-spacing:1px;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:10px 13px;border-radius:var(--rsm);color:var(--text2);cursor:pointer;font-size:13px;font-weight:600;transition:var(--tr);border:1px solid transparent;margin-bottom:2px;}
+.nav-item:hover{background:var(--surface2);color:var(--text);}
+.nav-item.active{background:rgba(0,149,217,.1);color:var(--primary);border-color:rgba(0,149,217,.2);}
 .ni{font-size:15px;}
 .main-content{flex:1;overflow-y:auto;padding:20px;}
 
 /* CARDS */
-.card{background:var(–surface);border:1px solid var(–border);border-radius:var(–r);overflow:hidden;margin-bottom:16px;}
-.card-hd{padding:14px 18px;border-bottom:1px solid var(–border);display:flex;align-items:center;justify-content:space-between;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px;}
+.card-hd{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
 .card-hd h3{font-size:14px;font-weight:800;}
 .card-bd{padding:18px;}
 
 /* STATS */
 .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:13px;margin-bottom:16px;}
-.sc{background:var(–surface);border:1.5px solid var(–border);border-radius:var(–r);padding:16px;display:flex;align-items:center;gap:12px;transition:var(–tr);}
-.sc:hover{transform:translateY(-2px);box-shadow:var(–shadow2);}
-.si{width:44px;height:44px;border-radius:var(–rsm);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.sc{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:16px;display:flex;align-items:center;gap:12px;transition:var(--tr);}
+.sc:hover{transform:translateY(-2px);box-shadow:var(--shadow2);}
+.si{width:44px;height:44px;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
 .si-b{background:rgba(0,149,217,.12);}
 .si-g{background:rgba(0,200,150,.12);}
 .si-o{background:rgba(245,166,35,.12);}
 .si-r{background:rgba(239,68,68,.12);}
 .si-p{background:rgba(139,92,246,.12);}
 .sv{font-size:22px;font-weight:900;line-height:1.2;}
-.sl{font-size:12px;color:var(–text2);margin-top:2px;}
+.sl{font-size:12px;color:var(--text2);margin-top:2px;}
 
 /* SHIFT CARDS */
 .shg{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:14px;position:relative;z-index:1;}
-.shc{border-radius:var(–r);padding:18px;position:relative;overflow:hidden;transition:var(–tr);}
+.shc{border-radius:var(--r);padding:18px;position:relative;overflow:hidden;transition:var(--tr);}
 .shc:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.2);}
-.shc::before{content:’’;position:absolute;top:-25px;left:-25px;width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.07);}
+.shc::before{content:'';position:absolute;top:-25px;left:-25px;width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.07);}
 .shc-a{background:linear-gradient(135deg,#005f8e,#0095D9);border:1px solid rgba(0,149,217,.3);}
 .shc-b{background:linear-gradient(135deg,#5b21b6,#8B5CF6);border:1px solid rgba(139,92,246,.3);}
 .shc-c{background:linear-gradient(135deg,#92400e,#F59E0B);border:1px solid rgba(245,158,11,.3);}
@@ -149,170 +147,174 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .shc-sub{font-size:10px;color:rgba(255,255,255,.7);}
 
 /* ONLINE */
-.ol-card{background:var(–surface);border:1px solid var(–border);border-radius:var(–r);padding:18px;margin-bottom:16px;}
+.ol-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:16px;}
 .ol-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-.ol-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(–success);animation:blink 1s infinite;margin-left:5px;}
+.ol-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--success);animation:blink 1s infinite;margin-left:5px;}
 .ol-list{display:flex;flex-wrap:wrap;gap:7px;max-height:260px;overflow-y:auto;}
-.ol-chip{display:flex;align-items:center;gap:7px;background:var(–surface2);border:1px solid var(–border);border-radius:var(–rp);padding:6px 11px;}
+.ol-chip{display:flex;align-items:center;gap:7px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rp);padding:6px 11px;}
 .ol-av{width:25px;height:25px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;}
 
 /* USAGE */
-.ug-card{background:var(–surface);border:1px solid var(–border);border-radius:var(–r);padding:18px;margin-bottom:16px;}
-.ug-bar-w{background:var(–bg2);border-radius:var(–rp);height:11px;overflow:hidden;margin:9px 0;}
-.ug-bar-f{height:100%;background:var(–grad);border-radius:var(–rp);transition:width 1s ease;}
+.ug-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:16px;}
+.ug-bar-w{background:var(--bg2);border-radius:var(--rp);height:11px;overflow:hidden;margin:9px 0;}
+.ug-bar-f{height:100%;background:var(--grad);border-radius:var(--rp);transition:width 1s ease;}
 .wk-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-top:12px;}
 .wk-day{text-align:center;}
 .wk-bw{height:48px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:3px;}
 .wk-b{width:18px;border-radius:4px 4px 0 0;background:rgba(0,149,217,.2);transition:height .5s ease;}
-.wk-b.on{background:var(–grad);}
-.wk-lbl{font-size:9px;color:var(–text2);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
-.wk-n{font-size:10px;color:var(–text3);}
+.wk-b.on{background:var(--grad);}
+.wk-lbl{font-size:9px;color:var(--text2);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
+.wk-n{font-size:10px;color:var(--text3);}
 
 /* PAGE HEADER */
 .ph{margin-bottom:18px;}
 .ph h2{font-size:20px;font-weight:900;}
-.ph p{font-size:13px;color:var(–text2);margin-top:3px;}
-.gh{background:var(–grad);border-radius:var(–r);padding:20px;margin-bottom:16px;color:#fff;position:relative;overflow:hidden;}
-.gh::after{content:’’;position:absolute;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.07);top:-50px;left:-40px;}
+.ph p{font-size:13px;color:var(--text2);margin-top:3px;}
+.gh{background:var(--grad);border-radius:var(--r);padding:20px;margin-bottom:16px;color:#fff;position:relative;overflow:hidden;}
+.gh::after{content:'';position:absolute;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.07);top:-50px;left:-40px;}
 .gh h2{font-size:20px;font-weight:900;position:relative;z-index:1;}
 .gh p{font-size:13px;opacity:.85;margin-top:3px;position:relative;z-index:1;}
 
 /* TABLES */
 .tw{overflow-x:auto;}
 table{width:100%;border-collapse:collapse;}
-thead tr th{background:var(–bg2);padding:11px 12px;text-align:center;font-size:12px;font-weight:800;color:var(–primary);position:sticky;top:0;z-index:2;border-bottom:2px solid var(–primary);white-space:nowrap;}
-tbody tr td{padding:10px 12px;text-align:center;font-size:13px;border-bottom:1px solid var(–border);white-space:nowrap;}
-tbody tr:hover td{background:var(–chov);}
+thead tr th{background:var(--bg2);padding:11px 12px;text-align:center;font-size:12px;font-weight:800;color:var(--primary);position:sticky;top:0;z-index:2;border-bottom:2px solid var(--primary);white-space:nowrap;}
+tbody tr td{padding:10px 12px;text-align:center;font-size:13px;border-bottom:1px solid var(--border);white-space:nowrap;}
+tbody tr:hover td{background:var(--chov);}
 tbody tr:nth-child(even) td{background:rgba(0,0,0,.02);}
-.no-data{text-align:center;padding:28px;color:var(–text2);font-size:13px;}
+.no-data{text-align:center;padding:28px;color:var(--text2);font-size:13px;}
 
 /* ALERTS */
-.al{padding:10px 14px;border-radius:var(–rsm);font-size:13px;font-weight:600;margin-bottom:13px;display:none;align-items:center;gap:8px;}
+.al{padding:10px 14px;border-radius:var(--rsm);font-size:13px;font-weight:600;margin-bottom:13px;display:none;align-items:center;gap:8px;}
 .al.show{display:flex;}
-.al-s{background:rgba(0,200,150,.1);border:1px solid rgba(0,200,150,.3);color:var(–success);}
-.al-d{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(–danger);}
-.al-i{background:rgba(0,149,217,.1);border:1px solid var(–border);color:var(–primary);}
+.al-s{background:rgba(0,200,150,.1);border:1px solid rgba(0,200,150,.3);color:var(--success);}
+.al-d{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(--danger);}
+.al-i{background:rgba(0,149,217,.1);border:1px solid var(--border);color:var(--primary);}
 
 /* MODALS */
 .mo{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:20px;}
 .mo.active{display:flex;}
-.modal{background:var(–surface);border:1px solid var(–border);border-radius:var(–r);width:100%;max-width:560px;box-shadow:var(–shadow);animation:fadeUp .3s ease;max-height:90vh;overflow-y:auto;}
-.m-hd{padding:16px 20px;border-bottom:1px solid var(–border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(–surface);z-index:1;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);width:100%;max-width:560px;box-shadow:var(--shadow);animation:fadeUp .3s ease;max-height:90vh;overflow-y:auto;}
+.m-hd{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--surface);z-index:1;}
 .m-hd h3{font-size:15px;font-weight:800;}
 .m-bd{padding:20px;}
-.m-ft{padding:14px 20px;border-top:1px solid var(–border);display:flex;gap:8px;justify-content:flex-end;}
-.btn-x{background:none;border:none;color:var(–text2);cursor:pointer;font-size:18px;padding:4px;border-radius:8px;transition:var(–tr);}
-.btn-x:hover{background:var(–surface2);color:var(–danger);}
+.m-ft{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;}
+.btn-x{background:none;border:none;color:var(--text2);cursor:pointer;font-size:18px;padding:4px;border-radius:8px;transition:var(--tr);}
+.btn-x:hover{background:var(--surface2);color:var(--danger);}
 .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
 .fgrid .full{grid-column:1/-1;}
-.finp{width:100%;padding:11px 13px;background:var(–ibg);border:1.5px solid var(–border);border-radius:var(–rsm);color:var(–text);font-family:‘Cairo’,sans-serif;font-size:14px;outline:none;transition:var(–tr);}
-.finp:focus{border-color:var(–primary);box-shadow:0 0 0 3px rgba(0,149,217,.1);}
+.finp{width:100%;padding:11px 13px;background:var(--ibg);border:1.5px solid var(--border);border-radius:var(--rsm);color:var(--text);font-family:'Cairo',sans-serif;font-size:14px;outline:none;transition:var(--tr);}
+.finp:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(0,149,217,.1);}
 select.finp{-webkit-appearance:none;}
-.finp:disabled,.finp[disabled]{background:var(–surface2)!important;color:var(–text2)!important;opacity:.75;-webkit-text-fill-color:var(–text2)!important;cursor:not-allowed;}
-select.finp:disabled{background:var(–surface2)!important;-webkit-text-fill-color:var(–text2)!important;}
+.finp:disabled,.finp[disabled]{background:var(--surface2)!important;color:var(--text2)!important;opacity:.75;-webkit-text-fill-color:var(--text2)!important;cursor:not-allowed;}
+select.finp:disabled{background:var(--surface2)!important;-webkit-text-fill-color:var(--text2)!important;}
 
 /* BADGES */
-.badge{display:inline-flex;align-items:center;gap:3px;padding:4px 10px;border-radius:var(–rp);font-size:11px;font-weight:700;}
-.b-on{background:rgba(0,200,150,.12);color:var(–success);border:1px solid rgba(0,200,150,.25);}
-.b-off{background:rgba(239,68,68,.1);color:var(–danger);border:1px solid rgba(239,68,68,.2);}
-.b-sup{background:rgba(0,149,217,.1);color:var(–primary);border:1px solid var(–border);}
-.sht{display:inline-flex;align-items:center;padding:4px 10px;border-radius:var(–rp);font-size:11px;font-weight:700;}
-.sh-a{background:rgba(0,149,217,.12);color:var(–shift-a);border:1px solid rgba(0,149,217,.25);}
-.sh-b{background:rgba(139,92,246,.12);color:var(–shift-b);border:1px solid rgba(139,92,246,.25);}
-.sh-c{background:rgba(245,158,11,.12);color:var(–shift-c);border:1px solid rgba(245,158,11,.25);}
-.sh-d{background:rgba(239,68,68,.12);color:var(–shift-d);border:1px solid rgba(239,68,68,.25);}
+.badge{display:inline-flex;align-items:center;gap:3px;padding:4px 10px;border-radius:var(--rp);font-size:11px;font-weight:700;}
+.b-on{background:rgba(0,200,150,.12);color:var(--success);border:1px solid rgba(0,200,150,.25);}
+.b-off{background:rgba(239,68,68,.1);color:var(--danger);border:1px solid rgba(239,68,68,.2);}
+.b-sup{background:rgba(0,149,217,.1);color:var(--primary);border:1px solid var(--border);}
+.sht{display:inline-flex;align-items:center;padding:4px 10px;border-radius:var(--rp);font-size:11px;font-weight:700;}
+.sh-a{background:rgba(0,149,217,.12);color:var(--shift-a);border:1px solid rgba(0,149,217,.25);}
+.sh-b{background:rgba(139,92,246,.12);color:var(--shift-b);border:1px solid rgba(139,92,246,.25);}
+.sh-c{background:rgba(245,158,11,.12);color:var(--shift-c);border:1px solid rgba(245,158,11,.25);}
+.sh-d{background:rgba(239,68,68,.12);color:var(--shift-d);border:1px solid rgba(239,68,68,.25);}
 
 /* SEARCH */
 .sw{position:relative;margin-bottom:13px;}
-.sw input{width:100%;padding:10px 34px 10px 13px;background:var(–ibg);border:1.5px solid var(–border);border-radius:var(–rsm);color:var(–text);font-family:‘Cairo’,sans-serif;font-size:13px;outline:none;transition:var(–tr);}
-.sw input:focus{border-color:var(–primary);}
-.sw .si2{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(–text3);font-size:14px;}
+.sw input{width:100%;padding:10px 34px 10px 13px;background:var(--ibg);border:1.5px solid var(--border);border-radius:var(--rsm);color:var(--text);font-family:'Cairo',sans-serif;font-size:13px;outline:none;transition:var(--tr);}
+.sw input:focus{border-color:var(--primary);}
+.sw .si2{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px;}
 
 /* DIVIDER */
-.dv{height:1px;background:var(–border);margin:14px 0;}
+.dv{height:1px;background:var(--border);margin:14px 0;}
 
 /* PROFILE */
-.pav{width:72px;height:72px;border-radius:22px;background:var(–grad);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;margin:0 auto 12px;}
-.srow{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(–border);}
+.pav{width:72px;height:72px;border-radius:22px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;margin:0 auto 12px;}
+.srow{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);}
 .srow:last-child{border-bottom:none;}
 .slbl{font-size:13px;font-weight:700;}
 
 /* TOAST */
-#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(–surface);border:1px solid var(–border);border-radius:var(–r);padding:10px 20px;font-size:13px;font-weight:700;z-index:9999;display:none;align-items:center;gap:8px;box-shadow:var(–shadow);min-width:220px;justify-content:center;}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 20px;font-size:13px;font-weight:700;z-index:9999;display:none;align-items:center;gap:8px;box-shadow:var(--shadow);min-width:220px;justify-content:center;}
 #toast.show{display:flex;}
-#toast.success{border-color:rgba(0,200,150,.4);color:var(–success);}
-#toast.error{border-color:rgba(239,68,68,.4);color:var(–danger);}
-#toast.info{color:var(–primary);}
+#toast.success{border-color:rgba(0,200,150,.4);color:var(--success);}
+#toast.error{border-color:rgba(239,68,68,.4);color:var(--danger);}
+#toast.info{color:var(--primary);}
+
 
 /* MOBILE TOPBAR */
 .u-info-desk{display:flex;flex-direction:column;}
 .sync-txt{display:inline;}
 .tb-date-desktop{display:block;}
 @media(max-width:520px){
-.tb-date-desktop{display:none;}
-.sync-txt{display:none;}
-.u-info-desk{display:none;}
-.user-chip{padding:5px 7px;}
-.sync-pill{padding:5px 8px;}
-.theme-btn{padding:6px 10px;}
-.topbar{padding:0 10px;}
+  .tb-date-desktop{display:none;}
+  .sync-txt{display:none;}
+  .u-info-desk{display:none;}
+  .user-chip{padding:5px 7px;}
+  .sync-pill{padding:5px 8px;}
+  .theme-btn{padding:6px 10px;}
+  .topbar{padding:0 10px;}
 }
 @media(max-width:768px){.sidebar{display:none;}.fgrid{grid-template-columns:1fr;}.sg{grid-template-columns:1fr 1fr;}.shg{grid-template-columns:1fr 1fr;}}
 
 /* CALENDAR */
-.cal-day{border-radius:8px;padding:5px 3px;min-height:72px;background:var(–surface2);border:1px solid var(–border);transition:var(–tr);position:relative;overflow:hidden;}
-.cal-day:hover{border-color:var(–primary);}
-.cal-day.today{border-color:var(–danger);border-width:2px;background:rgba(239,68,68,.06);}
+.cal-day{border-radius:8px;padding:5px 3px;min-height:72px;background:var(--surface2);border:1px solid var(--border);transition:var(--tr);position:relative;overflow:hidden;}
+.cal-day:hover{border-color:var(--primary);}
+.cal-day.today{border-color:var(--danger);border-width:2px;background:rgba(239,68,68,.06);}
 .cal-day.other-month{opacity:.35;}
-.cal-day-num{font-size:13px;font-weight:900;margin-bottom:2px;color:var(–text2);}
-.cal-day.today .cal-day-num{color:var(–danger);}
-.cal-day-hij{font-size:9px;color:var(–text3);margin-bottom:2px;line-height:1.2;}
+.cal-day-num{font-size:13px;font-weight:900;margin-bottom:2px;color:var(--text2);}
+.cal-day.today .cal-day-num{color:var(--danger);}
+.cal-day-hij{font-size:9px;color:var(--text3);margin-bottom:2px;line-height:1.2;}
 .cal-shift-tag{display:block;font-size:9px;font-weight:700;border-radius:5px;padding:2px 3px;margin-bottom:2px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 @media(max-width:520px){
-.cal-day{min-height:58px;padding:3px 2px;}
-.cal-day-num{font-size:11px;margin-bottom:1px;}
-.cal-day-hij{display:none;}
-.cal-shift-tag{font-size:7px;padding:1px 2px;margin-bottom:1px;}
-#calCard .card-bd{padding:4px 2px;}
-.cal-day .shg-mini{display:none;}
+  .cal-day{min-height:58px;padding:3px 2px;}
+  .cal-day-num{font-size:11px;margin-bottom:1px;}
+  .cal-day-hij{display:none;}
+  .cal-shift-tag{font-size:7px;padding:1px 2px;margin-bottom:1px;}
+  #calCard .card-bd{padding:4px 2px;}
+  .cal-day .shg-mini{display:none;}
 }
 .cs-morning{background:rgba(0,149,217,.18);color:#0095D9;}
 .cs-evening{background:rgba(139,92,246,.18);color:#8B5CF6;}
-.cs-off{background:rgba(0,200,150,.12);color:var(–success);}
-.cal-dh{text-align:center;font-size:11px;font-weight:800;color:var(–text2);padding:6px 0;}
+.cs-off{background:rgba(0,200,150,.12);color:var(--success);}
+.cal-dh{text-align:center;font-size:11px;font-weight:800;color:var(--text2);padding:6px 0;}
 /* Mini table */
-.mini-sch{background:var(–surface);border:1px solid var(–border);border-radius:var(–r);overflow:hidden;margin-top:14px;}
-.mini-sch-hd{padding:13px 18px;border-bottom:1px solid var(–border);font-size:14px;font-weight:800;}
+.mini-sch{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-top:14px;}
+.mini-sch-hd{padding:13px 18px;border-bottom:1px solid var(--border);font-size:14px;font-weight:800;}
 .mini-cycle{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;padding:14px;}
 .mc-cell{border-radius:8px;padding:8px 4px;text-align:center;}
 .mc-cell .mc-n{font-size:14px;font-weight:900;}
 .mc-cell .mc-l{font-size:9px;font-weight:700;margin-top:2px;}
 .mc-morning{background:rgba(0,149,217,.15);color:#0095D9;border:1px solid rgba(0,149,217,.25);}
 .mc-evening{background:rgba(139,92,246,.15);color:#8B5CF6;border:1px solid rgba(139,92,246,.25);}
-.mc-off{background:rgba(0,200,150,.1);color:var(–success);border:1px solid rgba(0,200,150,.2);}
+.mc-off{background:rgba(0,200,150,.1);color:var(--success);border:1px solid rgba(0,200,150,.2);}
+
 
 /* TRANSFER HIGHLIGHT */
 .emp-transferred {
-animation: highlightRow 1s ease;
+  animation: highlightRow 1s ease;
 }
 @keyframes highlightRow {
-0% { background: rgba(245,158,11,.35) !important; }
-100% { background: rgba(245,158,11,.35); }
+  0% { background: rgba(245,158,11,.35) !important; }
+  100% { background: rgba(245,158,11,.35); }
 }
-tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 3px solid var(–warning); }
+tr.new-transfer td { background: rgba(245,158,11,.18) !important; border-right: 3px solid var(--warning); }
+
 
 /* FORM TABS STICKY */
-.ftb{padding:9px 18px;border-radius:16px;border:none;cursor:pointer;font-size:13px;font-weight:700;font-family:‘Cairo’,sans-serif;transition:all .25s;}
-.ftb.on{background:var(–primary);color:#fff;}
-.ftb.off{background:transparent;color:var(–text2);}
-.ftb.off:hover{color:var(–text);}
+.ftb{padding:9px 18px;border-radius:16px;border:none;cursor:pointer;font-size:13px;font-weight:700;font-family:'Cairo',sans-serif;transition:all .25s;}
+.ftb.on{background:var(--primary);color:#fff;}
+.ftb.off{background:transparent;color:var(--text2);}
+.ftb.off:hover{color:var(--text);}
+
 
 /* COMPREHENSIVE TABLE */
 #comprehensiveTbl th{
-background:var(–bg2);padding:10px 10px;text-align:center;
-font-size:11px;font-weight:800;color:var(–primary);
-position:sticky;top:0;z-index:2;border-bottom:2px solid var(–primary);
-white-space:nowrap;border-left:1px solid var(–border);
+  background:var(--bg2);padding:10px 10px;text-align:center;
+  font-size:11px;font-weight:800;color:var(--primary);
+  position:sticky;top:0;z-index:2;border-bottom:2px solid var(--primary);
+  white-space:nowrap;border-left:1px solid var(--border);
 }
 #comprehensiveTbl th.th-group-id     { background:rgba(0,149,217,.12); }
 #comprehensiveTbl th.th-group-info   { background:rgba(0,200,150,.08); }
@@ -321,52 +323,52 @@ white-space:nowrap;border-left:1px solid var(–border);
 #comprehensiveTbl th.th-group-cloth  { background:rgba(239,68,68,.06); }
 #comprehensiveTbl th.th-group-card    { background:rgba(0,149,217,.10); }
 #comprehensiveTbl th.th-group-leave2   { background:rgba(99,102,241,.08); }
-#comprehensiveTbl td{border-bottom:1px solid var(–border)!important;
-padding:9px 10px;text-align:center;font-size:12px;
-border-bottom:1px solid var(–border);border-left:1px solid rgba(255,255,255,.03);
-white-space:nowrap;
+#comprehensiveTbl td{border-bottom:1px solid var(--border)!important;
+  padding:9px 10px;text-align:center;font-size:12px;
+  border-bottom:1px solid var(--border);border-left:1px solid rgba(255,255,255,.03);
+  white-space:nowrap;
 }
 #comprehensiveTbl tr:nth-child(even) td{ background:rgba(0,0,0,.02); }
-#comprehensiveTbl tr:hover td{ background:var(–chov) !important; }
-#comprehensiveTbl tr.transferred td{ border-right:3px solid var(–warning); }
-.exp-soon{ color:var(–danger);font-weight:700; }
-.exp-warn{ color:var(–warning);font-weight:700; }
-.exp-ok  { color:var(–success); }
+#comprehensiveTbl tr:hover td{ background:var(--chov) !important; }
+#comprehensiveTbl tr.transferred td{ border-right:3px solid var(--warning); }
+.exp-soon{ color:var(--danger);font-weight:700; }
+.exp-warn{ color:var(--warning);font-weight:700; }
+.exp-ok  { color:var(--success); }
 .days-badge{
-display:inline-flex;align-items:center;justify-content:center;
-width:32px;height:20px;border-radius:10px;font-size:10px;font-weight:800;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:32px;height:20px;border-radius:10px;font-size:10px;font-weight:800;
 }
-.days-red  { background:rgba(239,68,68,.15);color:var(–danger); }
-.days-warn { background:rgba(245,158,11,.15);color:var(–warning); }
-.days-ok   { background:rgba(0,200,150,.12);color:var(–success); }
+.days-red  { background:rgba(239,68,68,.15);color:var(--danger); }
+.days-warn { background:rgba(245,158,11,.15);color:var(--warning); }
+.days-ok   { background:rgba(0,200,150,.12);color:var(--success); }
 /* ===== STICKY COLUMNS - using separate+spacing for sticky to work ===== */
 #comprehensiveTbl {
-border-collapse: separate;
-border-spacing: 0;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
 #comprehensiveTbl td:nth-child(1),
 #comprehensiveTbl th:nth-child(1) {
-position: sticky; right: 0; z-index: 4;
-background: var(–surface);
-min-width: 82px;
+  position: sticky; right: 0; z-index: 4;
+  background: var(--surface);
+  min-width: 82px;
 }
 
 #comprehensiveTbl td:nth-child(2),
 #comprehensiveTbl th:nth-child(2) {
-position: sticky; right: 82px; z-index: 4;
-background: var(–surface);
-min-width: 148px;
-text-align: right;
+  position: sticky; right: 82px; z-index: 4;
+  background: var(--surface);
+  min-width: 148px;
+  text-align: right;
 }
 
 #comprehensiveTbl td:nth-child(3),
 #comprehensiveTbl th:nth-child(3) {
-position: sticky; right: 230px; z-index: 4;
-background: var(–surface);
-min-width: 118px;
-box-shadow: -3px 0 8px rgba(0,0,0,.2);
-border-left: 2px solid var(–primary) !important;
+  position: sticky; right: 230px; z-index: 4;
+  background: var(--surface);
+  min-width: 118px;
+  box-shadow: -3px 0 8px rgba(0,0,0,.2);
+  border-left: 2px solid var(--primary) !important;
 }
 
 #comprehensiveTbl thead th { position: sticky; top: 0; }
@@ -376,7 +378,7 @@ border-left: 2px solid var(–primary) !important;
 
 #comprehensiveTbl tr:nth-child(even) td:nth-child(1),
 #comprehensiveTbl tr:nth-child(even) td:nth-child(2),
-#comprehensiveTbl tr:nth-child(even) td:nth-child(3) { background: var(–surface2); }
+#comprehensiveTbl tr:nth-child(even) td:nth-child(3) { background: var(--surface2); }
 
 #comprehensiveTbl tr:hover td:nth-child(1),
 #comprehensiveTbl tr:hover td:nth-child(2),
@@ -386,144 +388,152 @@ border-left: 2px solid var(–primary) !important;
 #comprehensiveTbl tr.transferred td:nth-child(2),
 #comprehensiveTbl tr.transferred td:nth-child(3) { background: rgba(245,158,11,.12) !important; }
 
+
 /* ===== BOTTOM NAVIGATION (MOBILE) ===== */
 #bottomNav {
-display: none;
-position: fixed;
-bottom: 0; left: 0; right: 0;
-background: var(–surface);
-border-top: 1px solid var(–border);
-z-index: 200;
-padding: 6px 0 max(6px, env(safe-area-inset-bottom));
-box-shadow: 0 -4px 20px rgba(0,0,0,.2);
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  z-index: 200;
+  padding: 6px 0 max(6px, env(safe-area-inset-bottom));
+  box-shadow: 0 -4px 20px rgba(0,0,0,.2);
 }
 .bn-list {
-display: flex;
-align-items: stretch;
-justify-content: space-around;
-overflow-x: auto;
-scrollbar-width: none;
--ms-overflow-style: none;
-gap: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  gap: 0;
 }
 .bn-list::-webkit-scrollbar { display: none; }
 .bn-item {
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-gap: 3px;
-padding: 6px 10px;
-min-width: 56px;
-cursor: pointer;
-border-radius: 14px;
-transition: all .2s;
-flex-shrink: 0;
-border: none;
-background: none;
-font-family: ‘Cairo’, sans-serif;
-color: var(–text3);
-position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 6px 10px;
+  min-width: 56px;
+  cursor: pointer;
+  border-radius: 14px;
+  transition: all .2s;
+  flex-shrink: 0;
+  border: none;
+  background: none;
+  font-family: 'Cairo', sans-serif;
+  color: var(--text3);
+  position: relative;
 }
 .bn-item .bn-icon { font-size: 20px; line-height: 1; }
 .bn-item .bn-lbl  { font-size: 10px; font-weight: 700; white-space: nowrap; }
 .bn-item.active {
-color: var(–primary);
-background: rgba(0,149,217,.1);
+  color: var(--primary);
+  background: rgba(0,149,217,.1);
 }
 .bn-item.active::after {
-content: ‘’;
-position: absolute;
-top: 0;
-left: 50%; transform: translateX(-50%);
-width: 24px; height: 3px;
-background: var(–primary);
-border-radius: 0 0 4px 4px;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%; transform: translateX(-50%);
+  width: 24px; height: 3px;
+  background: var(--primary);
+  border-radius: 0 0 4px 4px;
 }
 /* More menu overlay */
 #bnMoreMenu {
-display: none;
-position: fixed;
-bottom: 70px;
-left: 0; right: 0;
-background: var(–surface);
-border-top: 1px solid var(–border);
-border-radius: 20px 20px 0 0;
-padding: 16px 12px;
-z-index: 199;
-box-shadow: 0 -8px 32px rgba(0,0,0,.3);
-max-height: 60vh;
-overflow-y: auto;
+  display: none;
+  position: fixed;
+  bottom: 70px;
+  left: 0; right: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-radius: 20px 20px 0 0;
+  padding: 16px 12px;
+  z-index: 199;
+  box-shadow: 0 -8px 32px rgba(0,0,0,.3);
+  max-height: 60vh;
+  overflow-y: auto;
 }
 .bnm-item {
-display: flex;
-align-items: center;
-gap: 12px;
-padding: 13px 16px;
-border-radius: 14px;
-cursor: pointer;
-font-size: 14px;
-font-weight: 700;
-color: var(–text);
-transition: all .2s;
-margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  transition: all .2s;
+  margin-bottom: 4px;
 }
-.bnm-item:hover, .bnm-item.active { background: rgba(0,149,217,.1); color: var(–primary); }
+.bnm-item:hover, .bnm-item.active { background: rgba(0,149,217,.1); color: var(--primary); }
 .bnm-icon { font-size: 20px; }
 #bnMoreOverlay {
-display: none;
-position: fixed; inset: 0;
-background: rgba(0,0,0,.4);
-z-index: 198;
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.4);
+  z-index: 198;
 }
 @media(max-width: 768px) {
-#bottomNav { display: block; }
-.app-layout { height: calc(100vh - 56px); }
-.main-content { padding: 14px 12px 90px; }
+  #bottomNav { display: block; }
+  .app-layout { height: calc(100vh - 56px); }
+  .main-content { padding: 14px 12px 90px; }
 }
 @media(min-width: 769px) {
-#bottomNav { display: none !important; }
+  #bottomNav { display: none !important; }
 }
 
+
 @media(max-width:520px){
-#mobileSwitchNote { display: block !important; }
-/* comprehensive table scrolls horizontally on mobile - don’t hide it */
-#comprehensiveTbl { font-size:10px; }
-#comprehensiveTbl th,#comprehensiveTbl td { padding:6px 8px; }
+  #mobileSwitchNote { display: block !important; }
+  /* comprehensive table scrolls horizontally on mobile - don't hide it */
+  #comprehensiveTbl { font-size:10px; }
+  #comprehensiveTbl th,#comprehensiveTbl td { padding:6px 8px; }
 }
+
 
 /* MOBILE FORMS */
 @media(max-width:520px){
-/* Date fields on same row */
-.leave-date-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-/* Auto-fill bar as column */
-#leaveEmpBar, #extraEmpBar { flex-direction:column; gap:6px; padding:10px; }
-/* Balances row smaller */
-#balancesRow span { font-size:11px; padding:3px 8px; }
-/* Forms card max width */
-.card { max-width:100% !important; }
-/* Tab labels shorter */
-#ftab-leave::after { content: ‘’; }
-/* Calendar controls wrap */
-#calCard .card-bd { padding:6px; }
-/* Weekly API scroll */
-.wk-grid { gap:4px; }
+  /* Date fields on same row */
+  .leave-date-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  /* Auto-fill bar as column */
+  #leaveEmpBar, #extraEmpBar { flex-direction:column; gap:6px; padding:10px; }
+  /* Balances row smaller */
+  #balancesRow span { font-size:11px; padding:3px 8px; }
+  /* Forms card max width */
+  .card { max-width:100% !important; }
+  /* Tab labels shorter */
+  #ftab-leave::after { content: ''; }
+  /* Calendar controls wrap */
+  #calCard .card-bd { padding:6px; }
+  /* Weekly API scroll */
+  .wk-grid { gap:4px; }
 }
+
+
+
+
+
 
 /* Autofill fix - scoped to dark/light */
 body.dark input:-webkit-autofill,
 body.dark input:-webkit-autofill:hover,
 body.dark input:-webkit-autofill:focus {
--webkit-box-shadow: 0 0 0 100px #0D1F3C inset !important;
--webkit-text-fill-color: #E8F4FD !important;
-caret-color: #E8F4FD;
+  -webkit-box-shadow: 0 0 0 100px #0D1F3C inset !important;
+  -webkit-text-fill-color: #E8F4FD !important;
+  caret-color: #E8F4FD;
 }
 body.light input:-webkit-autofill,
 body.light input:-webkit-autofill:hover,
 body.light input:-webkit-autofill:focus {
--webkit-box-shadow: 0 0 0 100px #EEF4FF inset !important;
--webkit-text-fill-color: #0A1628 !important;
-caret-color: #0A1628;
+  -webkit-box-shadow: 0 0 0 100px #EEF4FF inset !important;
+  -webkit-text-fill-color: #0A1628 !important;
+  caret-color: #0A1628;
 }
 
 </style>
@@ -557,7 +567,6 @@ caret-color: #0A1628;
 </div>
 
 <!-- LOGIN -->
-
 <div id="loginPage">
   <div class="login-card">
     <div class="login-logo">
@@ -601,7 +610,6 @@ caret-color: #0A1628;
 </div>
 
 <!-- MAIN APP -->
-
 <div id="mainApp">
   <div class="topbar">
     <div class="tb-brand">
@@ -636,7 +644,6 @@ caret-color: #0A1628;
   </div>
 
   <!-- BOTTOM NAVIGATION (MOBILE) -->
-
   <div id="bottomNav">
     <div class="bn-list" id="bnList">
       <!-- filled by JS buildBottomNav() -->
@@ -665,549 +672,545 @@ caret-color: #0A1628;
     </div>
     <div class="main-content">
 
-```
-  <!-- DASHBOARD -->
-  <div id="page-db" class="page">
-    <div id="dWelcomeCard" style="border-radius:var(--r);padding:20px 22px;margin-bottom:14px;position:relative;overflow:hidden">
-      <div style="position:absolute;inset:0;background:var(--grad);opacity:.95"></div>
-      <div style="position:absolute;top:-30px;left:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.07)"></div>
-      <div style="position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
-        <div>
-          <h2 id="dWelcome" style="font-size:18px;font-weight:900;color:#fff;margin-bottom:4px">مرحباً!</h2>
-          <p id="dDate" style="font-size:12px;color:rgba(255,255,255,.8)"></p>
+      <!-- DASHBOARD -->
+      <div id="page-db" class="page">
+        <div id="dWelcomeCard" style="border-radius:var(--r);padding:20px 22px;margin-bottom:14px;position:relative;overflow:hidden">
+          <div style="position:absolute;inset:0;background:var(--grad);opacity:.95"></div>
+          <div style="position:absolute;top:-30px;left:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.07)"></div>
+          <div style="position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+            <div>
+              <h2 id="dWelcome" style="font-size:18px;font-weight:900;color:#fff;margin-bottom:4px">مرحباً!</h2>
+              <p id="dDate" style="font-size:12px;color:rgba(255,255,255,.8)"></p>
+            </div>
+            <div id="dShiftBadge"></div>
+          </div>
         </div>
-        <div id="dShiftBadge"></div>
+        <div id="dContent"></div>
       </div>
-    </div>
-    <div id="dContent"></div>
-  </div>
 
-  <!-- EMPLOYEES -->
-  <div id="page-emp" class="page" style="display:none">
-    <div class="ph"><h2>👥 إدارة الموظفين</h2><p>الجدول الشامل لجميع بيانات الموظفين</p></div>
+      <!-- EMPLOYEES -->
+      <div id="page-emp" class="page" style="display:none">
+        <div class="ph"><h2>👥 إدارة الموظفين</h2><p>الجدول الشامل لجميع بيانات الموظفين</p></div>
 
-    <!-- CONTROLS BAR -->
-    <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 16px">
-      <div class="sw" style="margin:0;flex:1;min-width:200px">
-        <span class="si2">🔍</span>
-        <input type="text" id="empSrch" placeholder="بحث بالاسم أو الرقم أو المركز..." oninput="filterEmp()" style="width:100%">
-      </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button class="btn btn-sec btn-sm" onclick="exportComprehensiveExcel()" style="width:auto;background:rgba(0,200,150,.12);border-color:rgba(0,200,150,.3);color:var(--success)">📊 تصدير Excel</button>
-        <select id="filterShift" class="finp" style="width:110px;padding:8px 10px" onchange="filterEmp()">
-          <option value="">كل الورديات</option>
-          <option value="أ">وردية أ</option>
-          <option value="ب">وردية ب</option>
-          <option value="ج">وردية ج</option>
-          <option value="د">وردية د</option>
-        </select>
-        <select id="filterRole" class="finp" style="width:100px;padding:8px 10px" onchange="filterEmp()">
-          <option value="">كل الأدوار</option>
-          <option value="موظف">موظف</option>
-          <option value="مشرف">مشرف</option>
-        </select>
-        <button class="btn btn-sec btn-sm" onclick="toggleEmpView()" id="viewToggleBtn" title="تبديل العرض">📊 عرض مبسط</button>
-        <button class="btn btn-primary btn-sm" style="width:auto" onclick="openAdd()">➕ إضافة موظف</button>
-        <button class="btn btn-sec btn-sm" onclick="refreshComprehensive()" title="تحديث البيانات الكاملة">🔄</button>
-      </div>
-    </div>
-
-    <!-- SUMMARY STATS -->
-    <div id="mobileSwitchNote" style="display:none;background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--rsm);padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--text2)">📱 الجدول الشامل متاح على الشاشات الأكبر — يظهر هنا الجدول المبسط</div>
-    <div id="empSummaryStats" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-bottom:14px"></div>
-
-    <!-- COMPREHENSIVE TABLE -->
-    <div class="card" id="comprehensiveCard">
-      <div class="card-hd">
-        <h3 id="empTableTitle">📋 الجدول الشامل للموظفين</h3>
-        <div style="display:flex;align-items:center;gap:8px">
-          <span id="empCount" style="font-size:12px;color:var(--text2)"></span>
-          <button class="btn btn-sm" onclick="exportComprehensiveExcel()" style="width:auto;background:rgba(0,200,150,.12);border:1px solid rgba(0,200,150,.4);color:var(--success);border-radius:var(--rp);padding:6px 14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;font-size:12px">📥 Excel</button>
+        <!-- CONTROLS BAR -->
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 16px">
+          <div class="sw" style="margin:0;flex:1;min-width:200px">
+            <span class="si2">🔍</span>
+            <input type="text" id="empSrch" placeholder="بحث بالاسم أو الرقم أو المركز..." oninput="filterEmp()" style="width:100%">
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="btn btn-sec btn-sm" onclick="exportComprehensiveExcel()" style="width:auto;background:rgba(0,200,150,.12);border-color:rgba(0,200,150,.3);color:var(--success)">📊 تصدير Excel</button>
+            <select id="filterShift" class="finp" style="width:110px;padding:8px 10px" onchange="filterEmp()">
+              <option value="">كل الورديات</option>
+              <option value="أ">وردية أ</option>
+              <option value="ب">وردية ب</option>
+              <option value="ج">وردية ج</option>
+              <option value="د">وردية د</option>
+            </select>
+            <select id="filterRole" class="finp" style="width:100px;padding:8px 10px" onchange="filterEmp()">
+              <option value="">كل الأدوار</option>
+              <option value="موظف">موظف</option>
+              <option value="مشرف">مشرف</option>
+            </select>
+            <button class="btn btn-sec btn-sm" onclick="toggleEmpView()" id="viewToggleBtn" title="تبديل العرض">📊 عرض مبسط</button>
+            <button class="btn btn-primary btn-sm" style="width:auto" onclick="openAdd()">➕ إضافة موظف</button>
+            <button class="btn btn-sec btn-sm" onclick="refreshComprehensive()" title="تحديث البيانات الكاملة">🔄</button>
+          </div>
         </div>
-      </div>
-      <div class="card-bd" style="padding:0;overflow:hidden">
-        <div style="overflow-x:auto;overflow-y:auto;max-height:65vh;-webkit-overflow-scrolling:touch">
-          <table id="comprehensiveTbl" style="min-width:1800px">
-            <thead id="comprehensiveThead"></thead>
-            <tbody id="empTb"><tr><td colspan="30" class="no-data">⏳ جاري تحميل البيانات...</td></tr></tbody>
-          </table>
+
+        <!-- SUMMARY STATS -->
+        <div id="mobileSwitchNote" style="display:none;background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--rsm);padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--text2)">📱 الجدول الشامل متاح على الشاشات الأكبر — يظهر هنا الجدول المبسط</div>
+        <div id="empSummaryStats" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-bottom:14px"></div>
+
+        <!-- COMPREHENSIVE TABLE -->
+        <div class="card" id="comprehensiveCard">
+          <div class="card-hd">
+            <h3 id="empTableTitle">📋 الجدول الشامل للموظفين</h3>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span id="empCount" style="font-size:12px;color:var(--text2)"></span>
+              <button class="btn btn-sm" onclick="exportComprehensiveExcel()" style="width:auto;background:rgba(0,200,150,.12);border:1px solid rgba(0,200,150,.4);color:var(--success);border-radius:var(--rp);padding:6px 14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;font-size:12px">📥 Excel</button>
+            </div>
+          </div>
+          <div class="card-bd" style="padding:0;overflow:hidden">
+            <div style="overflow-x:auto;overflow-y:auto;max-height:65vh;-webkit-overflow-scrolling:touch">
+              <table id="comprehensiveTbl" style="min-width:1800px">
+                <thead id="comprehensiveThead"></thead>
+                <tbody id="empTb"><tr><td colspan="30" class="no-data">⏳ جاري تحميل البيانات...</td></tr></tbody>
+              </table>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
 
-    <!-- SIMPLE TABLE (hidden by default) -->
-    <div class="card" id="simpleEmpCard" style="display:none">
-      <div class="card-hd"><h3>قائمة الموظفين</h3></div>
-      <div class="card-bd" style="padding:0">
-        <div class="tw"><table>
-          <thead><tr><th>رقم الوظيفي</th><th>الاسم الكامل</th><th>رقم الجوال</th><th>القسم</th><th>الوردية</th><th>الدور</th><th>الحالة</th><th>إجراءات</th></tr></thead>
-          <tbody id="empTbSimple"></tbody>
-        </table></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MY SHIFT -->
-  <div id="page-sh" class="page" style="display:none">
-    <div class="ph" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px">
-      <div><h2 id="shTitle">📋 موظفو ورديتي</h2><p id="supLbl">-</p></div>
-    </div>
-
-    <!-- Controls bar -->
-    <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 16px">
-      <div class="sw" style="margin:0;flex:1;min-width:180px">
-        <span class="si2">🔍</span>
-        <input type="text" id="shSrch" placeholder="بحث..." oninput="filterShComp()" style="width:100%">
-      </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button class="btn btn-primary btn-sm" style="width:auto" onclick="openAddShift()">➕ إضافة موظف</button>
-        <button class="btn btn-sm" onclick="exportComprehensiveExcel()" style="width:auto;background:rgba(0,200,150,.12);border:1px solid rgba(0,200,150,.4);color:var(--success);border-radius:var(--rp);padding:6px 14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;font-size:12px">📥 Excel</button>
-      </div>
-    </div>
-
-    <!-- Summary stats -->
-    <div id="shSummaryStats" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:14px"></div>
-
-    <!-- Comprehensive table for shift -->
-    <div class="card">
-      <div class="card-hd">
-        <h3 id="shCompTitle">الجدول الشامل</h3>
-        <span id="shCompCount" style="font-size:12px;color:var(--text2)"></span>
-      </div>
-      <div class="card-bd" style="padding:0;overflow:hidden">
-        <div style="overflow-x:auto;overflow-y:auto;max-height:65vh;-webkit-overflow-scrolling:touch">
-          <table id="shCompTbl" style="min-width:1400px;border-collapse:separate;border-spacing:0">
-            <thead id="shCompThead"></thead>
-            <tbody id="shTb"><tr><td colspan="20" class="no-data">⏳ جاري التحميل...</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PROFILE -->
-  <div id="page-prof" class="page" style="display:none">
-    <div class="ph"><h2>👤 ملفي الشخصي</h2></div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;max-width:900px">
-      <!-- Left: basic info -->
-      <div class="card">
-        <div class="card-hd"><h3>البيانات الأساسية</h3><button class="btn btn-sec btn-sm" onclick="openEditProf()">✏️ تعديل</button></div>
-        <div class="card-bd" style="text-align:center;padding-top:18px">
-          <div class="pav" id="profAv">م</div>
-          <h2 id="profName" style="font-size:17px;margin-bottom:3px"></h2>
-          <p id="profRol" style="color:var(--text2);font-size:13px;margin-bottom:14px"></p>
-          <div class="dv"></div>
-          <div style="text-align:right">
-            <div class="srow"><div class="slbl">رقم الوظيفي</div><div style="color:var(--primary);font-weight:800" id="profId"></div></div>
-            <div class="srow"><div class="slbl">رقم الجوال</div><div id="profPh"></div></div>
-            <div class="srow"><div class="slbl">القسم</div><div id="profDp"></div></div>
-            <div class="srow"><div class="slbl">الوردية</div><div id="profSh"></div></div>
-            <div class="srow"><div class="slbl">المنطقة</div><div id="profRegion" style="color:var(--text2)">-</div></div>
-            <div class="srow"><div class="slbl">المركز</div><div id="profCenter" style="color:var(--text2)">-</div></div>
+        <!-- SIMPLE TABLE (hidden by default) -->
+        <div class="card" id="simpleEmpCard" style="display:none">
+          <div class="card-hd"><h3>قائمة الموظفين</h3></div>
+          <div class="card-bd" style="padding:0">
+            <div class="tw"><table>
+              <thead><tr><th>رقم الوظيفي</th><th>الاسم الكامل</th><th>رقم الجوال</th><th>القسم</th><th>الوردية</th><th>الدور</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+              <tbody id="empTbSimple"></tbody>
+            </table></div>
           </div>
         </div>
       </div>
-      <!-- Right: balances + transfer history -->
-      <div style="display:flex;flex-direction:column;gap:14px">
-        <div class="card" id="profBalCard">
-          <div class="card-hd"><h3>📊 أرصدة الإجازات</h3><button class="btn btn-sec btn-sm" onclick="openEditBalances()" id="editBalBtn">✏️ تعديل</button></div>
-          <div class="card-bd">
-            <div id="profBalances"></div>
+
+      <!-- MY SHIFT -->
+      <div id="page-sh" class="page" style="display:none">
+        <div class="ph" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <div><h2 id="shTitle">📋 موظفو ورديتي</h2><p id="supLbl">-</p></div>
+        </div>
+
+        <!-- Controls bar -->
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 16px">
+          <div class="sw" style="margin:0;flex:1;min-width:180px">
+            <span class="si2">🔍</span>
+            <input type="text" id="shSrch" placeholder="بحث..." oninput="filterShComp()" style="width:100%">
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="btn btn-primary btn-sm" style="width:auto" onclick="openAddShift()">➕ إضافة موظف</button>
+            <button class="btn btn-sm" onclick="exportComprehensiveExcel()" style="width:auto;background:rgba(0,200,150,.12);border:1px solid rgba(0,200,150,.4);color:var(--success);border-radius:var(--rp);padding:6px 14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;font-size:12px">📥 Excel</button>
           </div>
         </div>
+
+        <!-- Summary stats -->
+        <div id="shSummaryStats" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:14px"></div>
+
+        <!-- Comprehensive table for shift -->
         <div class="card">
-          <div class="card-hd"><h3>📋 حالة الوردية اليوم</h3></div>
-          <div class="card-bd" id="profShiftToday"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Edit balances modal trigger area (for employee) -->
-    <div id="profBalEditArea" class="card" style="max-width:460px;margin-top:14px;display:none">
-      <div class="card-hd"><h3>تعديل الأرصدة</h3></div>
-      <div class="card-bd">
-        <div class="fgrid">
-          <div class="form-group"><label>رصيد سنوية</label><input type="number" id="profBalAnnual" class="finp" min="0"></div>
-          <div class="form-group"><label>رصيد مجدولة</label><input type="number" id="profBalSched" class="finp" min="0"></div>
-        </div>
-        <button class="btn btn-primary btn-full" onclick="saveProfBalances()">💾 حفظ</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- SETTINGS -->
-  <div id="page-set" class="page" style="display:none">
-    <div class="ph"><h2>⚙️ إعدادات النظام</h2></div>
-    <div class="card" style="max-width:480px">
-      <div class="card-hd"><h3>بيانات حساب المدير</h3></div>
-      <div class="card-bd">
-        <div id="setAl" class="al"></div>
-        <div class="form-group"><label>رقم دخول المدير</label><input type="text" id="sMId" class="finp"></div>
-        <div class="form-group"><label>كلمة المرور الجديدة (فارغة = بدون تغيير)</label><input type="password" id="sMPw" class="finp" placeholder="كلمة مرور جديدة..."></div>
-        <div class="form-group"><label>اسم المدير</label><input type="text" id="sMNm" class="finp"></div>
-        <button class="btn btn-primary btn-full" onclick="saveSets()">💾 حفظ الإعدادات</button>
-      </div>
-    </div>
-    <div class="card" style="max-width:480px;margin-top:13px">
-      <div class="card-hd"><h3>حساب المدير كموظف</h3></div>
-      <div class="card-bd">
-        <p style="font-size:12px;color:var(--text2);margin-bottom:14px">ربط حساب المدير بحساب موظف للتنقل بين الدورين</p>
-        <div class="form-group"><label>رقم الوظيفي الخاص بالمدير كموظف</label><input type="text" id="sMgrEmpId" class="finp" placeholder="مثال: 9999" oninput="norm(this)"></div>
-        <button class="btn btn-sec btn-full" onclick="saveMgrEmpLink()" style="margin-bottom:0">🔗 ربط الحساب</button>
-        <div id="mgrEmpAl" class="al" style="margin-top:10px"></div>
-      </div>
-    </div>
-    <div class="card" style="max-width:480px;margin-top:13px">
-      <div class="card-hd"><h3>🔗 ربط Google Sheets</h3></div>
-      <div class="card-bd">
-        <div id="gasAl" class="al"></div>
-        <div class="form-group">
-          <label>معرّف جدول البيانات (Sheet ID)</label>
-          <div style="display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rsm);padding:8px 12px">
-            <span style="font-size:11px;color:var(--text3);word-break:break-all;flex:1" id="sheetId">11iUjLsOz64NaVi6MxPqf8acMl9--vXg8QuJpm0yWVL4</span>
-            <button class="btn btn-sec btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('sheetId').textContent).then(()=>toast('✅ تم النسخ','success'))">📋</button>
+          <div class="card-hd">
+            <h3 id="shCompTitle">الجدول الشامل</h3>
+            <span id="shCompCount" style="font-size:12px;color:var(--text2)"></span>
           </div>
-        </div>
-        <div class="form-group">
-          <label>رابط Google Apps Script (بعد النشر)</label>
-          <input type="text" id="gasUrlInput" class="finp" placeholder="https://script.google.com/macros/s/..." value="">
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-primary btn-sm" style="width:auto" onclick="saveGasUrl()">🔗 ربط وتفعيل</button>
-          <button class="btn btn-sec btn-sm" onclick="initSheets()">🔧 تهيئة الجداول</button>
-          <button class="btn btn-sec btn-sm" style="background:rgba(0,200,150,.1);border-color:rgba(0,200,150,.3);color:var(--success)" onclick="addMissingColumnsGAS()">➕ إضافة الأعمدة الناقصة</button>
-          <button class="btn btn-sec btn-sm" onclick="testGasConnection()">🧪 اختبار الاتصال</button>
-          <button class="btn btn-dng btn-sm" style="margin-top:8px" onclick="clearAllDataGAS()">🗑️ مسح جميع البيانات</button>
-          <button class="btn btn-sec btn-sm" onclick="loadAll()">🔄 تحديث</button>
-          <button class="btn btn-dng btn-sm" onclick="clearDemoData()">🗑️ حذف البيانات التجريبية</button>
-          <button class="btn btn-sec btn-sm" onclick="syncComprehensiveSheet()" title="تحديث الجدول الشامل في Sheets">📊 تحديث الجدول الشامل</button>
-        </div>
-        <div style="margin-top:12px;padding:10px 12px;background:var(--bg2);border-radius:var(--rsm);font-size:11px;color:var(--text3)">
-          💡 <b>طريقة الربط:</b> 1) افتح script.google.com → مشروع جديد → انسخ كود Code.gs من تعليقات الملف → نشر ← تطبيق ويب ← متاح للجميع → انسخ الرابط وألصقه هنا
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- FORMS PAGE -->
-  <div id="page-forms" class="page" style="display:none">
-    <div class="ph"><h2>📝 النماذج</h2><p>إجازات · ساعات إضافية · البيانات الوظيفية</p></div>
-
-    <!-- STICKY TABS -->
-    <div id="formTabsBar" style="position:sticky;top:0;z-index:50;background:var(--bg);padding:8px 0 10px;margin-bottom:14px;border-bottom:1px solid var(--border)">
-      <div style="display:flex;flex-wrap:wrap;gap:4px;background:var(--bg2);border-radius:20px;padding:4px">
-        <button onclick="switchFormTab('leave')" id="ftab-leave" class="ftb on" style="flex:1;min-width:100px">🏖️ الإجازات</button>
-        <button onclick="switchFormTab('extra')" id="ftab-extra" class="ftb off" style="flex:1;min-width:100px">⏰ إضافي</button>
-        <button onclick="switchFormTab('info')"  id="ftab-info"  class="ftb off" style="flex:1;min-width:100px">🗂️ البيانات</button>
-      </div>
-    </div>
-
-    <!-- ===== LEAVE SECTION ===== -->
-    <div id="fsec-leave" style="max-width:680px">
-      <!-- Employee info bar (auto-filled for employees) -->
-      <div id="leaveEmpBar" style="display:none;background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 16px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:14px;align-items:center">
-        <span style="font-size:13px;font-weight:700" id="leEmpName"></span>
-        <span style="font-size:12px;color:var(--text2)" id="leEmpId"></span>
-        <span id="leEmpShift" class="sht sh-a"></span>
-        <span style="font-size:12px;color:var(--text2)" id="leEmpRegion"></span>
-        <span style="font-size:12px;color:var(--text2)" id="leEmpCenter"></span>
-      </div>
-      <div class="card" style="max-width:680px">
-        <div class="card-hd"><h3>🏖️ طلب إجازة</h3></div>
-        <div class="card-bd">
-          <div id="leaveAl" class="al"></div>
-          <!-- Emp selector (managers/supervisors only) -->
-          <div id="leaveEmpSelectWrap" class="form-group" style="display:none">
-            <label>الموظف <span>*</span></label>
-            <select id="fLeaveEmp" class="finp" onchange="onLeaveEmpChange()"><option value="">-- اختر الموظف --</option></select>
-          </div>
-          <!-- Leave balances -->
-          <div id="leaveBalances" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;padding:10px 14px;background:var(--bg2);border-radius:var(--rsm)">
-            <span style="font-size:12px;font-weight:700;color:var(--text2);width:100%;margin-bottom:2px">📊 أرصدة الإجازات:</span>
-            <div style="display:flex;flex-wrap:wrap;gap:8px" id="balancesRow">
-              <span style="font-size:12px;color:var(--text3)">اختر موظفاً لعرض الأرصدة</span>
+          <div class="card-bd" style="padding:0;overflow:hidden">
+            <div style="overflow-x:auto;overflow-y:auto;max-height:65vh;-webkit-overflow-scrolling:touch">
+              <table id="shCompTbl" style="min-width:1400px;border-collapse:separate;border-spacing:0">
+                <thead id="shCompThead"></thead>
+                <tbody id="shTb"><tr><td colspan="20" class="no-data">⏳ جاري التحميل...</td></tr></tbody>
+              </table>
             </div>
           </div>
-          <div class="fgrid">
+        </div>
+      </div>
+
+      <!-- PROFILE -->
+      <div id="page-prof" class="page" style="display:none">
+        <div class="ph"><h2>👤 ملفي الشخصي</h2></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;max-width:900px">
+          <!-- Left: basic info -->
+          <div class="card">
+            <div class="card-hd"><h3>البيانات الأساسية</h3><button class="btn btn-sec btn-sm" onclick="openEditProf()">✏️ تعديل</button></div>
+            <div class="card-bd" style="text-align:center;padding-top:18px">
+              <div class="pav" id="profAv">م</div>
+              <h2 id="profName" style="font-size:17px;margin-bottom:3px"></h2>
+              <p id="profRol" style="color:var(--text2);font-size:13px;margin-bottom:14px"></p>
+              <div class="dv"></div>
+              <div style="text-align:right">
+                <div class="srow"><div class="slbl">رقم الوظيفي</div><div style="color:var(--primary);font-weight:800" id="profId"></div></div>
+                <div class="srow"><div class="slbl">رقم الجوال</div><div id="profPh"></div></div>
+                <div class="srow"><div class="slbl">القسم</div><div id="profDp"></div></div>
+                <div class="srow"><div class="slbl">الوردية</div><div id="profSh"></div></div>
+                <div class="srow"><div class="slbl">المنطقة</div><div id="profRegion" style="color:var(--text2)">-</div></div>
+                <div class="srow"><div class="slbl">المركز</div><div id="profCenter" style="color:var(--text2)">-</div></div>
+              </div>
+            </div>
+          </div>
+          <!-- Right: balances + transfer history -->
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div class="card" id="profBalCard">
+              <div class="card-hd"><h3>📊 أرصدة الإجازات</h3><button class="btn btn-sec btn-sm" onclick="openEditBalances()" id="editBalBtn">✏️ تعديل</button></div>
+              <div class="card-bd">
+                <div id="profBalances"></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-hd"><h3>📋 حالة الوردية اليوم</h3></div>
+              <div class="card-bd" id="profShiftToday"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Edit balances modal trigger area (for employee) -->
+        <div id="profBalEditArea" class="card" style="max-width:460px;margin-top:14px;display:none">
+          <div class="card-hd"><h3>تعديل الأرصدة</h3></div>
+          <div class="card-bd">
+            <div class="fgrid">
+              <div class="form-group"><label>رصيد سنوية</label><input type="number" id="profBalAnnual" class="finp" min="0"></div>
+              <div class="form-group"><label>رصيد مجدولة</label><input type="number" id="profBalSched" class="finp" min="0"></div>
+            </div>
+            <button class="btn btn-primary btn-full" onclick="saveProfBalances()">💾 حفظ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div id="page-set" class="page" style="display:none">
+        <div class="ph"><h2>⚙️ إعدادات النظام</h2></div>
+        <div class="card" style="max-width:480px">
+          <div class="card-hd"><h3>بيانات حساب المدير</h3></div>
+          <div class="card-bd">
+            <div id="setAl" class="al"></div>
+            <div class="form-group"><label>رقم دخول المدير</label><input type="text" id="sMId" class="finp"></div>
+            <div class="form-group"><label>كلمة المرور الجديدة (فارغة = بدون تغيير)</label><input type="password" id="sMPw" class="finp" placeholder="كلمة مرور جديدة..."></div>
+            <div class="form-group"><label>اسم المدير</label><input type="text" id="sMNm" class="finp"></div>
+            <button class="btn btn-primary btn-full" onclick="saveSets()">💾 حفظ الإعدادات</button>
+          </div>
+        </div>
+        <div class="card" style="max-width:480px;margin-top:13px">
+          <div class="card-hd"><h3>حساب المدير كموظف</h3></div>
+          <div class="card-bd">
+            <p style="font-size:12px;color:var(--text2);margin-bottom:14px">ربط حساب المدير بحساب موظف للتنقل بين الدورين</p>
+            <div class="form-group"><label>رقم الوظيفي الخاص بالمدير كموظف</label><input type="text" id="sMgrEmpId" class="finp" placeholder="مثال: 9999" oninput="norm(this)"></div>
+            <button class="btn btn-sec btn-full" onclick="saveMgrEmpLink()" style="margin-bottom:0">🔗 ربط الحساب</button>
+            <div id="mgrEmpAl" class="al" style="margin-top:10px"></div>
+          </div>
+        </div>
+        <div class="card" style="max-width:480px;margin-top:13px">
+          <div class="card-hd"><h3>🔗 ربط Google Sheets</h3></div>
+          <div class="card-bd">
+            <div id="gasAl" class="al"></div>
             <div class="form-group">
-              <label>نوع الإجازة <span>*</span></label>
-              <div style="display:flex;gap:6px">
-                <select id="fLeaveType" class="finp" style="flex:1" onchange="onLeaveTypeChange()">
-                  <option value="سنوية">سنوية</option>
-                  <option value="مجدولة">مجدولة</option>
-                  <option value="مرضية">مرضية</option>
-                  <option value="وفاة">وفاة</option>
-                  <option value="زواج">زواج</option>
-                  <option value="مولود">مولود</option>
-                  <option value="اختبارات">اختبارات</option>
-                  <option value="دورة عمل">دورة عمل</option>
-                </select>
-                <button class="btn btn-sec btn-sm" onclick="addLeaveType()" title="إضافة نوع جديد" style="flex-shrink:0;border-radius:12px;padding:0 10px">➕</button>
-              </div>
-            </div>
-            <div class="form-group full leave-date-row">
-              <div class="form-group" style="margin:0">
-                <label>تاريخ البداية <span>*</span></label>
-                <input type="date" id="fLeaveStart" class="finp" onchange="calcLeaveDays()">
-              </div>
-              <div class="form-group" style="margin:0">
-                <label>تاريخ النهاية <span>*</span></label>
-                <input type="date" id="fLeaveEnd" class="finp" onchange="calcLeaveDays()">
+              <label>معرّف جدول البيانات (Sheet ID)</label>
+              <div style="display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rsm);padding:8px 12px">
+                <span style="font-size:11px;color:var(--text3);word-break:break-all;flex:1" id="sheetId">11iUjLsOz64NaVi6MxPqf8acMl9--vXg8QuJpm0yWVL4</span>
+                <button class="btn btn-sec btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('sheetId').textContent).then(()=>toast('✅ تم النسخ','success'))">📋</button>
               </div>
             </div>
             <div class="form-group">
-              <label>مدة الإجازة (تلقائي)</label>
-              <input type="text" id="fLeaveDays" class="finp" readonly style="opacity:.75;background:var(--bg2)" placeholder="تُحسب تلقائياً">
+              <label>رابط Google Apps Script (بعد النشر)</label>
+              <input type="text" id="gasUrlInput" class="finp" placeholder="https://script.google.com/macros/s/..." value="">
             </div>
-            <div class="form-group full">
-              <label>ملاحظات</label>
-              <input type="text" id="fLeaveNote" class="finp" placeholder="سبب الإجازة أو ملاحظات...">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" style="width:auto" onclick="saveGasUrl()">🔗 ربط وتفعيل</button>
+              <button class="btn btn-sec btn-sm" onclick="initSheets()">🔧 تهيئة الجداول</button>
+              <button class="btn btn-sec btn-sm" style="background:rgba(0,200,150,.1);border-color:rgba(0,200,150,.3);color:var(--success)" onclick="addMissingColumnsGAS()">➕ إضافة الأعمدة الناقصة</button>
+              <button class="btn btn-sec btn-sm" onclick="testGasConnection()">🧪 اختبار الاتصال</button>
+              <button class="btn btn-dng btn-sm" style="margin-top:8px" onclick="clearAllDataGAS()">🗑️ مسح جميع البيانات</button>
+              <button class="btn btn-sec btn-sm" onclick="loadAll()">🔄 تحديث</button>
+              <button class="btn btn-dng btn-sm" onclick="clearDemoData()">🗑️ حذف البيانات التجريبية</button>
+              <button class="btn btn-sec btn-sm" onclick="syncComprehensiveSheet()" title="تحديث الجدول الشامل في Sheets">📊 تحديث الجدول الشامل</button>
+            </div>
+            <div style="margin-top:12px;padding:10px 12px;background:var(--bg2);border-radius:var(--rsm);font-size:11px;color:var(--text3)">
+              💡 <b>طريقة الربط:</b> 1) افتح script.google.com → مشروع جديد → انسخ كود Code.gs من تعليقات الملف → نشر ← تطبيق ويب ← متاح للجميع → انسخ الرابط وألصقه هنا
             </div>
           </div>
-          <!-- Balance deduction preview -->
-          <div id="leaveDeductPreview" style="display:none;padding:10px 14px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:var(--rsm);margin-bottom:12px;font-size:13px;font-weight:700;color:var(--danger)"></div>
-          <div id="leavePeriodSched" style="display:none"></div>
-          <button class="btn btn-primary btn-full" onclick="saveLeave()">💾 حفظ الطلب</button>
         </div>
       </div>
-      <!-- Balance editor (for manager/supervisor) -->
-      <div id="leaveBalanceEditor" class="card" style="max-width:680px;margin-top:14px;display:none">
-        <div class="card-hd"><h3 id="balEditorTitle">💰 تعديل أرصدة الإجازات</h3></div>
-        <div class="card-bd">
-          <div class="fgrid">
-            <div class="form-group">
-              <label>رصيد سنوية (بالنظام)</label>
-              <input type="number" id="balAnnual" class="finp" min="0">
-              <p style="font-size:11px;color:var(--text3);margin-top:3px">يُدار بواسطة المدير/المشرف</p>
-            </div>
-            <div class="form-group">
-              <label>رصيد مجدولة (بالمشرف)</label>
-              <input type="number" id="balScheduled" class="finp" min="0">
-              <p style="font-size:11px;color:var(--text3);margin-top:3px">الإجازات المجدولة في الجدول</p>
+
+
+      <!-- FORMS PAGE -->
+      <div id="page-forms" class="page" style="display:none">
+        <div class="ph"><h2>📝 النماذج</h2><p>إجازات · ساعات إضافية · البيانات الوظيفية</p></div>
+
+        <!-- STICKY TABS -->
+        <div id="formTabsBar" style="position:sticky;top:0;z-index:50;background:var(--bg);padding:8px 0 10px;margin-bottom:14px;border-bottom:1px solid var(--border)">
+          <div style="display:flex;flex-wrap:wrap;gap:4px;background:var(--bg2);border-radius:20px;padding:4px">
+            <button onclick="switchFormTab('leave')" id="ftab-leave" class="ftb on" style="flex:1;min-width:100px">🏖️ الإجازات</button>
+            <button onclick="switchFormTab('extra')" id="ftab-extra" class="ftb off" style="flex:1;min-width:100px">⏰ إضافي</button>
+            <button onclick="switchFormTab('info')"  id="ftab-info"  class="ftb off" style="flex:1;min-width:100px">🗂️ البيانات</button>
+          </div>
+        </div>
+
+        <!-- ===== LEAVE SECTION ===== -->
+        <div id="fsec-leave" style="max-width:680px">
+          <!-- Employee info bar (auto-filled for employees) -->
+          <div id="leaveEmpBar" style="display:none;background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 16px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:14px;align-items:center">
+            <span style="font-size:13px;font-weight:700" id="leEmpName"></span>
+            <span style="font-size:12px;color:var(--text2)" id="leEmpId"></span>
+            <span id="leEmpShift" class="sht sh-a"></span>
+            <span style="font-size:12px;color:var(--text2)" id="leEmpRegion"></span>
+            <span style="font-size:12px;color:var(--text2)" id="leEmpCenter"></span>
+          </div>
+          <div class="card" style="max-width:680px">
+            <div class="card-hd"><h3>🏖️ طلب إجازة</h3></div>
+            <div class="card-bd">
+              <div id="leaveAl" class="al"></div>
+              <!-- Emp selector (managers/supervisors only) -->
+              <div id="leaveEmpSelectWrap" class="form-group" style="display:none">
+                <label>الموظف <span>*</span></label>
+                <select id="fLeaveEmp" class="finp" onchange="onLeaveEmpChange()"><option value="">-- اختر الموظف --</option></select>
+              </div>
+              <!-- Leave balances -->
+              <div id="leaveBalances" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;padding:10px 14px;background:var(--bg2);border-radius:var(--rsm)">
+                <span style="font-size:12px;font-weight:700;color:var(--text2);width:100%;margin-bottom:2px">📊 أرصدة الإجازات:</span>
+                <div style="display:flex;flex-wrap:wrap;gap:8px" id="balancesRow">
+                  <span style="font-size:12px;color:var(--text3)">اختر موظفاً لعرض الأرصدة</span>
+                </div>
+              </div>
+              <div class="fgrid">
+                <div class="form-group">
+                  <label>نوع الإجازة <span>*</span></label>
+                  <div style="display:flex;gap:6px">
+                    <select id="fLeaveType" class="finp" style="flex:1" onchange="onLeaveTypeChange()">
+                      <option value="سنوية">سنوية</option>
+                      <option value="مجدولة">مجدولة</option>
+                      <option value="مرضية">مرضية</option>
+                      <option value="وفاة">وفاة</option>
+                      <option value="زواج">زواج</option>
+                      <option value="مولود">مولود</option>
+                      <option value="اختبارات">اختبارات</option>
+                      <option value="دورة عمل">دورة عمل</option>
+                    </select>
+                    <button class="btn btn-sec btn-sm" onclick="addLeaveType()" title="إضافة نوع جديد" style="flex-shrink:0;border-radius:12px;padding:0 10px">➕</button>
+                  </div>
+                </div>
+                <div class="form-group full leave-date-row">
+                  <div class="form-group" style="margin:0">
+                    <label>تاريخ البداية <span>*</span></label>
+                    <input type="date" id="fLeaveStart" class="finp" onchange="calcLeaveDays()">
+                  </div>
+                  <div class="form-group" style="margin:0">
+                    <label>تاريخ النهاية <span>*</span></label>
+                    <input type="date" id="fLeaveEnd" class="finp" onchange="calcLeaveDays()">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>مدة الإجازة (تلقائي)</label>
+                  <input type="text" id="fLeaveDays" class="finp" readonly style="opacity:.75;background:var(--bg2)" placeholder="تُحسب تلقائياً">
+                </div>
+                <div class="form-group full">
+                  <label>ملاحظات</label>
+                  <input type="text" id="fLeaveNote" class="finp" placeholder="سبب الإجازة أو ملاحظات...">
+                </div>
+              </div>
+              <!-- Balance deduction preview -->
+              <div id="leaveDeductPreview" style="display:none;padding:10px 14px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:var(--rsm);margin-bottom:12px;font-size:13px;font-weight:700;color:var(--danger)"></div>
+              <div id="leavePeriodSched" style="display:none"></div>
+              <button class="btn btn-primary btn-full" onclick="saveLeave()">💾 حفظ الطلب</button>
             </div>
           </div>
-          <div id="balSaveWrap"><button class="btn btn-sec" onclick="saveBalances()" style="border-radius:var(--rp)">💾 حفظ الأرصدة</button></div>
+          <!-- Balance editor (for manager/supervisor) -->
+          <div id="leaveBalanceEditor" class="card" style="max-width:680px;margin-top:14px;display:none">
+            <div class="card-hd"><h3 id="balEditorTitle">💰 تعديل أرصدة الإجازات</h3></div>
+            <div class="card-bd">
+              <div class="fgrid">
+                <div class="form-group">
+                  <label>رصيد سنوية (بالنظام)</label>
+                  <input type="number" id="balAnnual" class="finp" min="0">
+                  <p style="font-size:11px;color:var(--text3);margin-top:3px">يُدار بواسطة المدير/المشرف</p>
+                </div>
+                <div class="form-group">
+                  <label>رصيد مجدولة (بالمشرف)</label>
+                  <input type="number" id="balScheduled" class="finp" min="0">
+                  <p style="font-size:11px;color:var(--text3);margin-top:3px">الإجازات المجدولة في الجدول</p>
+                </div>
+              </div>
+              <div id="balSaveWrap"><button class="btn btn-sec" onclick="saveBalances()" style="border-radius:var(--rp)">💾 حفظ الأرصدة</button></div>
+            </div>
+          </div>
+          <div class="card" style="margin-top:14px">
+            <div class="card-hd"><h3>سجل الإجازات</h3></div>
+            <div class="card-bd" style="padding:0"><div class="tw"><table>
+              <thead><tr><th>الموظف</th><th>نوع الإجازة</th><th>من</th><th>إلى</th><th>الأيام</th><th>ملاحظات</th><th>حذف</th></tr></thead>
+              <tbody id="leaveTb"><tr><td colspan="7" class="no-data">لا يوجد طلبات</td></tr></tbody>
+            </table></div></div>
+          </div>
+        </div>
+
+        <!-- ===== EXTRA HOURS SECTION ===== -->
+        <div id="fsec-extra" style="display:none">
+          <div id="extraEmpBar" style="display:none;background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 16px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:14px;align-items:center">
+            <span style="font-size:13px;font-weight:700" id="exEmpName"></span>
+            <span style="font-size:12px;color:var(--text2)" id="exEmpId"></span>
+            <span id="exEmpShift" class="sht sh-a"></span>
+          </div>
+          <div class="card" style="max-width:680px">
+            <div class="card-hd"><h3>⏰ ساعات العمل الإضافية</h3></div>
+            <div class="card-bd">
+              <div id="extraAl" class="al"></div>
+              <div id="extraEmpSelectWrap" class="form-group" style="display:none">
+                <label>الموظف <span>*</span></label>
+                <select id="fExtraEmp" class="finp"><option value="">-- اختر الموظف --</option></select>
+              </div>
+              <div class="fgrid">
+                <div class="form-group">
+                  <label>التاريخ <span>*</span></label>
+                  <input type="date" id="fExtraDate" class="finp">
+                </div>
+                <div class="form-group">
+                  <label>عدد الساعات <span>*</span></label>
+                  <input type="text" id="fExtraHrs" class="finp" placeholder="مثال: 3 أو 1.5 أو 0.5 أو 0.25" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*">
+                </div>
+                <div class="form-group">
+                  <label>نوع الإضافي</label>
+                  <select id="fExtraType" class="finp">
+                    <option value="عادي">عادي</option>
+                    <option value="عطلة">عطلة رسمية</option>
+                    <option value="في يوم إجازة">في يوم إجازة</option>
+                  </select>
+                </div>
+                <div class="form-group full">
+                  <label>ملاحظات</label>
+                  <input type="text" id="fExtraNote" class="finp" placeholder="وصف مهمة الإضافي...">
+                </div>
+
+              </div>
+              <button class="btn btn-primary btn-full" id="saveExtraBtn" onclick="saveExtra()">💾 حفظ</button>
+            </div>
+          </div>
+          <div class="card" style="margin-top:14px">
+            <div class="card-hd"><h3>سجل الساعات الإضافية</h3></div>
+            <div class="card-bd" style="padding:0"><div class="tw"><table>
+              <thead><tr><th>الموظف</th><th>التاريخ</th><th>الساعات</th><th>النوع</th><th>الاستلام</th><th>ملاحظات</th><th>حذف</th></tr></thead>
+              <tbody id="extraTb"><tr><td colspan="6" class="no-data">لا يوجد سجلات</td></tr></tbody>
+            </table></div></div>
+          </div>
+        </div>
+
+        <!-- ===== INFO SECTION ===== -->
+        <div id="fsec-info" style="display:none">
+          <div id="infoEmpBar" style="display:none;background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 16px;margin-bottom:14px">
+            <span style="font-size:13px;font-weight:700" id="infBarName"></span>
+          </div>
+          <div class="card" style="max-width:720px">
+            <div class="card-hd"><h3>🗂️ البيانات الوظيفية الإضافية</h3></div>
+            <div class="card-bd">
+              <div id="infoAl" class="al"></div>
+              <div id="infoEmpSelectWrap" class="form-group" style="display:none">
+                <label>الموظف <span>*</span></label>
+                <select id="fInfoEmp" class="finp" onchange="onInfoEmpChange()"><option value="">-- اختر الموظف --</option></select>
+              </div>
+              <div class="fgrid">
+                <div class="form-group">
+                  <label>المنطقة</label>
+                  <select id="fInfoRegion" class="finp">
+                    <option value="">-- اختر --</option>
+                    <option value="شمال">شمال</option>
+                    <option value="وسط">وسط</option>
+                    <option value="جنوب">جنوب</option>
+                    <option value="غرب">غرب</option>
+                    <option value="شرق">شرق</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>المركز</label>
+                  <input type="text" id="fInfoCenter" class="finp" placeholder="اسم المركز">
+                </div>
+                <div class="form-group">
+                  <label>رقم السيارة</label>
+                  <input type="text" id="fInfoCar" class="finp" placeholder="رقم اللوحة">
+                </div>
+              </div>
+
+              <!-- تواريخ البطاقات - للجميع -->
+              <div class="dv" style="margin:10px 0 10px"></div>
+              <p style="font-size:12px;font-weight:800;color:var(--text2);margin-bottom:8px">🪪 تواريخ انتهاء البطاقات</p>
+              <div class="fgrid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:14px">
+                <div class="form-group" style="margin:0">
+                  <label style="font-size:12px">بطاقة العمل</label>
+                  <input type="date" id="fInfoBadge1" class="finp">
+                </div>
+                <div class="form-group" style="margin:0">
+                  <label style="font-size:12px">بطاقة المصدر</label>
+                  <input type="date" id="fInfoBadge2" class="finp">
+                </div>
+                <div class="form-group" style="margin:0">
+                  <label id="fInfoBadge3Label" style="font-size:12px">المستلم</label>
+                  <input type="date" id="fInfoBadge3" class="finp">
+                </div>
+              </div>
+
+              <div class="dv" style="margin:10px 0 14px"></div>
+              <p style="font-size:12px;font-weight:800;color:var(--text2);margin-bottom:10px">👕 مقاسات الملابس والتجهيزات</p>
+              <div class="fgrid">
+                <div class="form-group">
+                  <label>قميص CAT 2 (مقاس)</label>
+                  <select id="fInfoShirt2" class="finp">
+                    <option value="">--</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>XXXL</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>قميص CAT 2 (عدد)</label>
+                  <input type="number" id="fInfoShirt2Qty" class="finp" placeholder="0" min="0">
+                </div>
+                <div class="form-group">
+                  <label>بنطلون CAT 2 (مقاس)</label>
+                  <input type="text" id="fInfoPants2" class="finp" placeholder="مثال: 32">
+                </div>
+                <div class="form-group">
+                  <label>بنطلون CAT 2 (عدد)</label>
+                  <input type="number" id="fInfoPants2Qty" class="finp" placeholder="0" min="0">
+                </div>
+                <div class="form-group">
+                  <label>بدلة CAT 4 (مقاس)</label>
+                  <select id="fInfoSuit4" class="finp">
+                    <option value="">--</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>XXXL</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>بدلة CAT 4 (عدد)</label>
+                  <input type="number" id="fInfoSuit4Qty" class="finp" placeholder="0" min="0">
+                </div>
+                <div class="form-group">
+                  <label>مقاس الحذاء</label>
+                  <input type="text" id="fInfoShoes" class="finp" placeholder="مثال: 43">
+                </div>
+                <div class="form-group">
+                  <label>عدد الأحذية</label>
+                  <input type="number" id="fInfoShoeQty" class="finp" placeholder="0" min="0">
+                </div>
+              </div>
+              <button class="btn btn-primary btn-full" onclick="saveInfo()" style="margin-top:6px">💾 حفظ البيانات</button>
+            </div>
+          </div>
+          <div class="card" style="margin-top:14px">
+            <div class="card-hd"><h3>جدول البيانات الوظيفية</h3></div>
+            <div class="card-bd" style="padding:0"><div class="tw"><table>
+              <thead><tr><th>الموظف</th><th>المنطقة</th><th>المركز</th><th>السيارة</th><th>قميص CAT2</th><th>بنطلون CAT2</th><th>بدلة CAT4</th><th>حذاء</th><th>تعديل</th></tr></thead>
+              <tbody id="infoTb"><tr><td colspan="9" class="no-data">لا يوجد بيانات</td></tr></tbody>
+            </table></div></div>
+          </div>
         </div>
       </div>
-      <div class="card" style="margin-top:14px">
-        <div class="card-hd"><h3>سجل الإجازات</h3></div>
-        <div class="card-bd" style="padding:0"><div class="tw"><table>
-          <thead><tr><th>الموظف</th><th>نوع الإجازة</th><th>من</th><th>إلى</th><th>الأيام</th><th>ملاحظات</th><th>حذف</th></tr></thead>
-          <tbody id="leaveTb"><tr><td colspan="7" class="no-data">لا يوجد طلبات</td></tr></tbody>
-        </table></div></div>
-      </div>
-    </div>
 
-    <!-- ===== EXTRA HOURS SECTION ===== -->
-    <div id="fsec-extra" style="display:none">
-      <div id="extraEmpBar" style="display:none;background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 16px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:14px;align-items:center">
-        <span style="font-size:13px;font-weight:700" id="exEmpName"></span>
-        <span style="font-size:12px;color:var(--text2)" id="exEmpId"></span>
-        <span id="exEmpShift" class="sht sh-a"></span>
-      </div>
-      <div class="card" style="max-width:680px">
-        <div class="card-hd"><h3>⏰ ساعات العمل الإضافية</h3></div>
-        <div class="card-bd">
-          <div id="extraAl" class="al"></div>
-          <div id="extraEmpSelectWrap" class="form-group" style="display:none">
-            <label>الموظف <span>*</span></label>
-            <select id="fExtraEmp" class="finp"><option value="">-- اختر الموظف --</option></select>
+      <!-- CALENDAR PAGE -->
+      <div id="page-cal" class="page" style="display:none">
+        <div class="ph"><h2>📅 تقويم الورديات</h2><p>جدول دوام الورديات الأربع — يومين صباح | يومين مساء | أربعة أيام إجازة</p></div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px">
+          <div style="display:flex;align-items:center;gap:7px">
+            <label style="font-size:13px;font-weight:700;color:var(--text2)">الشهر:</label>
+            <select id="calMonth" class="finp" style="width:120px;padding:8px 10px" onchange="renderCalendar()">
+              <option value="0">يناير</option><option value="1">فبراير</option><option value="2">مارس</option>
+              <option value="3">أبريل</option><option value="4">مايو</option><option value="5">يونيو</option>
+              <option value="6">يوليو</option><option value="7">أغسطس</option><option value="8">سبتمبر</option>
+              <option value="9">أكتوبر</option><option value="10">نوفمبر</option><option value="11">ديسمبر</option>
+            </select>
           </div>
-          <div class="fgrid">
-            <div class="form-group">
-              <label>التاريخ <span>*</span></label>
-              <input type="date" id="fExtraDate" class="finp">
-            </div>
-            <div class="form-group">
-              <label>عدد الساعات <span>*</span></label>
-              <input type="text" id="fExtraHrs" class="finp" placeholder="مثال: 3 أو 1.5 أو 0.5 أو 0.25" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*">
-            </div>
-            <div class="form-group">
-              <label>نوع الإضافي</label>
-              <select id="fExtraType" class="finp">
-                <option value="عادي">عادي</option>
-                <option value="عطلة">عطلة رسمية</option>
-                <option value="في يوم إجازة">في يوم إجازة</option>
-              </select>
-            </div>
-            <div class="form-group full">
-              <label>ملاحظات</label>
-              <input type="text" id="fExtraNote" class="finp" placeholder="وصف مهمة الإضافي...">
-            </div>
-
+          <div style="display:flex;align-items:center;gap:7px">
+            <label style="font-size:13px;font-weight:700;color:var(--text2)">السنة:</label>
+            <select id="calYear" class="finp" style="width:95px;padding:8px 10px" onchange="renderCalendar()"></select>
           </div>
-          <button class="btn btn-primary btn-full" id="saveExtraBtn" onclick="saveExtra()">💾 حفظ</button>
+          <div style="display:flex;align-items:center;gap:7px">
+            <label style="font-size:13px;font-weight:700;color:var(--text2)">الوردية:</label>
+            <select id="calFilter" class="finp" style="width:130px;padding:8px 10px" onchange="renderCalendar()">
+              <option value="all">جميع الورديات</option>
+              <option value="أ">وردية أ فقط</option>
+              <option value="ب">وردية ب فقط</option>
+              <option value="ج">وردية ج فقط</option>
+              <option value="د">وردية د فقط</option>
+            </select>
+          </div>
+          <button class="btn btn-sec btn-sm" onclick="goToday()">📍 اليوم</button>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-right:auto">
+            <span style="background:rgba(0,149,217,.15);color:#0095D9;border:1px solid rgba(0,149,217,.3);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700">🌅 صباح 7ص-7م</span>
+            <span style="background:rgba(139,92,246,.15);color:#8B5CF6;border:1px solid rgba(139,92,246,.3);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700">🌙 مساء 7م-7ص</span>
+            <span style="background:rgba(0,200,150,.12);color:var(--success);border:1px solid rgba(0,200,150,.2);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700">🏖️ إجازة</span>
+          </div>
         </div>
-      </div>
-      <div class="card" style="margin-top:14px">
-        <div class="card-hd"><h3>سجل الساعات الإضافية</h3></div>
-        <div class="card-bd" style="padding:0"><div class="tw"><table>
-          <thead><tr><th>الموظف</th><th>التاريخ</th><th>الساعات</th><th>النوع</th><th>الاستلام</th><th>ملاحظات</th><th>حذف</th></tr></thead>
-          <tbody id="extraTb"><tr><td colspan="6" class="no-data">لا يوجد سجلات</td></tr></tbody>
-        </table></div></div>
-      </div>
-    </div>
-
-    <!-- ===== INFO SECTION ===== -->
-    <div id="fsec-info" style="display:none">
-      <div id="infoEmpBar" style="display:none;background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 16px;margin-bottom:14px">
-        <span style="font-size:13px;font-weight:700" id="infBarName"></span>
-      </div>
-      <div class="card" style="max-width:720px">
-        <div class="card-hd"><h3>🗂️ البيانات الوظيفية الإضافية</h3></div>
-        <div class="card-bd">
-          <div id="infoAl" class="al"></div>
-          <div id="infoEmpSelectWrap" class="form-group" style="display:none">
-            <label>الموظف <span>*</span></label>
-            <select id="fInfoEmp" class="finp" onchange="onInfoEmpChange()"><option value="">-- اختر الموظف --</option></select>
+        <div class="card" id="calCard">
+          <div class="card-hd" style="font-size:15px;font-weight:800"><span id="calTitle">-</span></div>
+          <div class="card-bd" style="padding:10px">
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px" id="calDayHeaders"></div>
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px" id="calGrid"></div>
           </div>
-          <div class="fgrid">
-            <div class="form-group">
-              <label>المنطقة</label>
-              <select id="fInfoRegion" class="finp">
-                <option value="">-- اختر --</option>
-                <option value="شمال">شمال</option>
-                <option value="وسط">وسط</option>
-                <option value="جنوب">جنوب</option>
-                <option value="غرب">غرب</option>
-                <option value="شرق">شرق</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>المركز</label>
-              <input type="text" id="fInfoCenter" class="finp" placeholder="اسم المركز">
-            </div>
-            <div class="form-group">
-              <label>رقم السيارة</label>
-              <input type="text" id="fInfoCar" class="finp" placeholder="رقم اللوحة">
-            </div>
-          </div>
-
-          <!-- تواريخ البطاقات - للجميع -->
-          <div class="dv" style="margin:10px 0 10px"></div>
-          <p style="font-size:12px;font-weight:800;color:var(--text2);margin-bottom:8px">🪪 تواريخ انتهاء البطاقات</p>
-          <div class="fgrid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:14px">
-            <div class="form-group" style="margin:0">
-              <label style="font-size:12px">بطاقة العمل</label>
-              <input type="date" id="fInfoBadge1" class="finp">
-            </div>
-            <div class="form-group" style="margin:0">
-              <label style="font-size:12px">بطاقة المصدر</label>
-              <input type="date" id="fInfoBadge2" class="finp">
-            </div>
-            <div class="form-group" style="margin:0">
-              <label id="fInfoBadge3Label" style="font-size:12px">المستلم</label>
-              <input type="date" id="fInfoBadge3" class="finp">
-            </div>
-          </div>
-
-          <div class="dv" style="margin:10px 0 14px"></div>
-          <p style="font-size:12px;font-weight:800;color:var(--text2);margin-bottom:10px">👕 مقاسات الملابس والتجهيزات</p>
-          <div class="fgrid">
-            <div class="form-group">
-              <label>قميص CAT 2 (مقاس)</label>
-              <select id="fInfoShirt2" class="finp">
-                <option value="">--</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>XXXL</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>قميص CAT 2 (عدد)</label>
-              <input type="number" id="fInfoShirt2Qty" class="finp" placeholder="0" min="0">
-            </div>
-            <div class="form-group">
-              <label>بنطلون CAT 2 (مقاس)</label>
-              <input type="text" id="fInfoPants2" class="finp" placeholder="مثال: 32">
-            </div>
-            <div class="form-group">
-              <label>بنطلون CAT 2 (عدد)</label>
-              <input type="number" id="fInfoPants2Qty" class="finp" placeholder="0" min="0">
-            </div>
-            <div class="form-group">
-              <label>بدلة CAT 4 (مقاس)</label>
-              <select id="fInfoSuit4" class="finp">
-                <option value="">--</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>XXXL</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>بدلة CAT 4 (عدد)</label>
-              <input type="number" id="fInfoSuit4Qty" class="finp" placeholder="0" min="0">
-            </div>
-            <div class="form-group">
-              <label>مقاس الحذاء</label>
-              <input type="text" id="fInfoShoes" class="finp" placeholder="مثال: 43">
-            </div>
-            <div class="form-group">
-              <label>عدد الأحذية</label>
-              <input type="number" id="fInfoShoeQty" class="finp" placeholder="0" min="0">
-            </div>
-          </div>
-          <button class="btn btn-primary btn-full" onclick="saveInfo()" style="margin-top:6px">💾 حفظ البيانات</button>
         </div>
+        <div id="miniSchedule"></div>
+        <div id="monthlyStats"></div>
       </div>
-      <div class="card" style="margin-top:14px">
-        <div class="card-hd"><h3>جدول البيانات الوظيفية</h3></div>
-        <div class="card-bd" style="padding:0"><div class="tw"><table>
-          <thead><tr><th>الموظف</th><th>المنطقة</th><th>المركز</th><th>السيارة</th><th>قميص CAT2</th><th>بنطلون CAT2</th><th>بدلة CAT4</th><th>حذاء</th><th>تعديل</th></tr></thead>
-          <tbody id="infoTb"><tr><td colspan="9" class="no-data">لا يوجد بيانات</td></tr></tbody>
-        </table></div></div>
-      </div>
-    </div>
-  </div>
 
-  <!-- CALENDAR PAGE -->
-  <div id="page-cal" class="page" style="display:none">
-    <div class="ph"><h2>📅 تقويم الورديات</h2><p>جدول دوام الورديات الأربع — يومين صباح | يومين مساء | أربعة أيام إجازة</p></div>
-    <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px">
-      <div style="display:flex;align-items:center;gap:7px">
-        <label style="font-size:13px;font-weight:700;color:var(--text2)">الشهر:</label>
-        <select id="calMonth" class="finp" style="width:120px;padding:8px 10px" onchange="renderCalendar()">
-          <option value="0">يناير</option><option value="1">فبراير</option><option value="2">مارس</option>
-          <option value="3">أبريل</option><option value="4">مايو</option><option value="5">يونيو</option>
-          <option value="6">يوليو</option><option value="7">أغسطس</option><option value="8">سبتمبر</option>
-          <option value="9">أكتوبر</option><option value="10">نوفمبر</option><option value="11">ديسمبر</option>
-        </select>
-      </div>
-      <div style="display:flex;align-items:center;gap:7px">
-        <label style="font-size:13px;font-weight:700;color:var(--text2)">السنة:</label>
-        <select id="calYear" class="finp" style="width:95px;padding:8px 10px" onchange="renderCalendar()"></select>
-      </div>
-      <div style="display:flex;align-items:center;gap:7px">
-        <label style="font-size:13px;font-weight:700;color:var(--text2)">الوردية:</label>
-        <select id="calFilter" class="finp" style="width:130px;padding:8px 10px" onchange="renderCalendar()">
-          <option value="all">جميع الورديات</option>
-          <option value="أ">وردية أ فقط</option>
-          <option value="ب">وردية ب فقط</option>
-          <option value="ج">وردية ج فقط</option>
-          <option value="د">وردية د فقط</option>
-        </select>
-      </div>
-      <button class="btn btn-sec btn-sm" onclick="goToday()">📍 اليوم</button>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-right:auto">
-        <span style="background:rgba(0,149,217,.15);color:#0095D9;border:1px solid rgba(0,149,217,.3);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700">🌅 صباح 7ص-7م</span>
-        <span style="background:rgba(139,92,246,.15);color:#8B5CF6;border:1px solid rgba(139,92,246,.3);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700">🌙 مساء 7م-7ص</span>
-        <span style="background:rgba(0,200,150,.12);color:var(--success);border:1px solid rgba(0,200,150,.2);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700">🏖️ إجازة</span>
-      </div>
     </div>
-    <div class="card" id="calCard">
-      <div class="card-hd" style="font-size:15px;font-weight:800"><span id="calTitle">-</span></div>
-      <div class="card-bd" style="padding:10px">
-        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px" id="calDayHeaders"></div>
-        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px" id="calGrid"></div>
-      </div>
-    </div>
-    <div id="miniSchedule"></div>
-    <div id="monthlyStats"></div>
-  </div>
-
-</div>
-```
-
   </div>
 </div>
 
 <!-- MODAL EMP -->
-
 <div class="mo" id="mEmp">
   <div class="modal">
     <div class="m-hd"><h3 id="mEmpTit">إضافة موظف</h3><button class="btn-x" onclick="closeM('mEmp')">✕</button></div>
@@ -1242,53 +1245,49 @@ caret-color: #0A1628;
         </div>
       </div>
 
-```
-  <!-- قسم البطاقات -->
-  <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-      <span style="font-size:13px;font-weight:800;color:var(--text)">🪪 تواريخ انتهاء البطاقات</span>
-      <button type="button" class="btn btn-sec btn-sm" style="width:auto;padding:5px 12px" onclick="addBadgeField()">➕ إضافة بطاقة</button>
+      <!-- قسم البطاقات -->
+      <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <span style="font-size:13px;font-weight:800;color:var(--text)">🪪 تواريخ انتهاء البطاقات</span>
+          <button type="button" class="btn btn-sec btn-sm" style="width:auto;padding:5px 12px" onclick="addBadgeField()">➕ إضافة بطاقة</button>
+        </div>
+        <div id="badgesContainer" class="fgrid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px">
+          <!-- بطاقة العمل -->
+          <div class="badge-field-wrap" data-badge-id="badge1">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+              <label style="font-size:12px;font-weight:700;color:var(--text2)" id="fBadgeLabel_badge1">بطاقة العمل</label>
+              <button type="button" onclick="renameBadgeField('badge1')" style="background:none;border:none;color:var(--primary);font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0" title="تغيير الاسم">✏️</button>
+            </div>
+            <input type="date" id="fBadge_badge1" class="finp" style="font-size:13px">
+            <div id="fBadgePreview_badge1" style="margin-top:4px;min-height:20px;font-size:11px"></div>
+          </div>
+          <!-- بطاقة المصدر -->
+          <div class="badge-field-wrap" data-badge-id="badge2">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+              <label style="font-size:12px;font-weight:700;color:var(--text2)" id="fBadgeLabel_badge2">بطاقة المصدر</label>
+              <button type="button" onclick="renameBadgeField('badge2')" style="background:none;border:none;color:var(--primary);font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0">✏️</button>
+            </div>
+            <input type="date" id="fBadge_badge2" class="finp" style="font-size:13px">
+            <div id="fBadgePreview_badge2" style="margin-top:4px;min-height:20px;font-size:11px"></div>
+          </div>
+          <!-- بطاقة المستلم -->
+          <div class="badge-field-wrap" data-badge-id="badge3">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+              <label style="font-size:12px;font-weight:700;color:var(--text2)" id="fBadgeLabel_badge3" id="fBadge3Label">بطاقة المستلم</label>
+              <button type="button" onclick="renameBadgeField('badge3')" style="background:none;border:none;color:var(--primary);font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0">✏️</button>
+            </div>
+            <input type="date" id="fBadge_badge3" class="finp" style="font-size:13px">
+            <div id="fBadgePreview_badge3" style="margin-top:4px;min-height:20px;font-size:11px"></div>
+          </div>
+          <!-- حقول البطاقات الإضافية تُضاف هنا ديناميكياً -->
+        </div>
+      </div>
     </div>
-    <div id="badgesContainer" class="fgrid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px">
-      <!-- بطاقة العمل -->
-      <div class="badge-field-wrap" data-badge-id="badge1">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-          <label style="font-size:12px;font-weight:700;color:var(--text2)" id="fBadgeLabel_badge1">بطاقة العمل</label>
-          <button type="button" onclick="renameBadgeField('badge1')" style="background:none;border:none;color:var(--primary);font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0" title="تغيير الاسم">✏️</button>
-        </div>
-        <input type="date" id="fBadge_badge1" class="finp" style="font-size:13px">
-        <div id="fBadgePreview_badge1" style="margin-top:4px;min-height:20px;font-size:11px"></div>
-      </div>
-      <!-- بطاقة المصدر -->
-      <div class="badge-field-wrap" data-badge-id="badge2">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-          <label style="font-size:12px;font-weight:700;color:var(--text2)" id="fBadgeLabel_badge2">بطاقة المصدر</label>
-          <button type="button" onclick="renameBadgeField('badge2')" style="background:none;border:none;color:var(--primary);font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0">✏️</button>
-        </div>
-        <input type="date" id="fBadge_badge2" class="finp" style="font-size:13px">
-        <div id="fBadgePreview_badge2" style="margin-top:4px;min-height:20px;font-size:11px"></div>
-      </div>
-      <!-- بطاقة المستلم -->
-      <div class="badge-field-wrap" data-badge-id="badge3">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-          <label style="font-size:12px;font-weight:700;color:var(--text2)" id="fBadgeLabel_badge3" id="fBadge3Label">بطاقة المستلم</label>
-          <button type="button" onclick="renameBadgeField('badge3')" style="background:none;border:none;color:var(--primary);font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0">✏️</button>
-        </div>
-        <input type="date" id="fBadge_badge3" class="finp" style="font-size:13px">
-        <div id="fBadgePreview_badge3" style="margin-top:4px;min-height:20px;font-size:11px"></div>
-      </div>
-      <!-- حقول البطاقات الإضافية تُضاف هنا ديناميكياً -->
-    </div>
-  </div>
-</div>
-<div class="m-ft"><button class="btn btn-sec" onclick="closeM('mEmp')">إلغاء</button><button class="btn btn-primary" style="width:auto" onclick="saveEmp()" id="saveEmpBtn">💾 حفظ</button></div>
-```
-
+    <div class="m-ft"><button class="btn btn-sec" onclick="closeM('mEmp')">إلغاء</button><button class="btn btn-primary" style="width:auto" onclick="saveEmp()" id="saveEmpBtn">💾 حفظ</button></div>
   </div>
 </div>
 
 <!-- MODAL PROFILE EDIT -->
-
 <div class="mo" id="mProf">
   <div class="modal">
     <div class="m-hd"><h3>✏️ تعديل الملف الشخصي</h3><button class="btn-x" onclick="closeM('mProf')">✕</button></div>
@@ -4758,7 +4757,6 @@ window.onload=()=>{
 </script>
 
 <!-- SHIFT DETAIL MODAL -->
-
 <div class="mo" id="mShift">
   <div class="modal" style="max-width:680px">
     <div class="m-hd">
