@@ -1659,42 +1659,28 @@ async function manualSync(){
 }
 
 async function loadAll(){
-  // Load ALL data in ONE request for speed
-  const all=await gas('كل_البيانات',{}).catch(()=>({ok:false}));
-  if(all.ok&&all.data){
-    if(all.data.emps)   emps=all.data.emps;
-    if(all.data.leaves) allLeaves=all.data.leaves;
-    if(all.data.extras) allExtras=all.data.extras;
+  // طلب واحد فقط - لا fallback
+  const all = await gas('كل_البيانات',{}).catch(()=>({ok:false}));
+  if(all.ok && all.data){
+    if(all.data.emps)    emps = all.data.emps;
+    if(all.data.leaves)  allLeaves = all.data.leaves;
+    if(all.data.extras)  allExtras = all.data.extras;
     if(all.data.infos){
-      const infoMap={};
-      all.data.infos.forEach(inf=>{ if(inf.empId) infoMap[String(inf.empId)]=inf; });
-      allInfos=Object.values(infoMap);
+      const m={}; all.data.infos.forEach(i=>{ if(i.empId) m[String(i.empId)]=i; });
+      allInfos = Object.values(m);
     }
     if(all.data.balances){
       allBalances={};
-      const balArr=Array.isArray(all.data.balances)?all.data.balances:[all.data.balances];
-      balArr.forEach(b=>{ if(b&&b.empId) allBalances[String(b.empId)]={annual:Number(b.annual)||0,scheduled:Number(b.scheduled)||0}; });
+      (Array.isArray(all.data.balances)?all.data.balances:[all.data.balances])
+        .forEach(b=>{ if(b&&b.empId) allBalances[String(b.empId)]={annual:Number(b.annual)||0,scheduled:Number(b.scheduled)||0}; });
     }
-  } else {
-    // Fallback: parallel individual requests
-    const [er,lr,xr,ir,br]=await Promise.all([
-      gas('getEmployees').catch(()=>({ok:false})),
-      gas('اجازات_جلب',{}).catch(()=>({ok:false})),
-      gas('اضافي_جلب',{}).catch(()=>({ok:false})),
-      gas('بيانات_جلب',{}).catch(()=>({ok:false})),
-      gas('ارصدة_جلب',{}).catch(()=>({ok:false}))
-    ]);
-    if(er.ok&&er.data) emps=er.data;
-    if(lr.ok&&lr.data) allLeaves=lr.data;
-    if(xr.ok&&xr.data) allExtras=xr.data;
-    if(ir.ok&&ir.data){const m={};ir.data.forEach(i=>{if(i.empId)m[String(i.empId)]=i;});allInfos=Object.values(m);}
-    if(br.ok&&br.data){allBalances={};const ba=Array.isArray(br.data)?br.data:[br.data];ba.forEach(b=>{if(b&&b.empId)allBalances[String(b.empId)]={annual:Number(b.annual)||0,scheduled:Number(b.scheduled)||0};});}
   }
-  renderEmpTbl();markTransferredRows();
-  if(document.getElementById("page-sh").style.display!=="none")renderShTbl();
+  renderEmpTbl(); markTransferredRows();
+  if(document.getElementById('page-sh').style.display!=='none') renderShTbl();
   buildDash();
-  if(VR==='مدير')loadSets();
+  if(VR==='مدير') loadSets();
 }
+
 async function loadSets(){const r=await gas('getSettings');if(r.ok){const si=document.getElementById('sMId');if(si)si.value=r.data.mgrId||'';const sn=document.getElementById('sMNm');if(sn)sn.value=r.data.mgrName||'';const sd=document.getElementById('sheetId');if(sd)sd.textContent=SHEET_ID;const me=document.getElementById('sMgrEmpId');if(me){const saved=U.mgrEmpId||localStorage.getItem('seMgrEmpId')||'';me.value=saved;if(saved&&!U.mgrEmpId){U.mgrEmpId=saved;sessionStorage.setItem('seU',JSON.stringify(U));}}}}
 
 // DASHBOARD
@@ -1955,16 +1941,11 @@ async function empDashAsync(){
   }
   // Fetch fresh data from GAS or localStorage
   const gasUrl=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
-  const [lRes,xRes,iRes,bRes] = await Promise.all([
-    gasUrl?gas('اجازات_جلب',{empId:dispU.empId}).catch(()=>({ok:false})):Promise.resolve({ok:false}),
-    gasUrl?gas('اضافي_جلب',{empId:dispU.empId}).catch(()=>({ok:false})):Promise.resolve({ok:false}),
-    gasUrl?gas('بيانات_جلب',{empId:dispU.empId}).catch(()=>({ok:false})):Promise.resolve({ok:false}),
-    gasUrl?gas('ارصدة_جلب',{empId:dispU.empId}).catch(()=>({ok:false})):Promise.resolve({ok:false}),
-  ]);
-  const empLeaves = lRes.ok&&lRes.data ? lRes.data : getLeaves().filter(l=>String(l.empId)===String(dispU.empId));
-  const empExtras = xRes.ok&&xRes.data ? xRes.data : getExtras().filter(x=>String(x.empId)===String(dispU.empId));
-  const info = (iRes.ok&&iRes.data&&iRes.data[0]) ? iRes.data[0] : (getInfos().find(x=>String(x.empId)===String(dispU.empId))||{});
-  const b = bRes.ok&&bRes.data ? bRes.data : getBalances(dispU.empId);
+  // استخدام البيانات المحلية فقط (لا طلبات GAS تلقائية)
+  const empLeaves = getLeaves().filter(l=>String(l.empId)===String(dispU.empId));
+  const empExtras = getExtras().filter(x=>String(x.empId)===String(dispU.empId));
+  const info = getInfos().find(x=>String(x.empId)===String(dispU.empId))||{};
+  const b = getBalances(dispU.empId);
 
   const tod=dispU.shift?getShiftStatus(dispU.shift,new Date()):null;
   const todIcon=tod==='صباح'?'🌅':tod==='مساء'?'🌙':'🏖️';
@@ -2165,22 +2146,7 @@ async function renderShTbl(){
   // Show loading
   tb.innerHTML='<tr><td colspan="20" class="no-data" style="padding:20px"><span style="color:var(--text2)">⏳ جاري التحميل من قاعدة البيانات...</span></td></tr>';
 
-  // Fetch fresh data from GAS
-  try{
-    const [lr,xr,ir]=await Promise.all([
-      gas('اجازات_جلب',ms?{shift:ms}:{}).catch(()=>({ok:false})),
-      gas('اضافي_جلب',ms?{shift:ms}:{}).catch(()=>({ok:false})),
-      gas('بيانات_جلب',{}).catch(()=>({ok:false}))
-    ]);
-    if(lr.ok&&lr.data) allLeaves=lr.data; else allLeaves=getLeaves();
-    if(xr.ok&&xr.data) allExtras=xr.data; else allExtras=getExtras();
-    if(ir.ok&&ir.data){
-    // Deduplicate infos by empId (keep last entry)
-    const infoMap={};
-    ir.data.forEach(inf=>{ if(inf.empId) infoMap[String(inf.empId)]=inf; });
-    allInfos=Object.values(infoMap);
-  } else allInfos=getInfos();
-  }catch(e){ allLeaves=getLeaves();allExtras=getExtras();allInfos=getInfos(); }
+  // استخدام البيانات المحلية (اضغط 🔄 للتحديث)
 
   // Build header
   const thead=document.getElementById('shCompThead');
@@ -3538,7 +3504,7 @@ function clearDemoData() {
   // حذف أرصدة الموظفين
   Object.keys(localStorage).filter(k=>k.startsWith('seBAL_')).forEach(k=>localStorage.removeItem(k));
   toast('✅ تم حذف البيانات التجريبية - سيتم جلب البيانات من Google Sheets', 'success');
-  setTimeout(()=>loadAll(), 1000);
+  // loadAll() removed - use sync button
 }
 
 
