@@ -2286,32 +2286,29 @@ async function saveEmp(){
   const st=document.getElementById('fSt').value,nt=document.getElementById('fNt').value.trim();
   if(!id||!nm||!ph){showAl('mEmpAl','d','يرجى ملء الحقول المطلوبة');return;}
   setLd('saveEmpBtn',true);
-  const pay={empId:id,name:nm,phone:ph,dept:dp,shift:sh,role:rl,status:st,note:nt};
+  const _fr=document.getElementById('fRegion');
+  const _fc=document.getElementById('fCenter');
+  const pay={empId:id,name:nm,phone:ph,dept:dp,shift:sh,role:rl,status:st,note:nt,
+    region:_fr?_fr.value:'', center:_fc?_fc.value.trim():''};
+  // Badge dates
+  const _b1=document.getElementById('fEmpBadge1')?.value||'';
+  const _b2=document.getElementById('fEmpBadge2')?.value||'';
+  const _b3=document.getElementById('fEmpBadge3')?.value||'';
+  if(_b1||_b2||_b3){pay.badge1=_b1;pay.badge2=_b2;pay.badge3=_b3;}
   let r;
   if(editIdx===-1)r=await gas('addEmployee',pay);
   else{pay.originalEmpId=emps[editIdx].empId;r=await gas('updateEmployee',pay);}
   setLd('saveEmpBtn',false);
   if(!r.ok){showAl('mEmpAl','d',r.error||'حدث خطأ');return;}
   closeM('mEmp');toast(editIdx===-1?'✅ تم إضافة الموظف':'✅ تم التعديل','success');
-  // Save region/center to infos table
-  const fr2=document.getElementById('fRegion');const fc2=document.getElementById('fCenter');
-  if(fr2||fc2){
-    const empObj2=emps.find(ex=>String(ex.empId)===String(id))||{empId:id,name:nm};
-    const existI=getInfos().find(x=>String(x.empId)===String(id))||{};
-    const allBadges=getAllBadgeValues();
-    // Also include badge dates from fEmpBadge1/2/3 (set by mgr/supervisor in emp modal)
-    const _eb1=document.getElementById('fEmpBadge1')?.value||'';
-    const _eb2=document.getElementById('fEmpBadge2')?.value||'';
-    const _eb3=document.getElementById('fEmpBadge3')?.value||'';
-    const empBadges={badge1:_eb1||allBadges.badge1||existI.badge1||'',badge2:_eb2||allBadges.badge2||existI.badge2||'',badge3:_eb3||allBadges.badge3||existI.badge3||''};
-    const infoRow={...existI,empId:String(id),empName:nm,region:fr2?fr2.value:existI.region||'',center:fc2?fc2.value.trim():existI.center||'',...allBadges,...empBadges};
-    const ia=getInfos();const ii=ia.findIndex(x=>String(x.empId)===String(id));
-    if(ii>=0)ia[ii]={...ia[ii],...infoRow};else ia.push(infoRow);
-    saveInfos(ia);
-    const _g=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
-    if(_g)gas('بيانات_حفظ',infoRow).catch(()=>{});
-  }
-  // تحديث محلي فوري
+  // تحديث محلي فوري (بدون طلب إضافي)
+  const existI2=getInfos().find(x=>String(x.empId)===String(id))||{};
+  const allBadges2=getAllBadgeValues();
+  const infoLocal={...existI2,empId:String(id),empName:nm,region:pay.region||'',center:pay.center||'',...allBadges2};
+  if(pay.badge1)infoLocal.badge1=pay.badge1;if(pay.badge2)infoLocal.badge2=pay.badge2;if(pay.badge3)infoLocal.badge3=pay.badge3;
+  const ia2=getInfos();const ii2=ia2.findIndex(x=>String(x.empId)===String(id));
+  if(ii2>=0)ia2[ii2]={...ia2[ii2],...infoLocal};else ia2.push(infoLocal);
+  saveInfos(ia2);
   renderEmpTbl(); buildDash();
   toast('✅ تم الحفظ — اضغط 🔄 للمزامنة','success');
 }
@@ -3944,8 +3941,7 @@ async function saveExtraEdit(id){
   if(idx>=0){arr[idx]=updated;saveExtras(arr);}
   const gUrl=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
   if(gUrl){
-    await gas('اضافي_حذف',{id:String(id)}).catch(()=>{});
-    gas('اضافي_اضافة',updated).catch(()=>{});
+    gas('اضافي_تعديل',updated).catch(()=>{});
   }
   const eRow=document.getElementById('xedit_'+id);
   if(eRow) eRow.remove();
@@ -4050,10 +4046,7 @@ async function saveLeaveEdit(id){
   if(idx>=0){arr[idx]=updated;saveLeaves(arr);}
 
   const gUrl=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
-  if(gUrl){
-    await gas('اجازة_حذف',{id:String(id)}).catch(()=>{});
-    gas('اجازة_اضافة',updated).catch(()=>{});
-  }
+  if(gUrl) gas('اجازة_تعديل',updated).catch(()=>{});
 
   const eRow=document.getElementById('ledit_'+id);
   if(eRow) eRow.remove();
