@@ -1557,7 +1557,7 @@ async function loginMgr(){
   U={empId:r.data.mgrId,name:r.data.mgrName||'مدير النظام',role:'مدير',viewRole:'مدير',phone:'',dept:'الإدارة',shift:'-',mgrEmpId:savedMgrEmpId};
   VR='مدير';sessionStorage.setItem('seU',JSON.stringify(U));
   trackSession(U.empId, U.name, '-');
-  const _er=await gas('getEmployees').catch(()=>({ok:false}));if(_er.ok&&_er.data)emps=_er.data;setLd('mBtn',false);startApp();
+  setLd('mBtn',false); startApp();
 }
 
 // APP
@@ -1567,10 +1567,7 @@ function startApp(){
   buildSidebar();
   buildBottomNav();
   updateTop();buildDash();showPage('db');
-  // تحميل أولي خفيف فقط
-  if(VR==='مدير'||VR==='مشرف'){
-    gas('getEmployees').then(r=>{if(r.ok&&r.data)emps=r.data;renderEmpTbl();buildDash();}).catch(()=>{});
-  }
+  // لا طلبات تلقائية - البيانات تُحمَّل عند الضغط على 🔄
 }
 function buildSidebar(){
   const r=VR;
@@ -1690,9 +1687,18 @@ async function loadAll(){
 }
 
 async function loadSets(){
-  if(window._setsLoaded) return; // لا تعيد الطلب
+  // استخدم الكاش إن وُجد
+  if(window._cachedSettings){
+    const s=window._cachedSettings;
+    const si=document.getElementById('sMId');if(si)si.value=s.mgrId||'';
+    const sn=document.getElementById('sMNm');if(sn)sn.value=s.mgrName||'';
+    const sd=document.getElementById('sheetId');if(sd)sd.textContent=SHEET_ID;
+    const me=document.getElementById('sMgrEmpId');
+    if(me){const saved=U.mgrEmpId||localStorage.getItem('seMgrEmpId')||'';me.value=saved;}
+    return;
+  }
   const r=await gas('getSettings');
-  if(r.ok){ window._setsLoaded=true;const si=document.getElementById('sMId');if(si)si.value=r.data.mgrId||'';const sn=document.getElementById('sMNm');if(sn)sn.value=r.data.mgrName||'';const sd=document.getElementById('sheetId');if(sd)sd.textContent=SHEET_ID;const me=document.getElementById('sMgrEmpId');if(me){const saved=U.mgrEmpId||localStorage.getItem('seMgrEmpId')||'';me.value=saved;if(saved&&!U.mgrEmpId){U.mgrEmpId=saved;sessionStorage.setItem('seU',JSON.stringify(U));}}}}
+  if(r.ok){ window._cachedSettings=r.data; window._setsLoaded=true;const si=document.getElementById('sMId');if(si)si.value=r.data.mgrId||'';const sn=document.getElementById('sMNm');if(sn)sn.value=r.data.mgrName||'';const sd=document.getElementById('sheetId');if(sd)sd.textContent=SHEET_ID;const me=document.getElementById('sMgrEmpId');if(me){const saved=U.mgrEmpId||localStorage.getItem('seMgrEmpId')||'';me.value=saved;if(saved&&!U.mgrEmpId){U.mgrEmpId=saved;sessionStorage.setItem('seU',JSON.stringify(U));}}}}
 
 // DASHBOARD
 function buildDash(){
@@ -2479,12 +2485,15 @@ async function saveProf(){
   if(_nsc&&_nsc!==_nsc2){showAl('mProfAl','d','رمز الإشراف غير متطابق');return;}
   if(_nsc&&_nsc.length<4){showAl('mProfAl','d','رمز الإشراف يجب 4 أحرف على الأقل');return;}
   const _fsp=_nsc||(targetEmp.supPassword||'');
+  const _pReg=document.getElementById('pRegion')?.value||'';
+  const _pCen=document.getElementById('pCenter')?.value.trim()||'';
   const r=await gas('updateEmployee',{
     empId:targetEmp.empId,name:nm,phone:ph,dept:dp,
     shift:newShift,role:newRole,
     status:targetEmp.status||'نشط',note:targetEmp.note||'',
     originalEmpId:targetEmp.empId,
-    supPassword:newRole==='مشرف'?_fsp:''
+    supPassword:newRole==='مشرف'?_fsp:'',
+    region:_pReg,center:_pCen
   });
   if(_nsc){
     // Update local cache
@@ -2506,23 +2515,34 @@ async function saveProf(){
     sessionStorage.setItem('seU',JSON.stringify(U));
   }
   closeM('mProf');toast('✅ تم تحديث البيانات','success');
-  // Save region/center to infos
+  // تحديث region/center محلياً فقط (بدون طلب إضافي)
   const pReg2=document.getElementById('pRegion');
   const pCen2=document.getElementById('pCenter');
   if(pReg2||pCen2){
     const existInfo=getInfos().find(x=>String(x.empId)===String(targetEmp.empId))||{};
-    const updInfo={...existInfo,empId:String(targetEmp.empId),empName:targetEmp.name||'',region:pReg2?pReg2.value:existInfo.region||'',center:pCen2?pCen2.value:existInfo.center||''};
+    const updInfo={...existInfo,empId:String(targetEmp.empId),empName:nm,region:pReg2?pReg2.value:existInfo.region||'',center:pCen2?pCen2.value.trim():existInfo.center||''};
     const iArr=getInfos();const iIdx=iArr.findIndex(x=>String(x.empId)===String(targetEmp.empId));
     if(iIdx>=0)iArr[iIdx]={...iArr[iIdx],...updInfo};else iArr.push(updInfo);
     saveInfos(iArr);
-    const __g=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
-    if(__g) gas('بيانات_حفظ',updInfo).catch(()=>{});
+    // أضف region/center للطلب الرئيسي (updateEmployee يحفظهما)
   }
   updateTop();showProf();toast('✅ تم التحديث — اضغط 🔄 للمزامنة','success');
 }
 
 // SETTINGS
-async function saveSets(){const id=document.getElementById('sMId').value.trim(),pw=document.getElementById('sMPw').value.trim(),nm=document.getElementById('sMNm').value.trim();if(!id){showAl('setAl','d','رقم دخول المدير مطلوب');return;}const pay={mgrId:id,mgrName:nm};if(pw)pay.mgrPass=pw;const r=await gas('saveSettings',pay);if(r.ok){window._setsLoaded=false;showAl('setAl','s','✅ تم حفظ الإعدادات');if(nm){U.name=nm;updateTop();}}else showAl('setAl','d',r.error||'خطأ');}
+async function saveSets(){
+  const id=document.getElementById('sMId').value.trim(),pw=document.getElementById('sMPw').value.trim(),nm=document.getElementById('sMNm').value.trim();
+  if(!id){showAl('setAl','d','رقم دخول المدير مطلوب');return;}
+  const pay={mgrId:id,mgrName:nm};if(pw)pay.mgrPass=pw;
+  const r=await gas('saveSettings',pay);
+  if(r.ok){
+    // تحديث الكاش المحلي بدون إعادة الطلب
+    window._cachedSettings={...(window._cachedSettings||{}),mgrId:id,mgrName:nm};
+    window._setsLoaded=true;
+    showAl('setAl','s','✅ تم حفظ الإعدادات');
+    if(nm){U.name=nm;updateTop();}
+  }else showAl('setAl','d',r.error||'خطأ');
+}
 async function initSheets(){toast('⏳ جاري التهيئة...','info');const r=await gas('initSheets',{});toast(r.ok?'✅ تمت التهيئة':'⚠️ '+(r.error||''),r.ok?'success':'error');}
 
 // NAV
