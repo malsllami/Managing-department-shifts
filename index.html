@@ -1659,7 +1659,7 @@ async function manualSync(){
 }
 
 async function loadAll(){
-  // طلب واحد فقط - لا fallback
+  // طلب واحد فقط
   const all = await gas('كل_البيانات',{}).catch(()=>({ok:false}));
   if(all.ok && all.data){
     if(all.data.emps)    emps = all.data.emps;
@@ -1675,13 +1675,24 @@ async function loadAll(){
         .forEach(b=>{ if(b&&b.empId) allBalances[String(b.empId)]={annual:Number(b.annual)||0,scheduled:Number(b.scheduled)||0}; });
     }
   }
+  // قراءة الإعدادات من الطلب الموحد (لا طلب إضافي)
+  if(all.ok && all.data && all.data.settings && VR==='مدير'){
+    const s=all.data.settings;
+    window._cachedSettings=s;
+    const si=document.getElementById('sMId');if(si)si.value=s.mgrId||'';
+    const sn=document.getElementById('sMNm');if(sn)sn.value=s.mgrName||'';
+    const sd=document.getElementById('sheetId');if(sd)sd.textContent=SHEET_ID;
+    window._setsLoaded=true;
+  }
   renderEmpTbl(); markTransferredRows();
   if(document.getElementById('page-sh').style.display!=='none') renderShTbl();
   buildDash();
-  if(VR==='مدير') loadSets();
 }
 
-async function loadSets(){const r=await gas('getSettings');if(r.ok){const si=document.getElementById('sMId');if(si)si.value=r.data.mgrId||'';const sn=document.getElementById('sMNm');if(sn)sn.value=r.data.mgrName||'';const sd=document.getElementById('sheetId');if(sd)sd.textContent=SHEET_ID;const me=document.getElementById('sMgrEmpId');if(me){const saved=U.mgrEmpId||localStorage.getItem('seMgrEmpId')||'';me.value=saved;if(saved&&!U.mgrEmpId){U.mgrEmpId=saved;sessionStorage.setItem('seU',JSON.stringify(U));}}}}
+async function loadSets(){
+  if(window._setsLoaded) return; // لا تعيد الطلب
+  const r=await gas('getSettings');
+  if(r.ok){ window._setsLoaded=true;const si=document.getElementById('sMId');if(si)si.value=r.data.mgrId||'';const sn=document.getElementById('sMNm');if(sn)sn.value=r.data.mgrName||'';const sd=document.getElementById('sheetId');if(sd)sd.textContent=SHEET_ID;const me=document.getElementById('sMgrEmpId');if(me){const saved=U.mgrEmpId||localStorage.getItem('seMgrEmpId')||'';me.value=saved;if(saved&&!U.mgrEmpId){U.mgrEmpId=saved;sessionStorage.setItem('seU',JSON.stringify(U));}}}}
 
 // DASHBOARD
 function buildDash(){
@@ -2300,11 +2311,9 @@ async function saveEmp(){
     const _g=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
     if(_g)gas('بيانات_حفظ',infoRow).catch(()=>{});
   }
-  // تحديث محلي بدون طلب GAS جديد
-  const gasEmpR = await gas('getEmployees').catch(()=>({ok:false}));
-  if(gasEmpR.ok && gasEmpR.data) emps = gasEmpR.data;
+  // تحديث محلي فوري
   renderEmpTbl(); buildDash();
-  toast('✅ تم الحفظ - اضغط 🔄 للمزامنة الكاملة','success');
+  toast('✅ تم الحفظ — اضغط 🔄 للمزامنة','success');
 }
 async function delEmp(i){const e=emps[i];if(!e)return;if(!confirm('حذف: '+e.name+'؟'))return;const r=await gas('deleteEmployee',{empId:e.empId});if(r.ok){emps=emps.filter((_,idx)=>idx!==i);toast('🗑️ تم الحذف','error');renderEmpTbl();buildDash();}else toast('خطأ: '+(r.error||''),'error');}
 
@@ -2516,7 +2525,7 @@ async function saveProf(){
 }
 
 // SETTINGS
-async function saveSets(){const id=document.getElementById('sMId').value.trim(),pw=document.getElementById('sMPw').value.trim(),nm=document.getElementById('sMNm').value.trim();if(!id){showAl('setAl','d','رقم دخول المدير مطلوب');return;}const pay={mgrId:id,mgrName:nm};if(pw)pay.mgrPass=pw;const r=await gas('saveSettings',pay);if(r.ok){showAl('setAl','s','✅ تم حفظ الإعدادات');if(nm){U.name=nm;updateTop();}}else showAl('setAl','d',r.error||'خطأ');}
+async function saveSets(){const id=document.getElementById('sMId').value.trim(),pw=document.getElementById('sMPw').value.trim(),nm=document.getElementById('sMNm').value.trim();if(!id){showAl('setAl','d','رقم دخول المدير مطلوب');return;}const pay={mgrId:id,mgrName:nm};if(pw)pay.mgrPass=pw;const r=await gas('saveSettings',pay);if(r.ok){window._setsLoaded=false;showAl('setAl','s','✅ تم حفظ الإعدادات');if(nm){U.name=nm;updateTop();}}else showAl('setAl','d',r.error||'خطأ');}
 async function initSheets(){toast('⏳ جاري التهيئة...','info');const r=await gas('initSheets',{});toast(r.ok?'✅ تمت التهيئة':'⚠️ '+(r.error||''),r.ok?'success':'error');}
 
 // NAV
@@ -2584,7 +2593,7 @@ async function promoteEmp(empId){
   const e=emps.find(x=>String(x.empId)===String(empId));if(!e)return;
   const pay={...e,role:'مشرف',originalEmpId:e.empId};
   const r=await gas('updateEmployee',pay);
-  if(r.ok){toast('✅ تم الترقية — اضغط 🔄 للمزامنة','success');const re=await gas('getEmployees').catch(()=>({ok:false}));if(re.ok&&re.data)emps=re.data;renderEmpTbl();buildDash();}
+  if(r.ok){const e2=emps.find(x=>String(x.empId)===String(empId));if(e2)e2.role='مشرف';toast('✅ تم الترقية — اضغط 🔄 للمزامنة','success');renderEmpTbl();buildDash();}
   else toast('خطأ: '+(r.error||''),'error');
 }
 async function demoteEmp(empId){
@@ -2592,7 +2601,7 @@ async function demoteEmp(empId){
   const e=emps.find(x=>String(x.empId)===String(empId));if(!e)return;
   const pay={...e,role:'موظف',originalEmpId:e.empId};
   const r=await gas('updateEmployee',pay);
-  if(r.ok){toast('✅ تم التحويل — اضغط 🔄 للمزامنة','success');const re=await gas('getEmployees').catch(()=>({ok:false}));if(re.ok&&re.data)emps=re.data;renderEmpTbl();buildDash();}
+  if(r.ok){const e2=emps.find(x=>String(x.empId)===String(empId));if(e2)e2.role='موظف';toast('✅ تم التحويل — اضغط 🔄 للمزامنة','success');renderEmpTbl();buildDash();}
   else toast('خطأ: '+(r.error||''),'error');
 }
 
@@ -3399,8 +3408,8 @@ async function transferEmployee(empId, newShift) {
   const pay={...e, shift:newShift, transferDate:new Date().toISOString().split('T')[0], originalEmpId:e.empId};
   const r=await gas('updateEmployee',pay);
   if(r.ok){
-    toast('✅ تم النقل — اضغط 🔄 للمزامنة','success');
-    const re2=await gas('getEmployees').catch(()=>({ok:false}));if(re2.ok&&re2.data)emps=re2.data;renderEmpTbl();buildDash();
+    const te=emps.find(x=>String(x.empId)===String(empId));if(te)te.shift=newShift;
+    toast('✅ تم النقل — اضغط 🔄 للمزامنة','success');renderEmpTbl();buildDash();
     // Highlight the row
     setTimeout(()=>{
       const rows=document.querySelectorAll('#empTb tr');
