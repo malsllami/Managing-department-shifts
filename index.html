@@ -699,7 +699,7 @@ body.light input:-webkit-autofill:focus {
             <input type="text" id="empSrch" placeholder="بحث بالاسم أو الرقم أو المركز..." oninput="filterEmp()" style="width:100%">
           </div>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
-            <button class="btn btn-sec btn-sm" onclick="exportComprehensiveExcel()" style="width:auto;background:rgba(0,200,150,.12);border-color:rgba(0,200,150,.3);color:var(--success)">📊 تصدير Excel</button>
+            <button class="btn btn-sec btn-sm" onclick="openExportModal()" style="width:auto;background:rgba(0,200,150,.12);border-color:rgba(0,200,150,.3);color:var(--success)">📊 تصدير Excel</button>
             <select id="filterShift" class="finp" style="width:110px;padding:8px 10px" onchange="filterEmp()">
               <option value="">كل الورديات</option>
               <option value="أ">وردية أ</option>
@@ -728,7 +728,7 @@ body.light input:-webkit-autofill:focus {
             <h3 id="empTableTitle">📋 الجدول الشامل للموظفين</h3>
             <div style="display:flex;align-items:center;gap:8px">
               <span id="empCount" style="font-size:12px;color:var(--text2)"></span>
-              <button class="btn btn-sm" onclick="exportComprehensiveExcel()" style="width:auto;background:rgba(0,200,150,.12);border:1px solid rgba(0,200,150,.4);color:var(--success);border-radius:var(--rp);padding:6px 14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;font-size:12px">📥 Excel</button>
+              <button class="btn btn-sm" onclick="openExportModal()" style="width:auto;background:rgba(0,200,150,.12);border:1px solid rgba(0,200,150,.4);color:var(--success);border-radius:var(--rp);padding:6px 14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;font-size:12px">📥 Excel</button>
             </div>
           </div>
           <div class="card-bd" style="padding:0;overflow:hidden">
@@ -767,7 +767,7 @@ body.light input:-webkit-autofill:focus {
           </div>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
             <button class="btn btn-primary btn-sm" style="width:auto" onclick="openAddShift()">➕ إضافة موظف</button>
-            <button class="btn btn-sm" onclick="exportComprehensiveExcel()" style="width:auto;background:rgba(0,200,150,.12);border:1px solid rgba(0,200,150,.4);color:var(--success);border-radius:var(--rp);padding:6px 14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;font-size:12px">📥 Excel</button>
+            <button class="btn btn-sm" onclick="openExportModal()" style="width:auto;background:rgba(0,200,150,.12);border:1px solid rgba(0,200,150,.4);color:var(--success);border-radius:var(--rp);padding:6px 14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;font-size:12px">📥 Excel</button>
           </div>
         </div>
 
@@ -1041,7 +1041,13 @@ body.light input:-webkit-autofill:focus {
                   <label>ملاحظات</label>
                   <input type="text" id="fExtraNote" class="finp" placeholder="وصف مهمة الإضافي...">
                 </div>
-
+                <div class="form-group">
+                  <label>حالة الاستلام</label>
+                  <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--ibg);border:1.5px solid var(--border);border-radius:var(--rsm)">
+                    <input type="checkbox" id="fExtraReceived" style="width:18px;height:18px;cursor:pointer;accent-color:var(--success)">
+                    <label for="fExtraReceived" style="font-size:13px;cursor:pointer;font-weight:600">✅ تم استلام الساعات</label>
+                  </div>
+                </div>
               </div>
               <button class="btn btn-primary btn-full" id="saveExtraBtn" onclick="saveExtra()">💾 حفظ</button>
             </div>
@@ -3151,8 +3157,7 @@ function saveExtra(){
   const hrsRaw=document.getElementById('fExtraHrs').value;
   const type=document.getElementById('fExtraType').value;
   const note=document.getElementById('fExtraNote').value.trim();
-  const received=false;
-  const isEditing=false; // editing now done inline via saveExtraEdit
+  const received=document.getElementById('fExtraReceived')?.checked||false;
   if(!empId||!date||!hrsRaw){showAl('extraAl','d','يرجى ملء الحقول المطلوبة');return;}
   const hrs=parseFloat(hrsRaw.replace(',','.'));
   if(isNaN(hrs)||hrs<=0){showAl('extraAl','d','يرجى إدخال عدد ساعات صحيح (مثال: 3 أو 1.5 أو 0.5)');return;}
@@ -3852,9 +3857,14 @@ function editExtraRow(id){
         <select id="xe_type_${id}" class="finp" style="padding:8px 10px;width:100%">${typeOpts}</select></div>
       <div><label style="font-size:11px;color:var(--text2);font-weight:700;display:block;margin-bottom:3px">ملاحظات</label>
         <input type="text" id="xe_note_${id}" value="${x.note||''}" class="finp" style="padding:8px 10px;width:100%"></div>
+      <div><label style="font-size:11px;color:var(--text2);font-weight:700;display:block;margin-bottom:3px">حالة الاستلام</label>
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--ibg);border:1.5px solid var(--border);border-radius:var(--rsm);width:100%">
+          <input type="checkbox" id="xe_rec_${id}" ${x.received?'checked':''} style="width:16px;height:16px;accent-color:var(--success)">
+          <label for="xe_rec_${id}" style="font-size:12px;cursor:pointer">تم الاستلام</label>
+        </div></div>
     </div>
-    <div style="display:flex;gap:7px">
-      <button class="btn btn-sm" style="background:var(--warning);color:#fff;border:none;border-radius:var(--rp);padding:7px 14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif" onclick="saveExtraEdit('${id}')">💾 حفظ التعديل</button>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <button class="btn btn-sm" style="background:var(--primary);color:#fff;border:none;border-radius:var(--rp);padding:7px 16px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif" onclick="saveExtraEdit('${id}')">💾 حفظ التعديل</button>
       <button class="btn btn-sec btn-sm" onclick="document.getElementById('xedit_${id}').remove()">إلغاء ✕</button>
     </div>
   </td>`;
@@ -3867,13 +3877,14 @@ async function saveExtraEdit(id){
   const hrsRaw=document.getElementById('xe_hrs_'+id)?.value||'';
   const type=document.getElementById('xe_type_'+id)?.value||'عادي';
   const note=document.getElementById('xe_note_'+id)?.value||'';
+  const received=document.getElementById('xe_rec_'+id)?.checked||false;
   if(!date){toast('يرجى إدخال التاريخ','error');return;}
   const hrs=parseFloat(hrsRaw.replace(',','.'));
   if(isNaN(hrs)||hrs<=0){toast('عدد ساعات غير صحيح','error');return;}
   const arr=getExtras();
   const idx=arr.findIndex(i=>String(i.id)===String(id));
   const orig=idx>=0?arr[idx]:{};
-  const updated={...orig,date,hrs,type,note};
+  const updated={...orig,date,hrs,type,note,received};
   if(idx>=0){arr[idx]=updated;saveExtras(arr);}
   const gUrl=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
   if(gUrl){
@@ -4367,7 +4378,48 @@ function renameBadge3(){ renameBadgeField('badge3'); }
 // ============================================================
 // EXCEL EXPORT - الجدول الشامل
 // ============================================================
-async function exportComprehensiveExcel(){
+function openExportModal(){
+  // Set default period (this month)
+  setExportPeriod('thisMonth');
+  openM('mExport');
+}
+
+function setExportPeriod(period){
+  const now = new Date();
+  let from, to;
+  if(period==='thisMonth'){
+    from = new Date(now.getFullYear(), now.getMonth(), 1);
+    to = new Date(now.getFullYear(), now.getMonth()+1, 0);
+  } else if(period==='lastMonth'){
+    from = new Date(now.getFullYear(), now.getMonth()-1, 1);
+    to = new Date(now.getFullYear(), now.getMonth(), 0);
+  } else if(period==='last3'){
+    from = new Date(now.getFullYear(), now.getMonth()-2, 1);
+    to = new Date(now.getFullYear(), now.getMonth()+1, 0);
+  } else if(period==='thisYear'){
+    from = new Date(now.getFullYear(), 0, 1);
+    to = new Date(now.getFullYear(), 11, 31);
+  } else if(period==='all'){
+    document.getElementById('expFrom').value = '';
+    document.getElementById('expTo').value = '';
+    document.getElementById('exportPeriodLabel').textContent = '📋 كل البيانات (بدون تصفية)';
+    return;
+  }
+  const fmt = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  document.getElementById('expFrom').value = fmt(from);
+  document.getElementById('expTo').value = fmt(to);
+  const AR_M=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  document.getElementById('exportPeriodLabel').textContent = '📅 ' + from.getDate()+' '+AR_M[from.getMonth()]+' '+from.getFullYear()+' — '+to.getDate()+' '+AR_M[to.getMonth()]+' '+to.getFullYear();
+}
+
+async function doExportWithFilter(){
+  const fromVal = document.getElementById('expFrom').value;
+  const toVal   = document.getElementById('expTo').value;
+  closeM('mExport');
+  await exportComprehensiveExcel(fromVal||null, toVal||null);
+}
+
+async function exportComprehensiveExcel(filterFrom, filterTo){
   toast('⏳ جاري تحميل البيانات الكاملة...','info');
   // Always reload all data before export to ensure fresh balances
   await loadAll();
@@ -4448,8 +4500,19 @@ async function exportComprehensiveExcel(){
   const lH=['الاسم','رقم الوظيفي','الوردية','نوع الإجازة','من','إلى','الأيام','ملاحظات'];
   const lData=[lH];
   let lastShL='';
+  // Date filter helper
+  const inPeriod = (dateStr) => {
+    if(!filterFrom && !filterTo) return true;
+    const d = parseAnyDate(dateStr);
+    if(!d) return false;
+    const dStr = d.toISOString().split('T')[0];
+    if(filterFrom && dStr < filterFrom) return false;
+    if(filterTo   && dStr > filterTo)   return false;
+    return true;
+  };
+  const periodLabel = filterFrom ? (' | من '+fmtAr(filterFrom)+' إلى '+fmtAr(filterTo)) : ' | كل الفترات';
   exportEmps.forEach(e=>{
-    const empL=allLeaves.filter(l=>String(l.empId)===String(e.empId));
+    const empL=allLeaves.filter(l=>String(l.empId)===String(e.empId) && inPeriod(l.start));
     if(!empL.length) return;
     if(e.shift!==lastShL){lastShL=e.shift;lData.push(['── وردية '+(SHNAMES[e.shift]||e.shift)+' ──','','','','','','','']);}
     empL.forEach(l=>lData.push([e.name,e.empId,SHNAMES[e.shift]||e.shift,l.type,l.start,l.end||'',l.days,l.note||'']));
@@ -4511,7 +4574,8 @@ async function exportComprehensiveExcel(){
       const d=new Date();
       const ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
       const role=VR==='مشرف'?'_وردية_'+(SHNAMES[U.shift]||U.shift):VR==='موظف'?'_بياناتي':'_كامل';
-      const fname='تقرير_الورديات'+role+'_'+ds+'.xlsx';
+      const periodSuffix = filterFrom ? ('_'+filterFrom+'_الى_'+filterTo) : '_كامل';
+  const fname='تقرير_الورديات'+role+periodSuffix+'_'+ds+'.xlsx';
       XLSX.writeFile(wb,fname);
       toast('✅ تم تصدير '+exportEmps.length+' موظف - '+wb.SheetNames.join(' | '),'success');
     }catch(err){
@@ -4613,8 +4677,10 @@ function _doExport(data, count){
   const xRows=[xHeaders];
   let lastShiftX='';
   exportEmps.forEach(e=>{
+    const empX=allExtras.filter(x=>String(x.empId)===String(e.empId) && inPeriod(x.date));
+    if(!empX.length) return;
     if(e.shift!==lastShiftX){lastShiftX=e.shift;xRows.push(['── وردية '+(SHNAMES[e.shift]||e.shift)+' ──','','','','','','','']);}
-    allExtras.filter(x=>String(x.empId)===String(e.empId)).forEach(x=>{
+    empX.forEach(x=>{
       xRows.push([e.name,e.empId,SHNAMES[e.shift]||e.shift,x.date,x.hrs,x.type,x.received?'مُستلم':'لم يُستلم',x.note||'']);
     });
   });
@@ -4755,6 +4821,42 @@ window.onload=()=>{
   var t2=setTimeout(function(){if(!didStart){clearTimeout(t1);didStart=true;showApp();}},3000);
 };
 </script>
+
+<!-- EXPORT MODAL -->
+<div class="mo" id="mExport">
+  <div class="modal" style="max-width:480px">
+    <div class="m-hd"><h3>📊 تصدير ملف Excel</h3><button class="btn-x" onclick="closeM('mExport')">✕</button></div>
+    <div class="m-bd">
+      <p style="font-size:13px;color:var(--text2);margin-bottom:16px">اختر الفترة الزمنية لتصدير بيانات الإجازات والساعات الإضافية. بيانات الموظفين والمقاسات والبطاقات تُصدَّر كاملة دائماً.</p>
+      <div class="fgrid" style="grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+        <div class="form-group" style="margin:0">
+          <label style="font-size:12px;font-weight:700">من تاريخ</label>
+          <input type="date" id="expFrom" class="finp">
+        </div>
+        <div class="form-group" style="margin:0">
+          <label style="font-size:12px;font-weight:700">إلى تاريخ</label>
+          <input type="date" id="expTo" class="finp">
+        </div>
+      </div>
+      <!-- أزرار فترة سريعة -->
+      <div style="margin-bottom:16px">
+        <p style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:8px">اختيار سريع:</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <button class="btn btn-sec btn-sm" onclick="setExportPeriod('thisMonth')">هذا الشهر</button>
+          <button class="btn btn-sec btn-sm" onclick="setExportPeriod('lastMonth')">الشهر الماضي</button>
+          <button class="btn btn-sec btn-sm" onclick="setExportPeriod('last3')">3 أشهر</button>
+          <button class="btn btn-sec btn-sm" onclick="setExportPeriod('thisYear')">هذه السنة</button>
+          <button class="btn btn-sec btn-sm" onclick="setExportPeriod('all')" style="background:rgba(0,149,217,.1);border-color:var(--primary);color:var(--primary)">كل البيانات</button>
+        </div>
+      </div>
+      <div id="exportPeriodLabel" style="font-size:12px;color:var(--primary);font-weight:700;margin-bottom:4px"></div>
+    </div>
+    <div class="m-ft">
+      <button class="btn btn-sec" onclick="closeM('mExport')">إلغاء</button>
+      <button class="btn btn-primary" style="width:auto" onclick="doExportWithFilter()">📥 تصدير</button>
+    </div>
+  </div>
+</div>
 
 <!-- SHIFT DETAIL MODAL -->
 <div class="mo" id="mShift">
