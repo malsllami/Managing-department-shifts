@@ -662,7 +662,10 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
       <div id="topBrandDate" class="tb-date-desktop" style="font-size:11px;font-weight:600;color:var(--text2)"></div>
     </div>
     <div class="tb-right">
-      <div class="sync-pill" id="syncPill"><div class="sync-dot"></div><span class="sync-txt">متصل</span></div>
+      <div class="sync-pill" id="syncPill" onclick="manualSync()" title="مزامنة البيانات" style="cursor:pointer">
+        <div class="sync-dot" id="syncDot"></div>
+        <span class="sync-txt" id="syncTxt">مزامنة 🔄</span>
+      </div>
       <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" title="تبديل المظهر">🌙</button>
       <!-- User chip - compact -->
       <div class="user-chip" id="userChipBtn" onclick="toggleUserMenu()" style="cursor:pointer;position:relative">
@@ -758,7 +761,7 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
             </select>
             <button class="btn btn-sec btn-sm" onclick="toggleEmpView()" id="viewToggleBtn" title="تبديل العرض">📊 عرض مبسط</button>
             <button class="btn btn-primary btn-sm" style="width:auto" onclick="openAdd()">➕ إضافة موظف</button>
-            <button class="btn btn-sec btn-sm" onclick="refreshComprehensive()" title="تحديث البيانات الكاملة">🔄</button>
+            <button class="btn btn-sec btn-sm" onclick="manualSync()" title="مزامنة البيانات مع قاعدة البيانات" style="background:rgba(0,149,217,.12);border-color:rgba(0,149,217,.3);color:var(--primary,#0095D9)">🔄 مزامنة</button>
           </div>
         </div>
 
@@ -1554,7 +1557,7 @@ async function loginMgr(){
   U={empId:r.data.mgrId,name:r.data.mgrName||'مدير النظام',role:'مدير',viewRole:'مدير',phone:'',dept:'الإدارة',shift:'-',mgrEmpId:savedMgrEmpId};
   VR='مدير';sessionStorage.setItem('seU',JSON.stringify(U));
   trackSession(U.empId, U.name, '-');
-  await loadAll();setLd('mBtn',false);startApp();
+  const _er=await gas('getEmployees').catch(()=>({ok:false}));if(_er.ok&&_er.data)emps=_er.data;setLd('mBtn',false);startApp();
 }
 
 // APP
@@ -1564,7 +1567,10 @@ function startApp(){
   buildSidebar();
   buildBottomNav();
   updateTop();buildDash();showPage('db');
-  if(VR!=='موظف') loadAll();
+  // تحميل أولي خفيف فقط
+  if(VR==='مدير'||VR==='مشرف'){
+    gas('getEmployees').then(r=>{if(r.ok&&r.data)emps=r.data;renderEmpTbl();buildDash();}).catch(()=>{});
+  }
 }
 function buildSidebar(){
   const r=VR;
@@ -1628,6 +1634,29 @@ function updateTop(){
   }
 }
 
+
+// ─── مزامنة يدوية فقط ───
+let _syncInProgress = false;
+async function manualSync(){
+  if(_syncInProgress){ toast('⏳ المزامنة جارية...','info'); return; }
+  _syncInProgress = true;
+  const dot = document.getElementById('syncDot');
+  const txt = document.getElementById('syncTxt');
+  if(dot) dot.style.background = '#F5A623';
+  if(txt) txt.textContent = '⏳ جاري...';
+  try {
+    await loadAll();
+    if(dot) dot.style.background = '#00C896';
+    if(txt) txt.textContent = '✅ محدَّث';
+    toast('✅ تمت المزامنة','success');
+    setTimeout(()=>{ if(txt) txt.textContent='مزامنة 🔄'; if(dot) dot.style.background='#00C896'; }, 3000);
+  } catch(e) {
+    if(dot) dot.style.background = '#EF4444';
+    if(txt) txt.textContent = '❌ خطأ';
+    toast('❌ فشلت المزامنة','error');
+  }
+  _syncInProgress = false;
+}
 
 async function loadAll(){
   // Load ALL data in ONE request for speed
@@ -2305,9 +2334,13 @@ async function saveEmp(){
     const _g=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
     if(_g)gas('بيانات_حفظ',infoRow).catch(()=>{});
   }
-  await loadAll();
+  // تحديث محلي بدون طلب GAS جديد
+  const gasEmpR = await gas('getEmployees').catch(()=>({ok:false}));
+  if(gasEmpR.ok && gasEmpR.data) emps = gasEmpR.data;
+  renderEmpTbl(); buildDash();
+  toast('✅ تم الحفظ - اضغط 🔄 للمزامنة الكاملة','success');
 }
-async function delEmp(i){const e=emps[i];if(!e)return;if(!confirm('حذف: '+e.name+'؟'))return;const r=await gas('deleteEmployee',{empId:e.empId});if(r.ok){toast('🗑️ تم الحذف','error');await loadAll();}else toast('خطأ: '+(r.error||''),'error');}
+async function delEmp(i){const e=emps[i];if(!e)return;if(!confirm('حذف: '+e.name+'؟'))return;const r=await gas('deleteEmployee',{empId:e.empId});if(r.ok){emps=emps.filter((_,idx)=>idx!==i);toast('🗑️ تم الحذف','error');renderEmpTbl();buildDash();}else toast('خطأ: '+(r.error||''),'error');}
 
 // PROFILE
 function showProf(){
@@ -2513,7 +2546,7 @@ async function saveProf(){
     const __g=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
     if(__g) gas('بيانات_حفظ',updInfo).catch(()=>{});
   }
-  updateTop();await loadAll();showProf();
+  updateTop();showProf();toast('✅ تم التحديث — اضغط 🔄 للمزامنة','success');
 }
 
 // SETTINGS
@@ -2585,7 +2618,7 @@ async function promoteEmp(empId){
   const e=emps.find(x=>String(x.empId)===String(empId));if(!e)return;
   const pay={...e,role:'مشرف',originalEmpId:e.empId};
   const r=await gas('updateEmployee',pay);
-  if(r.ok){toast('✅ تم ترقية الموظف إلى مشرف','success');await loadAll();}
+  if(r.ok){toast('✅ تم الترقية — اضغط 🔄 للمزامنة','success');const re=await gas('getEmployees').catch(()=>({ok:false}));if(re.ok&&re.data)emps=re.data;renderEmpTbl();buildDash();}
   else toast('خطأ: '+(r.error||''),'error');
 }
 async function demoteEmp(empId){
@@ -2593,7 +2626,7 @@ async function demoteEmp(empId){
   const e=emps.find(x=>String(x.empId)===String(empId));if(!e)return;
   const pay={...e,role:'موظف',originalEmpId:e.empId};
   const r=await gas('updateEmployee',pay);
-  if(r.ok){toast('✅ تم التحويل إلى موظف','success');await loadAll();}
+  if(r.ok){toast('✅ تم التحويل — اضغط 🔄 للمزامنة','success');const re=await gas('getEmployees').catch(()=>({ok:false}));if(re.ok&&re.data)emps=re.data;renderEmpTbl();buildDash();}
   else toast('خطأ: '+(r.error||''),'error');
 }
 
@@ -3149,10 +3182,12 @@ function saveLeave(){
       saveBalanceData(empId,b);
     }
   }
-  showAl('leaveAl','s','✅ تم حفظ طلب الإجازة');
+  showAl('leaveAl','s','✅ تم حفظ طلب الإجازة — اضغط 🔄 للمزامنة');
+  // تحديث محلي فوري
+  const la=getLeaves();la.unshift(leaveObj);saveLeaves(la);
   renderLeaveTable();
   ['fLeaveStart','fLeaveEnd','fLeaveDays','fLeaveNote'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('leaveDeductPreview').style.display='none';
+  const dp2=document.getElementById('leaveDeductPreview');if(dp2)dp2.style.display='none';
 }
 
 async function renderLeaveTable(){
@@ -3183,7 +3218,9 @@ async function deleteLeave(id){if(!confirm('هل تريد حذف طلب الإج
   const gasUrl4=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
   if(gasUrl4){const r=await gas('اجازة_حذف',{id:String(id)});if(!r.ok){toast('خطأ: '+(r.error||''),'error');return;}}
   else{saveLeaves(getLeaves().filter(l=>l.id!==id));}
-  renderLeaveTable();}
+  renderLeaveTable();
+  // بناء الداش محلياً
+  buildDash();}
 
 // ---- EXTRA HOURS ----
 function getExtras(){return allExtras;}
@@ -3288,7 +3325,7 @@ async function deleteExtra(id){if(!confirm('حذف السجل؟'))return;
   const gasUrl5=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
   if(gasUrl5){const r=await gas('اضافي_حذف',{id:String(id)});if(!r.ok){toast('خطأ: '+(r.error||''),'error');return;}}
   else{saveExtras(getExtras().filter(x=>x.id!==id));}
-  renderExtraTable();}
+  renderExtraTable(); buildDash();}
 
 // ---- EMP INFO ----
 function getInfos(){return allInfos;}
@@ -3349,9 +3386,8 @@ function saveInfo(){
   const __gasUrl=window._GAS_URL_OVERRIDE||localStorage.getItem('seGasUrl')||GAS_URL;
   if(__gasUrl){ gas('بيانات_حفظ',data).then(r=>{if(!r.ok)console.warn('GAS info:',r.error);}); }
   else { if(idx>=0) arr[idx]={...arr[idx],...data}; else arr.push(data); saveInfos(arr); }
-  showAl('infoAl','s','✅ تم حفظ البيانات الوظيفية');
+  showAl('infoAl','s','✅ تم حفظ البيانات — اضغط 🔄 للمزامنة');
   renderInfoTable();
-  // Refresh leave bar region/center
   if(!isMgrOrSup()) autoFillLeaveBar();
 }
 async function renderInfoTable(){
@@ -3397,8 +3433,8 @@ async function transferEmployee(empId, newShift) {
   const pay={...e, shift:newShift, transferDate:new Date().toISOString().split('T')[0], originalEmpId:e.empId};
   const r=await gas('updateEmployee',pay);
   if(r.ok){
-    toast('✅ تم نقل الموظف إلى '+SHNAMES[newShift],'success');
-    await loadAll();
+    toast('✅ تم النقل — اضغط 🔄 للمزامنة','success');
+    const re2=await gas('getEmployees').catch(()=>({ok:false}));if(re2.ok&&re2.data)emps=re2.data;renderEmpTbl();buildDash();
     // Highlight the row
     setTimeout(()=>{
       const rows=document.querySelectorAll('#empTb tr');
@@ -3532,8 +3568,9 @@ function toggleEmpView(){
 }
 
 async function refreshComprehensive(){
-  toast('⏳ جاري تحديث بيانات الجدول...','info');
-  await loadAll();
+  toast('⏳ جاري تحديث...','info');
+  await manualSync(); return; }
+async function _refreshComp_unused(){
   const gasUrl = window._GAS_URL_OVERRIDE || localStorage.getItem('seGasUrl') || GAS_URL;
   if(gasUrl){
     const [lr, er, ir] = await Promise.all([
@@ -3937,7 +3974,7 @@ async function saveExtraEdit(id){
   }
   const eRow=document.getElementById('xedit_'+id);
   if(eRow) eRow.remove();
-  toast('✅ تم تعديل السجل','success');
+  toast('✅ تم التعديل','success');
   renderExtraTable();
 }
 // ============================================================
