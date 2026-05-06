@@ -1672,11 +1672,11 @@ async function manualSync(){
 }
 
 async function loadAll(){
-  // أظهر ما عندنا فوراً
-  renderEmpTbl(); buildDash();
-  // ثم اجلب من GAS
+  // حاول كل_البيانات أولاً (طلب واحد)
   const all = await gas('كل_البيانات',{}).catch(()=>({ok:false}));
+  
   if(all.ok && all.data){
+    // نجح - استخرج كل البيانات
     if(all.data.emps)    emps = all.data.emps;
     if(all.data.leaves)  allLeaves = all.data.leaves;
     if(all.data.extras)  allExtras = all.data.extras;
@@ -1689,21 +1689,40 @@ async function loadAll(){
       (Array.isArray(all.data.balances)?all.data.balances:[all.data.balances])
         .forEach(b=>{ if(b&&b.empId) allBalances[String(b.empId)]={annual:Number(b.annual)||0,scheduled:Number(b.scheduled)||0}; });
     }
+    if(all.data.settings && VR==='مدير'){
+      const s=all.data.settings;
+      window._cachedSettings=s; window._setsLoaded=true;
+    }
+  } else {
+    // Fallback: طلبات منفصلة
+    console.warn('كل_البيانات فشل، جاري المحاولة بطلبات منفصلة...');
+    const er = await gas('getEmployees').catch(()=>({ok:false}));
+    if(er.ok && er.data) emps = er.data;
+    const [lr,xr,ir,br] = await Promise.all([
+      gas('اجازات_جلب',{}).catch(()=>({ok:false})),
+      gas('اضافي_جلب',{}).catch(()=>({ok:false})),
+      gas('بيانات_جلب',{}).catch(()=>({ok:false})),
+      gas('ارصدة_جلب',{}).catch(()=>({ok:false}))
+    ]);
+    if(lr.ok && lr.data) allLeaves = lr.data;
+    if(xr.ok && xr.data) allExtras = xr.data;
+    if(ir.ok && ir.data){
+      const m={}; ir.data.forEach(i=>{ if(i.empId) m[String(i.empId)]=i; });
+      allInfos = Object.values(m);
+    }
+    if(br.ok && br.data){
+      allBalances={};
+      const ba=Array.isArray(br.data)?br.data:[br.data];
+      ba.forEach(b=>{ if(b&&b.empId) allBalances[String(b.empId)]={annual:Number(b.annual)||0,scheduled:Number(b.scheduled)||0}; });
+    }
   }
-  // قراءة الإعدادات من الطلب الموحد (لا طلب إضافي)
-  if(all.ok && all.data && all.data.settings && VR==='مدير'){
-    const s=all.data.settings;
-    window._cachedSettings=s;
-    const si=document.getElementById('sMId');if(si)si.value=s.mgrId||'';
-    const sn=document.getElementById('sMNm');if(sn)sn.value=s.mgrName||'';
-    const sd=document.getElementById('sheetId');if(sd)sd.textContent=SHEET_ID;
-    window._setsLoaded=true;
-  }
+  
+  // تحديث الواجهة
   renderEmpTbl(); markTransferredRows();
   if(document.getElementById('page-sh').style.display!=='none') renderShTbl();
   buildDash();
-  // إعادة بناء الداش بالبيانات الجديدة
-  buildDash();
+  if(VR==='مدير') loadSets();
+  
   // تحديث مؤشر المزامنة
   const _dot=document.getElementById('syncDot');
   const _txt=document.getElementById('syncTxt');
@@ -1723,7 +1742,7 @@ async function loadSets(){
     if(me){const saved=U.mgrEmpId||localStorage.getItem('seMgrEmpId')||'';me.value=saved;}
     return;
   }
-  const r=await gas('getSettings');
+  const r=await gas('getSettings').catch(()=>({ok:false}));
   if(r.ok){ window._cachedSettings=r.data; window._setsLoaded=true;const si=document.getElementById('sMId');if(si)si.value=r.data.mgrId||'';const sn=document.getElementById('sMNm');if(sn)sn.value=r.data.mgrName||'';const sd=document.getElementById('sheetId');if(sd)sd.textContent=SHEET_ID;const me=document.getElementById('sMgrEmpId');if(me){const saved=U.mgrEmpId||localStorage.getItem('seMgrEmpId')||'';me.value=saved;if(saved&&!U.mgrEmpId){U.mgrEmpId=saved;sessionStorage.setItem('seU',JSON.stringify(U));}}}}
 
 // DASHBOARD
