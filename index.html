@@ -26,7 +26,7 @@
 }
 body.dark,html.dark body,html.dark{--bg:#0A1628;--bg2:#0D1F3C;--surface:#111E35;--surface2:#162540;--border:rgba(0,149,217,0.2);--text:#E8F4FD;--text2:#8BAFC8;--text3:#5A8099;--ibg:#0D1F3C;--chov:rgba(0,149,217,0.06);}
 body.light,html.light body,html.light{--bg:#F0F6FF;--bg2:#E4EEF8;--surface:#FFFFFF;--surface2:#F5F9FF;--border:rgba(0,120,200,0.15);--text:#0A1628;--text2:#4A6080;--text3:#8BAFC8;--ibg:#EEF4FF;--chov:rgba(0,149,217,0.04);}
-*{margin:0;padding:0;box-sizing:border-box;}
+*{margin:0;padding:0;box-sizing:border-box;}html,body{overflow-x:hidden;width:100%;}
 body{font-family:'Cairo',sans-serif;background:#0A1628;color:#E8F4FD;min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s;}
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 10% 20%,rgba(0,149,217,0.05) 0%,transparent 50%),radial-gradient(ellipse at 90% 80%,rgba(0,200,150,0.04) 0%,transparent 50%);pointer-events:none;z-index:0;}
 ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:#0D1F3C;}::-webkit-scrollbar-thumb{background:#0095D9;border-radius:3px;}
@@ -1565,6 +1565,7 @@ async function loginMgr(){
   if(String(id)!==String(r.data.mgrId)||pw!==r.data.mgrPass){showAl('loginAlert','d','بيانات المدير غير صحيحة');setLd('mBtn',false);return;}
   const savedMgrEmpId = localStorage.getItem('seMgrEmpId')||'';
   U={empId:r.data.mgrId,name:r.data.mgrName||'مدير النظام',role:'مدير',viewRole:'مدير',phone:'',dept:'الإدارة',shift:'-',mgrEmpId:savedMgrEmpId};
+  if(savedMgrEmpId) console.log('Manager linked to employee:', savedMgrEmpId);
   VR='مدير';sessionStorage.setItem('seU',JSON.stringify(U));
   trackSession(U.empId, U.name, '-');
   setLd('mBtn',false); startApp();
@@ -1576,8 +1577,13 @@ function startApp(){
   document.getElementById('mainApp').classList.add('active');
   buildSidebar();
   buildBottomNav();
-  updateTop();buildDash();showPage('db');
-  // لا طلبات تلقائية - البيانات تُحمَّل عند الضغط على 🔄
+  updateTop();
+  // أظهر شاشة تحميل أولاً
+  const el=document.getElementById('dContent');
+  if(el) el.innerHTML='<div style="text-align:center;padding:40px;color:#8BAFC8"><div class="spinner" style="margin:0 auto 14px;width:28px;height:28px;border-width:3px;border-color:rgba(0,149,217,.2);border-top-color:#0095D9;animation:spin .7s linear infinite;border-radius:50%"></div><div style="font-size:14px;font-weight:700">جاري تحميل البيانات...</div></div>';
+  showPage('db');
+  // جلب البيانات فور الدخول
+  loadAll();
 }
 function buildSidebar(){
   const r=VR;
@@ -1696,6 +1702,8 @@ async function loadAll(){
   renderEmpTbl(); markTransferredRows();
   if(document.getElementById('page-sh').style.display!=='none') renderShTbl();
   buildDash();
+  // إعادة بناء الداش بالبيانات الجديدة
+  buildDash();
   // تحديث مؤشر المزامنة
   const _dot=document.getElementById('syncDot');
   const _txt=document.getElementById('syncTxt');
@@ -1752,10 +1760,16 @@ function buildDash(){
     }
   } else if(dShiftBadge) dShiftBadge.innerHTML='';
   const el=document.getElementById('dContent');
-  if(VR==='مدير'){ el.innerHTML=mgrDash(); }
+  if(VR==='مدير'){
+    if(!emps.length){
+      el.innerHTML='<div style="text-align:center;padding:40px;color:#8BAFC8"><div class="spinner" style="margin:0 auto 14px;width:28px;height:28px;border-width:3px;border-color:rgba(0,149,217,.2);border-top-color:#0095D9;animation:spin .7s linear infinite;border-radius:50%"></div><div style="font-size:14px;font-weight:700">جاري تحميل البيانات...</div></div>';
+    } else {
+      el.innerHTML=mgrDash();
+      setTimeout(drawWeekChart,80);
+    }
+  }
   else if(VR==='مشرف'){ el.innerHTML=supDash(); }
   else { el.innerHTML='<div style="text-align:center;padding:30px;color:#8BAFC8"><div class="spinner" style="margin:0 auto 10px;border-color:rgba(0,149,217,0.2);border-top-color:#0095D9"></div>جاري تحميل البيانات...</div>'; empDashAsync(); }
-  setTimeout(drawWeekChart,80);
 }
 
 // ── شريط الطلبات اليومية ──
