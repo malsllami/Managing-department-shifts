@@ -545,6 +545,7 @@ caret-color: #0A1628;
 </head>
 <body class="dark">
 <style id="cssVars">
+*{box-sizing:border-box;}
 :root,body.dark{--bg:#0A1628;--bg2:#0D1F3C;--surface:#111E35;--surface2:#162540;--border:rgba(0,149,217,.2);--text:#E8F4FD;--text2:#8BAFC8;--text3:#5A8099;--ibg:#0D1F3C;--chov:rgba(0,149,217,.06);--primary:#0095D9;--accent:#00C896;--success:#00C896;--warning:#F5A623;--danger:#EF4444;--shift-a:#0095D9;--shift-b:#8B5CF6;--shift-c:#F59E0B;--shift-d:#EF4444;--r:20px;--rsm:14px;--rxs:10px;--rp:50px;--tr:all 0.25s ease;--grad:linear-gradient(135deg,#0095D9 0%,#00C896 100%);--shadow:0 8px 32px rgba(0,0,0,.3);--shadow2:0 4px 16px rgba(0,149,217,.2);}
 body.light{--bg:#F0F6FF;--bg2:#E4EEF8;--surface:#FFFFFF;--surface2:#F5F9FF;--border:rgba(0,120,200,.15);--text:#0A1628;--text2:#4A6080;--text3:#8BAFC8;--ibg:#EEF4FF;--chov:rgba(0,149,217,.04);}
 /* Light mode overrides - because CSS has hardcoded dark values */
@@ -623,11 +624,11 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
     <!-- MANAGER FORM (hidden, shown via small link) -->
     <div id="mForm" style="display:none">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-        <button onclick="switchTab('e')" style="background:none;border:none;color:var(--text2);font-size:12px;cursor:pointer;font-family:Cairo,sans-serif;text-decoration:underline">← رجوع</button>
-        <span style="font-size:14px;font-weight:800;color:var(--text)">🔐 دخول المدير</span>
+        <button onclick="switchTab('e')" style="background:none;border:none;color:#8BAFC8;font-size:12px;cursor:pointer;font-family:Cairo,sans-serif;text-decoration:underline">← رجوع</button>
+        <span style="font-size:14px;font-weight:800;color:#E8F4FD">🔐 دخول المدير</span>
       </div>
       <div class="form-group"><label>رقم المدير <span>*</span></label>
-        <div class="fw"><span class="fic r" style="color:var(--warning)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+        <div class="fw"><span class="fic r" style="color:#F5A623"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
         <input type="text" id="mId" placeholder="رقم المدير" oninput="norm(this)" style="padding-right:42px;padding-left:14px"></div></div>
       <div class="form-group"><label>كلمة المرور <span>*</span></label>
         <div class="fw"><span class="fic r"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
@@ -635,10 +636,10 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
         <button type="button" class="fic l" onclick="ep(this,'mPw')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
       <button class="btn btn-primary" onclick="loginMgr()" id="mBtn"><span>🔐 دخول</span></button>
     </div>
-    <p style="text-align:center;font-size:11px;color:var(--text3);margin-top:16px">© 2025 السعودية للطاقة</p>
+    <p style="text-align:center;font-size:11px;color:#5A8099;margin-top:16px">© 2025 السعودية للطاقة</p>
     <!-- Manager access link at bottom -->
     <div id="mgrLinkArea" style="text-align:center;margin-top:10px">
-      <button onclick="switchTab('m')" id="mgrSmallBtn" style="background:none;border:1px solid rgba(255,255,255,.1);color:var(--text3);font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:8px 18px;border-radius:20px;transition:all .2s" onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'" onmouseout="this.style.borderColor='rgba(255,255,255,.1)';this.style.color='var(--text3)'">🔒 دخول المدير</button>
+      <button onclick="switchTab('m')" id="mgrSmallBtn" style="background:none;border:1px solid rgba(255,255,255,.1);color:#5A8099;font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:8px 18px;border-radius:20px;transition:all .2s" onmouseover="this.style.borderColor='#0095D9';this.style.color='#0095D9'" onmouseout="this.style.borderColor='rgba(255,255,255,.1)';this.style.color='#5A8099'">🔒 دخول المدير</button>
     </div>
   </div>
 </div>
@@ -650,7 +651,7 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
     <div class="tb-brand">
       <svg width="34" height="22" viewBox="0 0 120 80"><defs><linearGradient id="lg3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0095D9"/><stop offset="100%" stop-color="#00C896"/></linearGradient></defs><path d="M10 60 Q30 10 55 40 Q70 60 85 30 Q100 5 115 40" fill="none" stroke="url(#lg3)" stroke-width="12" stroke-linecap="round"/></svg>
       <!-- Date shown on desktop only -->
-      <div id="topBrandDate" class="tb-date-desktop" style="font-size:11px;font-weight:600;color:var(--text2)"></div>
+      <div id="topBrandDate" class="tb-date-desktop" style="font-size:11px;font-weight:600;color:#8BAFC8"></div>
     </div>
     <div class="tb-right">
       <div class="sync-pill" id="syncPill" onclick="manualSync()" title="اضغط للمزامنة" style="cursor:pointer">
@@ -662,20 +663,20 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
       <div class="user-chip" id="userChipBtn" onclick="toggleUserMenu()" style="cursor:pointer;position:relative">
         <div class="u-av" id="topAv">م</div>
         <div class="u-info-desk"><div class="u-name" id="topName">-</div><div class="u-role" id="topRole">-</div></div>
-        <span style="font-size:10px;color:var(--text3);margin-right:2px">▾</span>
+        <span style="font-size:10px;color:#5A8099;margin-right:2px">▾</span>
       </div>
       <button class="btn btn-dng btn-sm" onclick="logout()" style="padding:6px 12px;font-size:12px">خروج ⎋</button>
     </div>
   </div>
   <!-- User dropdown menu -->
-  <div id="userMenu" style="display:none;position:fixed;top:58px;left:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;z-index:200;min-width:220px;box-shadow:0 8px 28px rgba(0,0,0,.3)">
-    <div id="userMenuDate" style="font-size:11px;color:var(--text2);margin-bottom:10px;line-height:1.6;border-bottom:1px solid var(--border);padding-bottom:8px"></div>
-    <div id="userMenuInfo" style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px"></div>
-    <div id="userMenuRole" style="font-size:11px;color:var(--text2);margin-bottom:10px"></div>
+  <div id="userMenu" style="display:none;position:fixed;top:58px;left:12px;background:#111E35;border:1px solid rgba(0,149,217,0.2);border-radius:20px;padding:14px;z-index:200;min-width:220px;box-shadow:0 8px 28px rgba(0,0,0,.3)">
+    <div id="userMenuDate" style="font-size:11px;color:#8BAFC8;margin-bottom:10px;line-height:1.6;border-bottom:1px solid rgba(0,149,217,0.2);padding-bottom:8px"></div>
+    <div id="userMenuInfo" style="font-size:13px;font-weight:700;color:#E8F4FD;margin-bottom:4px"></div>
+    <div id="userMenuRole" style="font-size:11px;color:#8BAFC8;margin-bottom:10px"></div>
     <button class="btn btn-dng btn-sm btn-full" onclick="logout()" style="margin-top:4px">⎋ تسجيل خروج</button>
   </div>
   <div class="rs-bar" id="rsBar" style="display:none">
-    <span style="font-size:12px;color:var(--text2);margin-left:8px">التنقل بين الأدوار:</span>
+    <span style="font-size:12px;color:#8BAFC8;margin-left:8px">التنقل بين الأدوار:</span>
     <button class="rs-btn" id="rsM" onclick="switchRole('مدير')" style="display:none">👑 مدير</button>
     <button class="rs-btn" id="rsS" onclick="switchRole('مشرف')" style="display:none">⭐ مشرف</button>
     <button class="rs-btn" id="rsE" onclick="switchRole('موظف')" style="display:none">👤 موظف</button>
@@ -692,7 +693,7 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
   <div id="bnMoreOverlay" onclick="closeBnMore()"></div>
   <div id="bnMoreMenu">
     <div style="text-align:center;padding:4px 0 12px">
-      <div style="width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto"></div>
+      <div style="width:36px;height:4px;background:rgba(0,149,217,0.2);border-radius:2px;margin:0 auto"></div>
     </div>
     <div id="bnMoreList"></div>
   </div>
@@ -714,8 +715,8 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
 ```
   <!-- DASHBOARD -->
   <div id="page-db" class="page">
-    <div id="dWelcomeCard" style="border-radius:var(--r);padding:20px 22px;margin-bottom:14px;position:relative;overflow:hidden">
-      <div style="position:absolute;inset:0;background:var(--grad);opacity:.95"></div>
+    <div id="dWelcomeCard" style="border-radius:20px;padding:20px 22px;margin-bottom:14px;position:relative;overflow:hidden">
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0095D9 0%,#00C896 100%);opacity:.95"></div>
       <div style="position:absolute;top:-30px;left:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.07)"></div>
       <div style="position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
         <div>
@@ -733,13 +734,13 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
     <div class="ph"><h2>👥 إدارة الموظفين</h2><p>الجدول الشامل لجميع بيانات الموظفين</p></div>
 
     <!-- CONTROLS BAR -->
-    <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 16px">
+    <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px;background:#111E35;border:1px solid rgba(0,149,217,0.2);border-radius:20px;padding:12px 16px">
       <div class="sw" style="margin:0;flex:1;min-width:200px">
         <span class="si2">🔍</span>
         <input type="text" id="empSrch" placeholder="بحث بالاسم أو الرقم أو المركز..." oninput="filterEmp()" style="width:100%">
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button class="btn btn-sec btn-sm" onclick="openExportModal()" style="width:auto;background:rgba(0,200,150,.12);border-color:rgba(0,200,150,.3);color:var(--success)">📊 تصدير Excel</button>
+        <button class="btn btn-sec btn-sm" onclick="openExportModal()" style="width:auto;background:rgba(0,200,150,.12);border-color:rgba(0,200,150,.3);color:#00C896">📊 تصدير Excel</button>
         <select id="filterShift" class="finp" style="width:110px;padding:8px 10px" onchange="filterEmp()">
           <option value="">كل الورديات</option>
           <option value="أ">وردية أ</option>
@@ -759,7 +760,7 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
     </div>
 
     <!-- SUMMARY STATS -->
-    <div id="mobileSwitchNote" style="display:none;background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--rsm);padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--text2)">📱 الجدول الشامل متاح على الشاشات الأكبر — يظهر هنا الجدول المبسط</div>
+    <div id="mobileSwitchNote" style="display:none;background:rgba(0,149,217,.08);border:1px solid rgba(0,149,217,0.2);border-radius:14px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#8BAFC8">📱 الجدول الشامل متاح على الشاشات الأكبر — يظهر هنا الجدول المبسط</div>
     <div id="empSummaryStats" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-bottom:14px"></div>
 
     <!-- COMPREHENSIVE TABLE -->
@@ -767,8 +768,8 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
       <div class="card-hd">
         <h3 id="empTableTitle">📋 الجدول الشامل للموظفين</h3>
         <div style="display:flex;align-items:center;gap:8px">
-          <span id="empCount" style="font-size:12px;color:var(--text2)"></span>
-          <button class="btn btn-sm" onclick="openExportModal()" style="width:auto;background:rgba(0,200,150,.12);border:1px solid rgba(0,200,150,.4);color:var(--success);border-radius:var(--rp);padding:6px 14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;font-size:12px">📥 Excel</button>
+          <span id="empCount" style="font-size:12px;color:#8BAFC8"></span>
+          <button class="btn btn-sm" onclick="openExportModal()" style="width:auto;background:rgba(0,200,150,.12);border:1px solid rgba(0,200,150,.4);color:#00C896;border-radius:50px;padding:6px 14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;font-size:12px">📥 Excel</button>
         </div>
       </div>
       <div class="card-bd" style="padding:0;overflow:hidden">
@@ -800,14 +801,14 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
     </div>
 
     <!-- Controls bar -->
-    <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 16px">
+    <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px;background:#111E35;border:1px solid rgba(0,149,217,0.2);border-radius:20px;padding:12px 16px">
       <div class="sw" style="margin:0;flex:1;min-width:180px">
         <span class="si2">🔍</span>
         <input type="text" id="shSrch" placeholder="بحث..." oninput="filterShComp()" style="width:100%">
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap">
         <button class="btn btn-primary btn-sm" style="width:auto" onclick="openAddShift()">➕ إضافة موظف</button>
-        <button class="btn btn-sm" onclick="openExportModal()" style="width:auto;background:rgba(0,200,150,.12);border:1px solid rgba(0,200,150,.4);color:var(--success);border-radius:var(--rp);padding:6px 14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;font-size:12px">📥 Excel</button>
+        <button class="btn btn-sm" onclick="openExportModal()" style="width:auto;background:rgba(0,200,150,.12);border:1px solid rgba(0,200,150,.4);color:#00C896;border-radius:50px;padding:6px 14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;font-size:12px">📥 Excel</button>
       </div>
     </div>
 
@@ -818,7 +819,7 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
     <div class="card">
       <div class="card-hd">
         <h3 id="shCompTitle">الجدول الشامل</h3>
-        <span id="shCompCount" style="font-size:12px;color:var(--text2)"></span>
+        <span id="shCompCount" style="font-size:12px;color:#8BAFC8"></span>
       </div>
       <div class="card-bd" style="padding:0;overflow:hidden">
         <div style="overflow-x:auto;overflow-y:auto;max-height:65vh;-webkit-overflow-scrolling:touch">
@@ -841,15 +842,15 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
         <div class="card-bd" style="text-align:center;padding-top:18px">
           <div class="pav" id="profAv">م</div>
           <h2 id="profName" style="font-size:17px;margin-bottom:3px"></h2>
-          <p id="profRol" style="color:var(--text2);font-size:13px;margin-bottom:14px"></p>
+          <p id="profRol" style="color:#8BAFC8;font-size:13px;margin-bottom:14px"></p>
           <div class="dv"></div>
           <div style="text-align:right">
-            <div class="srow"><div class="slbl">رقم الوظيفي</div><div style="color:var(--primary);font-weight:800" id="profId"></div></div>
+            <div class="srow"><div class="slbl">رقم الوظيفي</div><div style="color:#0095D9;font-weight:800" id="profId"></div></div>
             <div class="srow"><div class="slbl">رقم الجوال</div><div id="profPh"></div></div>
             <div class="srow"><div class="slbl">القسم</div><div id="profDp"></div></div>
             <div class="srow"><div class="slbl">الوردية</div><div id="profSh"></div></div>
-            <div class="srow"><div class="slbl">المنطقة</div><div id="profRegion" style="color:var(--text2)">-</div></div>
-            <div class="srow"><div class="slbl">المركز</div><div id="profCenter" style="color:var(--text2)">-</div></div>
+            <div class="srow"><div class="slbl">المنطقة</div><div id="profRegion" style="color:#8BAFC8">-</div></div>
+            <div class="srow"><div class="slbl">المركز</div><div id="profCenter" style="color:#8BAFC8">-</div></div>
           </div>
         </div>
       </div>
@@ -897,7 +898,7 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
     <div class="card" style="max-width:480px;margin-top:13px">
       <div class="card-hd"><h3>حساب المدير كموظف</h3></div>
       <div class="card-bd">
-        <p style="font-size:12px;color:var(--text2);margin-bottom:14px">ربط حساب المدير بحساب موظف للتنقل بين الدورين</p>
+        <p style="font-size:12px;color:#8BAFC8;margin-bottom:14px">ربط حساب المدير بحساب موظف للتنقل بين الدورين</p>
         <div class="form-group"><label>رقم الوظيفي الخاص بالمدير كموظف</label><input type="text" id="sMgrEmpId" class="finp" placeholder="مثال: 9999" oninput="norm(this)"></div>
         <button class="btn btn-sec btn-full" onclick="saveMgrEmpLink()" style="margin-bottom:0">🔗 ربط الحساب</button>
         <div id="mgrEmpAl" class="al" style="margin-top:10px"></div>
@@ -909,8 +910,8 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
         <div id="gasAl" class="al"></div>
         <div class="form-group">
           <label>معرّف جدول البيانات (Sheet ID)</label>
-          <div style="display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rsm);padding:8px 12px">
-            <span style="font-size:11px;color:var(--text3);word-break:break-all;flex:1" id="sheetId">11iUjLsOz64NaVi6MxPqf8acMl9--vXg8QuJpm0yWVL4</span>
+          <div style="display:flex;align-items:center;gap:8px;background:#0D1F3C;border:1px solid rgba(0,149,217,0.2);border-radius:14px;padding:8px 12px">
+            <span style="font-size:11px;color:#5A8099;word-break:break-all;flex:1" id="sheetId">11iUjLsOz64NaVi6MxPqf8acMl9--vXg8QuJpm0yWVL4</span>
             <button class="btn btn-sec btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('sheetId').textContent).then(()=>toast('✅ تم النسخ','success'))">📋</button>
           </div>
         </div>
@@ -921,14 +922,14 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button class="btn btn-primary btn-sm" style="width:auto" onclick="saveGasUrl()">🔗 ربط وتفعيل</button>
           <button class="btn btn-sec btn-sm" onclick="initSheets()">🔧 تهيئة الجداول</button>
-          <button class="btn btn-sec btn-sm" style="background:rgba(0,200,150,.1);border-color:rgba(0,200,150,.3);color:var(--success)" onclick="addMissingColumnsGAS()">➕ إضافة الأعمدة الناقصة</button>
+          <button class="btn btn-sec btn-sm" style="background:rgba(0,200,150,.1);border-color:rgba(0,200,150,.3);color:#00C896" onclick="addMissingColumnsGAS()">➕ إضافة الأعمدة الناقصة</button>
           <button class="btn btn-sec btn-sm" onclick="testGasConnection()">🧪 اختبار الاتصال</button>
           <button class="btn btn-dng btn-sm" style="margin-top:8px" onclick="clearAllDataGAS()">🗑️ مسح جميع البيانات</button>
           <button class="btn btn-sec btn-sm" onclick="loadAll()">🔄 تحديث</button>
           <button class="btn btn-dng btn-sm" onclick="clearDemoData()">🗑️ حذف البيانات التجريبية</button>
           <button class="btn btn-sec btn-sm" onclick="syncComprehensiveSheet()" title="تحديث الجدول الشامل في Sheets">📊 تحديث الجدول الشامل</button>
         </div>
-        <div style="margin-top:12px;padding:10px 12px;background:var(--bg2);border-radius:var(--rsm);font-size:11px;color:var(--text3)">
+        <div style="margin-top:12px;padding:10px 12px;background:#0D1F3C;border-radius:14px;font-size:11px;color:#5A8099">
           💡 <b>طريقة الربط:</b> 1) افتح script.google.com → مشروع جديد → انسخ كود Code.gs من تعليقات الملف → نشر ← تطبيق ويب ← متاح للجميع → انسخ الرابط وألصقه هنا
         </div>
       </div>
@@ -941,8 +942,8 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
     <div class="ph"><h2>📝 النماذج</h2><p>إجازات · ساعات إضافية · البيانات الوظيفية</p></div>
 
     <!-- STICKY TABS -->
-    <div id="formTabsBar" style="position:sticky;top:0;z-index:50;background:var(--bg);padding:8px 0 10px;margin-bottom:14px;border-bottom:1px solid var(--border)">
-      <div style="display:flex;flex-wrap:wrap;gap:4px;background:var(--bg2);border-radius:20px;padding:4px">
+    <div id="formTabsBar" style="position:sticky;top:0;z-index:50;background:#0A1628;padding:8px 0 10px;margin-bottom:14px;border-bottom:1px solid rgba(0,149,217,0.2)">
+      <div style="display:flex;flex-wrap:wrap;gap:4px;background:#0D1F3C;border-radius:20px;padding:4px">
         <button onclick="switchFormTab('leave')" id="ftab-leave" class="ftb on" style="flex:1;min-width:100px">🏖️ الإجازات</button>
         <button onclick="switchFormTab('extra')" id="ftab-extra" class="ftb off" style="flex:1;min-width:100px">⏰ إضافي</button>
         <button onclick="switchFormTab('info')"  id="ftab-info"  class="ftb off" style="flex:1;min-width:100px">🗂️ البيانات</button>
@@ -952,12 +953,12 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
     <!-- ===== LEAVE SECTION ===== -->
     <div id="fsec-leave" style="max-width:680px">
       <!-- Employee info bar (auto-filled for employees) -->
-      <div id="leaveEmpBar" style="display:none;background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 16px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:14px;align-items:center">
+      <div id="leaveEmpBar" style="display:none;background:rgba(0,149,217,.08);border:1px solid rgba(0,149,217,0.2);border-radius:14px;padding:12px 16px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:14px;align-items:center">
         <span style="font-size:13px;font-weight:700" id="leEmpName"></span>
-        <span style="font-size:12px;color:var(--text2)" id="leEmpId"></span>
+        <span style="font-size:12px;color:#8BAFC8" id="leEmpId"></span>
         <span id="leEmpShift" class="sht sh-a"></span>
-        <span style="font-size:12px;color:var(--text2)" id="leEmpRegion"></span>
-        <span style="font-size:12px;color:var(--text2)" id="leEmpCenter"></span>
+        <span style="font-size:12px;color:#8BAFC8" id="leEmpRegion"></span>
+        <span style="font-size:12px;color:#8BAFC8" id="leEmpCenter"></span>
       </div>
       <div class="card" style="max-width:680px">
         <div class="card-hd"><h3>🏖️ طلب إجازة</h3></div>
@@ -969,10 +970,10 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
             <select id="fLeaveEmp" class="finp" onchange="onLeaveEmpChange()"><option value="">-- اختر الموظف --</option></select>
           </div>
           <!-- Leave balances -->
-          <div id="leaveBalances" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;padding:10px 14px;background:var(--bg2);border-radius:var(--rsm)">
-            <span style="font-size:12px;font-weight:700;color:var(--text2);width:100%;margin-bottom:2px">📊 أرصدة الإجازات:</span>
+          <div id="leaveBalances" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;padding:10px 14px;background:#0D1F3C;border-radius:14px">
+            <span style="font-size:12px;font-weight:700;color:#8BAFC8;width:100%;margin-bottom:2px">📊 أرصدة الإجازات:</span>
             <div style="display:flex;flex-wrap:wrap;gap:8px" id="balancesRow">
-              <span style="font-size:12px;color:var(--text3)">اختر موظفاً لعرض الأرصدة</span>
+              <span style="font-size:12px;color:#5A8099">اختر موظفاً لعرض الأرصدة</span>
             </div>
           </div>
           <div class="fgrid">
@@ -1004,7 +1005,7 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
             </div>
             <div class="form-group">
               <label>مدة الإجازة (تلقائي)</label>
-              <input type="text" id="fLeaveDays" class="finp" readonly style="opacity:.75;background:var(--bg2)" placeholder="تُحسب تلقائياً">
+              <input type="text" id="fLeaveDays" class="finp" readonly style="opacity:.75;background:#0D1F3C" placeholder="تُحسب تلقائياً">
             </div>
             <div class="form-group full">
               <label>ملاحظات</label>
@@ -1012,7 +1013,7 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
             </div>
           </div>
           <!-- Balance deduction preview -->
-          <div id="leaveDeductPreview" style="display:none;padding:10px 14px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:var(--rsm);margin-bottom:12px;font-size:13px;font-weight:700;color:var(--danger)"></div>
+          <div id="leaveDeductPreview" style="display:none;padding:10px 14px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:14px;margin-bottom:12px;font-size:13px;font-weight:700;color:#EF4444"></div>
           <div id="leavePeriodSched" style="display:none"></div>
           <button class="btn btn-primary btn-full" onclick="saveLeave()">💾 حفظ الطلب</button>
         </div>
@@ -1025,15 +1026,15 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
             <div class="form-group">
               <label>رصيد سنوية (بالنظام)</label>
               <input type="number" id="balAnnual" class="finp" min="0">
-              <p style="font-size:11px;color:var(--text3);margin-top:3px">يُدار بواسطة المدير/المشرف</p>
+              <p style="font-size:11px;color:#5A8099;margin-top:3px">يُدار بواسطة المدير/المشرف</p>
             </div>
             <div class="form-group">
               <label>رصيد مجدولة (بالمشرف)</label>
               <input type="number" id="balScheduled" class="finp" min="0">
-              <p style="font-size:11px;color:var(--text3);margin-top:3px">الإجازات المجدولة في الجدول</p>
+              <p style="font-size:11px;color:#5A8099;margin-top:3px">الإجازات المجدولة في الجدول</p>
             </div>
           </div>
-          <div id="balSaveWrap"><button class="btn btn-sec" onclick="saveBalances()" style="border-radius:var(--rp)">💾 حفظ الأرصدة</button></div>
+          <div id="balSaveWrap"><button class="btn btn-sec" onclick="saveBalances()" style="border-radius:50px">💾 حفظ الأرصدة</button></div>
         </div>
       </div>
       <div class="card" style="margin-top:14px">
@@ -1047,9 +1048,9 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
 
     <!-- ===== EXTRA HOURS SECTION ===== -->
     <div id="fsec-extra" style="display:none">
-      <div id="extraEmpBar" style="display:none;background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 16px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:14px;align-items:center">
+      <div id="extraEmpBar" style="display:none;background:rgba(0,149,217,.08);border:1px solid rgba(0,149,217,0.2);border-radius:14px;padding:12px 16px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:14px;align-items:center">
         <span style="font-size:13px;font-weight:700" id="exEmpName"></span>
-        <span style="font-size:12px;color:var(--text2)" id="exEmpId"></span>
+        <span style="font-size:12px;color:#8BAFC8" id="exEmpId"></span>
         <span id="exEmpShift" class="sht sh-a"></span>
       </div>
       <div class="card" style="max-width:680px">
@@ -1083,8 +1084,8 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
             </div>
             <div class="form-group">
               <label>حالة الاستلام</label>
-              <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--ibg);border:1.5px solid var(--border);border-radius:var(--rsm)">
-                <input type="checkbox" id="fExtraReceived" style="width:18px;height:18px;cursor:pointer;accent-color:var(--success)">
+              <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;background:#0D1F3C;border:1.5px solid rgba(0,149,217,0.2);border-radius:14px">
+                <input type="checkbox" id="fExtraReceived" style="width:18px;height:18px;cursor:pointer;accent-color:#00C896">
                 <label for="fExtraReceived" style="font-size:13px;cursor:pointer;font-weight:600">✅ تم استلام الساعات</label>
               </div>
             </div>
@@ -1103,7 +1104,7 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
 
     <!-- ===== INFO SECTION ===== -->
     <div id="fsec-info" style="display:none">
-      <div id="infoEmpBar" style="display:none;background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 16px;margin-bottom:14px">
+      <div id="infoEmpBar" style="display:none;background:rgba(0,149,217,.08);border:1px solid rgba(0,149,217,0.2);border-radius:14px;padding:12px 16px;margin-bottom:14px">
         <span style="font-size:13px;font-weight:700" id="infBarName"></span>
       </div>
       <div class="card" style="max-width:720px">
@@ -1138,7 +1139,7 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
 
           <!-- تواريخ البطاقات - للجميع -->
           <div class="dv" style="margin:10px 0 10px"></div>
-          <p style="font-size:12px;font-weight:800;color:var(--text2);margin-bottom:8px">🪪 تواريخ انتهاء البطاقات</p>
+          <p style="font-size:12px;font-weight:800;color:#8BAFC8;margin-bottom:8px">🪪 تواريخ انتهاء البطاقات</p>
           <div class="fgrid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:14px">
             <div class="form-group" style="margin:0">
               <label style="font-size:12px">بطاقة العمل</label>
@@ -1155,7 +1156,7 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
           </div>
 
           <div class="dv" style="margin:10px 0 14px"></div>
-          <p style="font-size:12px;font-weight:800;color:var(--text2);margin-bottom:10px">👕 مقاسات الملابس والتجهيزات</p>
+          <p style="font-size:12px;font-weight:800;color:#8BAFC8;margin-bottom:10px">👕 مقاسات الملابس والتجهيزات</p>
           <div class="fgrid">
             <div class="form-group">
               <label>قميص CAT 2 (مقاس)</label>
@@ -1210,9 +1211,9 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
   <!-- CALENDAR PAGE -->
   <div id="page-cal" class="page" style="display:none">
     <div class="ph"><h2>📅 تقويم الورديات</h2><p>جدول دوام الورديات الأربع — يومين صباح | يومين مساء | أربعة أيام إجازة</p></div>
-    <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px">
+    <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px;background:#111E35;border:1px solid rgba(0,149,217,0.2);border-radius:20px;padding:14px 16px">
       <div style="display:flex;align-items:center;gap:7px">
-        <label style="font-size:13px;font-weight:700;color:var(--text2)">الشهر:</label>
+        <label style="font-size:13px;font-weight:700;color:#8BAFC8">الشهر:</label>
         <select id="calMonth" class="finp" style="width:120px;padding:8px 10px" onchange="renderCalendar()">
           <option value="0">يناير</option><option value="1">فبراير</option><option value="2">مارس</option>
           <option value="3">أبريل</option><option value="4">مايو</option><option value="5">يونيو</option>
@@ -1221,11 +1222,11 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
         </select>
       </div>
       <div style="display:flex;align-items:center;gap:7px">
-        <label style="font-size:13px;font-weight:700;color:var(--text2)">السنة:</label>
+        <label style="font-size:13px;font-weight:700;color:#8BAFC8">السنة:</label>
         <select id="calYear" class="finp" style="width:95px;padding:8px 10px" onchange="renderCalendar()"></select>
       </div>
       <div style="display:flex;align-items:center;gap:7px">
-        <label style="font-size:13px;font-weight:700;color:var(--text2)">الوردية:</label>
+        <label style="font-size:13px;font-weight:700;color:#8BAFC8">الوردية:</label>
         <select id="calFilter" class="finp" style="width:130px;padding:8px 10px" onchange="renderCalendar()">
           <option value="all">جميع الورديات</option>
           <option value="أ">وردية أ فقط</option>
@@ -1238,7 +1239,7 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
       <div style="display:flex;flex-wrap:wrap;gap:6px;margin-right:auto">
         <span style="background:rgba(0,149,217,.15);color:#0095D9;border:1px solid rgba(0,149,217,.3);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700">🌅 صباح 7ص-7م</span>
         <span style="background:rgba(139,92,246,.15);color:#8B5CF6;border:1px solid rgba(139,92,246,.3);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700">🌙 مساء 7م-7ص</span>
-        <span style="background:rgba(0,200,150,.12);color:var(--success);border:1px solid rgba(0,200,150,.2);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700">🏖️ إجازة</span>
+        <span style="background:rgba(0,200,150,.12);color:#00C896;border:1px solid rgba(0,200,150,.2);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700">🏖️ إجازة</span>
       </div>
     </div>
     <div class="card" id="calCard">
@@ -1279,34 +1280,34 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
         <div class="form-group"><label>المركز</label><input type="text" id="fCenter" class="finp" placeholder="اسم المركز"></div>
         <div class="form-group full"><label>ملاحظات</label><input type="text" id="fNt" class="finp" placeholder="اختيارية"></div>
         <!-- تواريخ البطاقات في نموذج إضافة/تعديل الموظف -->
-        <div class="form-group full" id="empBadgeDatesWrap" style="border-top:1px solid var(--border);padding-top:12px;margin-top:4px">
-          <p style="font-size:12px;font-weight:800;color:var(--text2);margin-bottom:10px">🪪 تواريخ انتهاء البطاقات (للمدير والمشرف)</p>
+        <div class="form-group full" id="empBadgeDatesWrap" style="border-top:1px solid rgba(0,149,217,0.2);padding-top:12px;margin-top:4px">
+          <p style="font-size:12px;font-weight:800;color:#8BAFC8;margin-bottom:10px">🪪 تواريخ انتهاء البطاقات (للمدير والمشرف)</p>
           <div class="fgrid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px">
             <div class="form-group" style="margin:0"><label style="font-size:12px">بطاقة العمل</label><input type="date" id="fEmpBadge1" class="finp"></div>
             <div class="form-group" style="margin:0"><label style="font-size:12px">بطاقة المصدر</label><input type="date" id="fEmpBadge2" class="finp"></div>
             <div class="form-group" style="margin:0"><label id="fEmpBadge3Lbl" style="font-size:12px">بطاقة المستلم</label><input type="date" id="fEmpBadge3" class="finp"></div>
           </div>
         </div>
-        <div class="form-group full" id="fSupPwWrap" style="display:none;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.2);border-radius:var(--rsm);padding:12px">
+        <div class="form-group full" id="fSupPwWrap" style="display:none;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.2);border-radius:14px;padding:12px">
           <label style="color:#8B5CF6;font-weight:800">🔐 كلمة مرور المشرف</label>
-          <p style="font-size:11px;color:var(--text2);margin:4px 0 8px">كلمة المرور التي سيستخدمها المشرف لتسجيل الدخول (مختلفة عن رقم الجوال)</p>
+          <p style="font-size:11px;color:#8BAFC8;margin:4px 0 8px">كلمة المرور التي سيستخدمها المشرف لتسجيل الدخول (مختلفة عن رقم الجوال)</p>
           <input type="text" id="fSupPw" class="finp" placeholder="أدخل كلمة مرور للمشرف..." autocomplete="off">
         </div>
       </div>
 
 ```
   <!-- قسم البطاقات -->
-  <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px">
+  <div style="margin-top:14px;border-top:1px solid rgba(0,149,217,0.2);padding-top:12px">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-      <span style="font-size:13px;font-weight:800;color:var(--text)">🪪 تواريخ انتهاء البطاقات</span>
+      <span style="font-size:13px;font-weight:800;color:#E8F4FD">🪪 تواريخ انتهاء البطاقات</span>
       <button type="button" class="btn btn-sec btn-sm" style="width:auto;padding:5px 12px" onclick="addBadgeField()">➕ إضافة بطاقة</button>
     </div>
     <div id="badgesContainer" class="fgrid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px">
       <!-- بطاقة العمل -->
       <div class="badge-field-wrap" data-badge-id="badge1">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-          <label style="font-size:12px;font-weight:700;color:var(--text2)" id="fBadgeLabel_badge1">بطاقة العمل</label>
-          <button type="button" onclick="renameBadgeField('badge1')" style="background:none;border:none;color:var(--primary);font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0" title="تغيير الاسم">✏️</button>
+          <label style="font-size:12px;font-weight:700;color:#8BAFC8" id="fBadgeLabel_badge1">بطاقة العمل</label>
+          <button type="button" onclick="renameBadgeField('badge1')" style="background:none;border:none;color:#0095D9;font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0" title="تغيير الاسم">✏️</button>
         </div>
         <input type="date" id="fBadge_badge1" class="finp" style="font-size:13px">
         <div id="fBadgePreview_badge1" style="margin-top:4px;min-height:20px;font-size:11px"></div>
@@ -1314,8 +1315,8 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
       <!-- بطاقة المصدر -->
       <div class="badge-field-wrap" data-badge-id="badge2">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-          <label style="font-size:12px;font-weight:700;color:var(--text2)" id="fBadgeLabel_badge2">بطاقة المصدر</label>
-          <button type="button" onclick="renameBadgeField('badge2')" style="background:none;border:none;color:var(--primary);font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0">✏️</button>
+          <label style="font-size:12px;font-weight:700;color:#8BAFC8" id="fBadgeLabel_badge2">بطاقة المصدر</label>
+          <button type="button" onclick="renameBadgeField('badge2')" style="background:none;border:none;color:#0095D9;font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0">✏️</button>
         </div>
         <input type="date" id="fBadge_badge2" class="finp" style="font-size:13px">
         <div id="fBadgePreview_badge2" style="margin-top:4px;min-height:20px;font-size:11px"></div>
@@ -1323,8 +1324,8 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
       <!-- بطاقة المستلم -->
       <div class="badge-field-wrap" data-badge-id="badge3">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-          <label style="font-size:12px;font-weight:700;color:var(--text2)" id="fBadgeLabel_badge3" id="fBadge3Label">بطاقة المستلم</label>
-          <button type="button" onclick="renameBadgeField('badge3')" style="background:none;border:none;color:var(--primary);font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0">✏️</button>
+          <label style="font-size:12px;font-weight:700;color:#8BAFC8" id="fBadgeLabel_badge3" id="fBadge3Label">بطاقة المستلم</label>
+          <button type="button" onclick="renameBadgeField('badge3')" style="background:none;border:none;color:#0095D9;font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0">✏️</button>
         </div>
         <input type="date" id="fBadge_badge3" class="finp" style="font-size:13px">
         <div id="fBadgePreview_badge3" style="margin-top:4px;min-height:20px;font-size:11px"></div>
@@ -1381,14 +1382,14 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
           <label>المركز</label>
           <input type="text" id="pCenter" class="finp" placeholder="اسم المركز">
         </div>
-        <div class="form-group full" style="background:rgba(0,149,217,.06);border:1px solid var(--border);border-radius:var(--rsm);padding:10px 12px">
-          <p style="font-size:12px;color:var(--text2);margin:0">💡 جميع الحقول قابلة للتعديل. تغيير الوردية ينقل الموظف للوردية الجديدة.</p>
+        <div class="form-group full" style="background:rgba(0,149,217,.06);border:1px solid rgba(0,149,217,0.2);border-radius:14px;padding:10px 12px">
+          <p style="font-size:12px;color:#8BAFC8;margin:0">💡 جميع الحقول قابلة للتعديل. تغيير الوردية ينقل الموظف للوردية الجديدة.</p>
         </div>
         <!-- رمز الإشراف - يظهر للمشرف فقط -->
-        <div class="form-group full" id="supCodeWrap" style="display:none;border-top:1px solid var(--border);padding-top:12px;margin-top:4px">
-          <div style="background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.25);border-radius:var(--rsm);padding:14px 16px">
+        <div class="form-group full" id="supCodeWrap" style="display:none;border-top:1px solid rgba(0,149,217,0.2);padding-top:12px;margin-top:4px">
+          <div style="background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.25);border-radius:14px;padding:14px 16px">
             <h4 style="font-size:13px;font-weight:800;color:#8B5CF6;margin:0 0 6px">🔐 رمز الإشراف</h4>
-            <p style="font-size:11px;color:var(--text2);margin:0 0 12px">هذا الرمز يُستخدم بدلاً من رقم الجوال لتسجيل الدخول كمشرف. اتركه فارغاً للاستمرار بالجوال.</p>
+            <p style="font-size:11px;color:#8BAFC8;margin:0 0 12px">هذا الرمز يُستخدم بدلاً من رقم الجوال لتسجيل الدخول كمشرف. اتركه فارغاً للاستمرار بالجوال.</p>
             <div class="fgrid" style="grid-template-columns:1fr 1fr;gap:10px">
               <div class="form-group" style="margin:0">
                 <label style="font-size:11px;font-weight:700">رمز الإشراف الجديد</label>
@@ -1405,7 +1406,7 @@ body.light .pav{background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)!impor
                 </div>
               </div>
             </div>
-            <div id="supCodeStatus" style="font-size:11px;margin-top:8px;color:var(--text2)"></div>
+            <div id="supCodeStatus" style="font-size:11px;margin-top:8px;color:#8BAFC8"></div>
           </div>
         </div>
       </div>
@@ -1447,7 +1448,7 @@ function applyTheme(){
 }
 
 // PASS EYE
-function ep(btn,id){const i=document.getElementById(id);const s=i.type==='password';i.type=s?'text':'password';btn.querySelector('svg').innerHTML=s?'<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>':'<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';btn.style.color=s?'var(--primary)':'';}
+function ep(btn,id){const i=document.getElementById(id);const s=i.type==='password';i.type=s?'text':'password';btn.querySelector('svg').innerHTML=s?'<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>':'<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';btn.style.color=s?'#0095D9':'';}
 
 // NORMALIZE
 function norm(inp){inp.value=inp.value.replace(/[\u0660-\u0669]/g,d=>d.charCodeAt(0)-0x0660).replace(/[\u06F0-\u06F9]/g,d=>d.charCodeAt(0)-0x06F0);}
@@ -1636,7 +1637,7 @@ function updateTop(){
     const _aMs=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
     const _hMn=_hMs[Math.min(Math.max(nhij.m-1,0),11)]||'';
     topDate.innerHTML='<span>'+_aDs[nd.getDay()]+' '+nd.getDate()+' '+_aMs[nd.getMonth()]+' '+nd.getFullYear()+'م</span>'
-      +'<br><span style="color:var(--text3)">'+nhij.d+' '+_hMn+' '+nhij.y+'هـ | '+dispRole+'</span>';
+      +'<br><span style="color:#5A8099">'+nhij.d+' '+_hMn+' '+nhij.y+'هـ | '+dispRole+'</span>';
   }
 }
 
@@ -1665,7 +1666,9 @@ async function manualSync(){
 }
 
 async function loadAll(){
-  // طلب واحد فقط
+  // أظهر ما عندنا فوراً
+  renderEmpTbl(); buildDash();
+  // ثم اجلب من GAS
   const all = await gas('كل_البيانات',{}).catch(()=>({ok:false}));
   if(all.ok && all.data){
     if(all.data.emps)    emps = all.data.emps;
@@ -1739,7 +1742,7 @@ function buildDash(){
     if(U.role==='مدير'&&U.mgrEmpId){const me=emps.find(e=>String(e.empId)===String(U.mgrEmpId));if(me)dispU2=me;}
     const sh=dispU2.shift;
     const bgMap={'أ':'linear-gradient(135deg,#005f8e,#0095D9)','ب':'linear-gradient(135deg,#5b21b6,#8B5CF6)','ج':'linear-gradient(135deg,#92400e,#F59E0B)','د':'linear-gradient(135deg,#991b1b,#EF4444)'};
-    if(dwCard&&sh&&bgMap[sh]) dwCard.querySelector('div[style*="background:var(--grad)"]') && (dwCard.querySelector('div[style*="background:var(--grad)"]').style.background=bgMap[sh]);
+    if(dwCard&&sh&&bgMap[sh]) dwCard.querySelector('div[style*="background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)"]') && (dwCard.querySelector('div[style*="background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)"]').style.background=bgMap[sh]);
     // Add shift badge
     if(dShiftBadge&&sh){
       const todS=getShiftStatus(sh,new Date());
@@ -1751,7 +1754,7 @@ function buildDash(){
   const el=document.getElementById('dContent');
   if(VR==='مدير'){ el.innerHTML=mgrDash(); }
   else if(VR==='مشرف'){ el.innerHTML=supDash(); }
-  else { el.innerHTML='<div style="text-align:center;padding:30px;color:var(--text2)"><div class="spinner" style="margin:0 auto 10px;border-color:var(--border);border-top-color:var(--primary)"></div>جاري تحميل البيانات...</div>'; empDashAsync(); }
+  else { el.innerHTML='<div style="text-align:center;padding:30px;color:#8BAFC8"><div class="spinner" style="margin:0 auto 10px;border-color:rgba(0,149,217,0.2);border-top-color:#0095D9"></div>جاري تحميل البيانات...</div>'; empDashAsync(); }
   setTimeout(drawWeekChart,80);
 }
 
@@ -1838,9 +1841,9 @@ function mgrDash(){
     ].map(x=>`<div class="sc" style="flex-direction:column;align-items:flex-start;gap:4px;${x.fn?'cursor:pointer':''}" ${x.fn?'onclick="'+x.fn+'"':''}>
       <div style="display:flex;align-items:center;justify-content:space-between;width:100%">
         <div class="si ${x.c}" style="width:36px;height:36px;font-size:16px">${x.i}</div>
-        <div style="font-size:22px;font-weight:900;color:var(--text)">${x.v}</div>
+        <div style="font-size:22px;font-weight:900;color:#E8F4FD">${x.v}</div>
       </div>
-      <div style="font-size:11px;color:var(--text2);font-weight:600">${x.l}${x.fn?' 🔍':''}</div>
+      <div style="font-size:11px;color:#8BAFC8;font-weight:600">${x.l}${x.fn?' 🔍':''}</div>
     </div>`).join('')}
   </div>
 
@@ -1864,16 +1867,16 @@ function mgrDash(){
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:14px">
     <!-- Online -->
     <div class="ol-card" style="margin:0">
-      <div class="ol-hd"><h3 style="font-size:14px;font-weight:800">المتواجدون الآن <span class="ol-dot"></span></h3><span style="font-size:12px;color:var(--text2)">${onl.length} مستخدم</span></div>
+      <div class="ol-hd"><h3 style="font-size:14px;font-weight:800">المتواجدون الآن <span class="ol-dot"></span></h3><span style="font-size:12px;color:#8BAFC8">${onl.length} مستخدم</span></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-        ${onl.map((e,i)=>`<div style="display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:8px 10px;overflow:hidden">
+        ${onl.map((e,i)=>`<div style="display:flex;align-items:center;gap:8px;background:#162540;border:1px solid rgba(0,149,217,0.2);border-radius:14px;padding:8px 10px;overflow:hidden">
           <div class="ol-av" style="background:${cols[i%5]};flex-shrink:0;width:28px;height:28px;font-size:11px">${e.name.charAt(0)}</div>
           <div style="min-width:0">
             <div style="font-size:11px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.name}</div>
-            <div style="font-size:10px;color:var(--text2)">${shTag(e.shift)}</div>
+            <div style="font-size:10px;color:#8BAFC8">${shTag(e.shift)}</div>
           </div>
         </div>`).join('')}
-        ${tot>5?`<div style="grid-column:1/-1;text-align:center;font-size:11px;color:var(--text3);padding:4px">+${tot-5} آخرون</div>`:''}
+        ${tot>5?`<div style="grid-column:1/-1;text-align:center;font-size:11px;color:#5A8099;padding:4px">+${tot-5} آخرون</div>`:''}
       </div>
     </div>
     <!-- Centers -->
@@ -1961,11 +1964,11 @@ function supDash(){
             const pendEmp=shiftExtras.filter(x=>String(x.empId)===String(e.empId)&&!x.received).length;
             return '<tr>'
               +'<td><b>'+e.name+'</b>'+(e.role==='مشرف'?' <span class="badge b-sup" style="font-size:9px">⭐</span>':'')+'</td>'
-              +'<td style="font-size:11px;color:var(--text2)">'+(inf.center||'—')+'</td>'
-              +'<td>'+(onLeave?'<span style="color:var(--warning);font-size:11px;font-weight:700">🏖️ إجازة</span>':'<span style="color:var(--success);font-size:11px">نشط</span>')+'</td>'
-              +'<td><span style="font-size:12px;font-weight:800;color:var(--success)">'+b.annual+'</span></td>'
-              +'<td><span style="font-size:12px;font-weight:800;color:var(--primary)">'+b.scheduled+'</span></td>'
-              +'<td>'+(pendEmp>0?'<span style="font-size:11px;font-weight:700;color:var(--danger)">'+pendEmp+' ⏰</span>':'<span style="color:var(--text3);font-size:11px">—</span>')+'</td>'
+              +'<td style="font-size:11px;color:#8BAFC8">'+(inf.center||'—')+'</td>'
+              +'<td>'+(onLeave?'<span style="color:#F5A623;font-size:11px;font-weight:700">🏖️ إجازة</span>':'<span style="color:#00C896;font-size:11px">نشط</span>')+'</td>'
+              +'<td><span style="font-size:12px;font-weight:800;color:#00C896">'+b.annual+'</span></td>'
+              +'<td><span style="font-size:12px;font-weight:800;color:#0095D9">'+b.scheduled+'</span></td>'
+              +'<td>'+(pendEmp>0?'<span style="font-size:11px;font-weight:700;color:#EF4444">'+pendEmp+' ⏰</span>':'<span style="color:#5A8099;font-size:11px">—</span>')+'</td>'
               +'</tr>';
           }).join('')}
           </tbody>
@@ -1980,10 +1983,10 @@ function supDash(){
       <tbody>${allShiftEmps.length?allShiftEmps.map(e=>{
         const inf=infos.find(x=>String(x.empId)===String(e.empId))||{};
         const onLeave=activeLeaves.some(l=>String(l.empId)===String(e.empId));
-        return '<tr style="'+(onLeave?'background:rgba(139,92,246,.08)':'')+'"><td><b>'+e.empId+'</b></td><td>'+e.name+(String(e.empId)===String(U.empId)?' <span style="font-size:10px;color:var(--primary)">(أنت)</span>':'')+'</td><td>'+e.phone+'</td>'
+        return '<tr style="'+(onLeave?'background:rgba(139,92,246,.08)':'')+'"><td><b>'+e.empId+'</b></td><td>'+e.name+(String(e.empId)===String(U.empId)?' <span style="font-size:10px;color:#0095D9">(أنت)</span>':'')+'</td><td>'+e.phone+'</td>'
           +'<td>'+(inf.center||'-')+'</td>'
           +'<td>'+(e.role==='مشرف'?'<span class="badge b-sup">⭐ مشرف</span>':'موظف')+'</td>'
-          +'<td>'+(onLeave?'<span style="color:var(--warning);font-weight:700">🏖️ إجازة</span>':stBadge(e.status))+'</td></tr>';
+          +'<td>'+(onLeave?'<span style="color:#F5A623;font-weight:700">🏖️ إجازة</span>':stBadge(e.status))+'</td></tr>';
       }).join(''):'<tr><td colspan="6" class="no-data">لا يوجد موظفون</td></tr>'}</tbody>
     </table></div></div>
   </div>`;
@@ -2023,13 +2026,13 @@ async function empDashAsync(){
   ${buildUsageBar(false)}
   <!-- Info strip -->
   <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center;justify-content:space-between">
-    <button onclick="exportComprehensiveExcel()" style="background:rgba(0,200,150,.12);border:1px solid rgba(0,200,150,.4);color:var(--success);border-radius:var(--rp);padding:6px 14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;font-size:12px;flex-shrink:0">📥 تصدير بياناتي</button>
+    <button onclick="exportComprehensiveExcel()" style="background:rgba(0,200,150,.12);border:1px solid rgba(0,200,150,.4);color:#00C896;border-radius:50px;padding:6px 14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;font-size:12px;flex-shrink:0">📥 تصدير بياناتي</button>
   </div>
   <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center">
-    ${info.region||info.center?`<span style="font-size:12px;font-weight:700;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rp);padding:4px 12px">📍 ${info.region||''} ${info.center?'· '+info.center:''}</span>`:''}
-    ${info.car?`<span style="font-size:12px;font-weight:700;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rp);padding:4px 12px">🚗 ${info.car}</span>`:''}
-    <span style="font-size:12px;font-weight:700;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rp);padding:4px 12px">🏢 ${dispU.dept||'—'}</span>
-    <span style="font-size:12px;font-weight:700;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rp);padding:4px 12px">🪪 ${dispU.empId}</span>
+    ${info.region||info.center?`<span style="font-size:12px;font-weight:700;background:#162540;border:1px solid rgba(0,149,217,0.2);border-radius:50px;padding:4px 12px">📍 ${info.region||''} ${info.center?'· '+info.center:''}</span>`:''}
+    ${info.car?`<span style="font-size:12px;font-weight:700;background:#162540;border:1px solid rgba(0,149,217,0.2);border-radius:50px;padding:4px 12px">🚗 ${info.car}</span>`:''}
+    <span style="font-size:12px;font-weight:700;background:#162540;border:1px solid rgba(0,149,217,0.2);border-radius:50px;padding:4px 12px">🏢 ${dispU.dept||'—'}</span>
+    <span style="font-size:12px;font-weight:700;background:#162540;border:1px solid rgba(0,149,217,0.2);border-radius:50px;padding:4px 12px">🪪 ${dispU.empId}</span>
   </div>
 
   <!-- KPI GRID -->
@@ -2043,21 +2046,21 @@ async function empDashAsync(){
 
   <!-- ACTIVE / UPCOMING LEAVE CARD -->
   ${activeLeave?`
-  <div style="background:rgba(0,200,150,.1);border:1px solid rgba(0,200,150,.3);border-radius:var(--r);padding:14px 18px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-    <div><span style="font-size:13px;font-weight:800;color:var(--success)">🏖️ أنت في إجازة الآن</span><span style="font-size:11px;color:var(--text2);margin-right:8px">${activeLeave.type}</span></div>
-    <div style="font-size:12px;color:var(--text2)">
+  <div style="background:rgba(0,200,150,.1);border:1px solid rgba(0,200,150,.3);border-radius:20px;padding:14px 18px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+    <div><span style="font-size:13px;font-weight:800;color:#00C896">🏖️ أنت في إجازة الآن</span><span style="font-size:11px;color:#8BAFC8;margin-right:8px">${activeLeave.type}</span></div>
+    <div style="font-size:12px;color:#8BAFC8">
       ${fmtAr(activeLeave.start)} ← ${fmtAr(activeLeave.end)}
-      <span style="font-weight:800;color:var(--success);margin-right:8px">
+      <span style="font-weight:800;color:#00C896;margin-right:8px">
         متبقي: ${Math.max(0,Math.ceil((parseL(activeLeave.end)-now)/86400000))+1} يوم
       </span>
     </div>
   </div>`:''}
   ${!activeLeave&&futureLeave?`
-  <div style="background:rgba(0,149,217,.08);border:1px solid var(--border);border-radius:var(--r);padding:14px 18px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-    <div><span style="font-size:13px;font-weight:800;color:var(--primary)">📅 إجازة قادمة</span><span style="font-size:11px;color:var(--text2);margin-right:8px">${futureLeave.type}</span></div>
-    <div style="font-size:12px;color:var(--text2)">
+  <div style="background:rgba(0,149,217,.08);border:1px solid rgba(0,149,217,0.2);border-radius:20px;padding:14px 18px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+    <div><span style="font-size:13px;font-weight:800;color:#0095D9">📅 إجازة قادمة</span><span style="font-size:11px;color:#8BAFC8;margin-right:8px">${futureLeave.type}</span></div>
+    <div style="font-size:12px;color:#8BAFC8">
       ${fmtAr(futureLeave.start)}
-      <span style="font-weight:800;color:var(--primary);margin-right:8px">
+      <span style="font-weight:800;color:#0095D9;margin-right:8px">
         بعد: ${Math.ceil((parseL(futureLeave.start)-now)/86400000)} يوم
       </span>
     </div>
@@ -2067,7 +2070,7 @@ async function empDashAsync(){
   <div class="card" style="margin-bottom:12px">
     <div class="card-hd" style="cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
       <h3>🏖️ سجل إجازاتي</h3>
-      <span style="font-size:12px;color:var(--text2)">${empLeaves.length} إجازة | ${empLeaves.reduce((s,l)=>s+(Number(l.days)||0),0)} يوم إجمالي ▾</span>
+      <span style="font-size:12px;color:#8BAFC8">${empLeaves.length} إجازة | ${empLeaves.reduce((s,l)=>s+(Number(l.days)||0),0)} يوم إجمالي ▾</span>
     </div>
     <div style="display:none">
       <div class="tw"><table>
@@ -2081,7 +2084,7 @@ async function empDashAsync(){
           return `<tr>
             <td>${l.type}</td><td>${ls}</td><td>${le||'-'}</td>
             <td>${l.days}</td>
-            <td>${isActive?`<span style="color:var(--success);font-weight:700">نشطة · ${remaining} يوم متبقي</span>`:isExpired?'<span style="color:var(--text3)">منتهية</span>':'<span style="color:var(--primary)">قادمة</span>'}</td>
+            <td>${isActive?`<span style="color:#00C896;font-weight:700">نشطة · ${remaining} يوم متبقي</span>`:isExpired?'<span style="color:#5A8099">منتهية</span>':'<span style="color:#0095D9">قادمة</span>'}</td>
           </tr>`;
         }).join(''):'<tr><td colspan="5" class="no-data">لا يوجد إجازات</td></tr>'}</tbody>
       </table></div>
@@ -2093,7 +2096,7 @@ async function empDashAsync(){
   <div class="card" style="margin-bottom:12px">
     <div class="card-hd" style="cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
       <h3>⏰ سجل الساعات الإضافية</h3>
-      <span style="font-size:12px;color:var(--text2)">${totalHrs} ساعة | ${pendingExtras.length} لم تُستلم ▾</span>
+      <span style="font-size:12px;color:#8BAFC8">${totalHrs} ساعة | ${pendingExtras.length} لم تُستلم ▾</span>
     </div>
     <div style="display:none">
       <div class="tw"><table>
@@ -2102,7 +2105,7 @@ async function empDashAsync(){
           <td>${fmtAr(x.date)}</td>
           <td><b>${x.hrs}</b> ساعة</td>
           <td>${x.type}</td>
-          <td><button class="btn btn-sm" style="border-radius:var(--rp);padding:4px 8px;font-size:11px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;background:${x.received?'rgba(0,200,150,.15)':'rgba(239,68,68,.1)'};color:${x.received?'var(--success)':'var(--danger)'};border:1px solid ${x.received?'rgba(0,200,150,.3)':'rgba(239,68,68,.25)'}" onclick="toggleExtraReceived('${x.id}',this)">${x.received?'✅ مُستلم':'⏳ لم يُستلم'}</button></td>
+          <td><button class="btn btn-sm" style="border-radius:50px;padding:4px 8px;font-size:11px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;background:${x.received?'rgba(0,200,150,.15)':'rgba(239,68,68,.1)'};color:${x.received?'#00C896':'#EF4444'};border:1px solid ${x.received?'rgba(0,200,150,.3)':'rgba(239,68,68,.25)'}" onclick="toggleExtraReceived('${x.id}',this)">${x.received?'✅ مُستلم':'⏳ لم يُستلم'}</button></td>
           <td><button class="btn btn-sec btn-sm" style="padding:3px 7px;font-size:11px" onclick="switchFormTab('extra');editExtraRow('${x.id}')">✏️</button></td>
         </tr>`).join(''):'<tr><td colspan="5" class="no-data">لا يوجد سجلات</td></tr>'}</tbody>
       </table></div>
@@ -2116,16 +2119,16 @@ async function empDashAsync(){
     <div class="card-hd"><h3>🪪 البطاقات وانتهاء الصلاحية</h3></div>
     <div class="card-bd">
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px">
-        ${info.badge1?`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:10px">
-          <div style="font-size:10px;color:var(--text2);margin-bottom:4px">بطاقة العمل</div>
+        ${info.badge1?`<div style="background:#162540;border:1px solid rgba(0,149,217,0.2);border-radius:12px;padding:10px">
+          <div style="font-size:10px;color:#8BAFC8;margin-bottom:4px">بطاقة العمل</div>
           <div style="font-size:13px;font-weight:700">${fmtAr(info.badge1)}</div>
           <div style="margin-top:4px">${badgeBadge(info.badge1)}</div></div>`:''}
-        ${info.badge2?`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:10px">
-          <div style="font-size:10px;color:var(--text2);margin-bottom:4px">بطاقة المصدر</div>
+        ${info.badge2?`<div style="background:#162540;border:1px solid rgba(0,149,217,0.2);border-radius:12px;padding:10px">
+          <div style="font-size:10px;color:#8BAFC8;margin-bottom:4px">بطاقة المصدر</div>
           <div style="font-size:13px;font-weight:700">${fmtAr(info.badge2)}</div>
           <div style="margin-top:4px">${badgeBadge(info.badge2)}</div></div>`:''}
-        ${info.badge3?`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:10px">
-          <div style="font-size:10px;color:var(--text2);margin-bottom:4px">${typeof getBadgeName==='function'?getBadgeName('badge3'):'المستلم'}</div>
+        ${info.badge3?`<div style="background:#162540;border:1px solid rgba(0,149,217,0.2);border-radius:12px;padding:10px">
+          <div style="font-size:10px;color:#8BAFC8;margin-bottom:4px">${typeof getBadgeName==='function'?getBadgeName('badge3'):'المستلم'}</div>
           <div style="font-size:13px;font-weight:700">${fmtAr(info.badge3)}</div>
           <div style="margin-top:4px">${badgeBadge(info.badge3)}</div></div>`:''}
       </div>
@@ -2136,16 +2139,16 @@ async function empDashAsync(){
     <div class="card-hd"><h3>👕 المقاسات والتجهيزات</h3></div>
     <div class="card-bd">
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px">
-        ${info.shirt2?`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center"><div style="font-size:16px;font-weight:800">${info.shirt2}</div><div style="font-size:10px;color:var(--text2)">قميص CAT2 (${info.shirt2Qty||0})</div></div>`:''}
-        ${info.pants2?`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center"><div style="font-size:16px;font-weight:800">${info.pants2}</div><div style="font-size:10px;color:var(--text2)">بنطلون CAT2 (${info.pants2Qty||0})</div></div>`:''}
-        ${info.suit4?`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center"><div style="font-size:16px;font-weight:800">${info.suit4}</div><div style="font-size:10px;color:var(--text2)">بدلة CAT4 (${info.suit4Qty||0})</div></div>`:''}
-        ${info.shoes?`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center"><div style="font-size:16px;font-weight:800">${info.shoes}</div><div style="font-size:10px;color:var(--text2)">حذاء (${info.shoeQty||0})</div></div>`:''}
-        ${info.car?`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center"><div style="font-size:14px;font-weight:800">${info.car}</div><div style="font-size:10px;color:var(--text2)">رقم السيارة</div></div>`:''}
+        ${info.shirt2?`<div style="background:#162540;border:1px solid rgba(0,149,217,0.2);border-radius:12px;padding:10px;text-align:center"><div style="font-size:16px;font-weight:800">${info.shirt2}</div><div style="font-size:10px;color:#8BAFC8">قميص CAT2 (${info.shirt2Qty||0})</div></div>`:''}
+        ${info.pants2?`<div style="background:#162540;border:1px solid rgba(0,149,217,0.2);border-radius:12px;padding:10px;text-align:center"><div style="font-size:16px;font-weight:800">${info.pants2}</div><div style="font-size:10px;color:#8BAFC8">بنطلون CAT2 (${info.pants2Qty||0})</div></div>`:''}
+        ${info.suit4?`<div style="background:#162540;border:1px solid rgba(0,149,217,0.2);border-radius:12px;padding:10px;text-align:center"><div style="font-size:16px;font-weight:800">${info.suit4}</div><div style="font-size:10px;color:#8BAFC8">بدلة CAT4 (${info.suit4Qty||0})</div></div>`:''}
+        ${info.shoes?`<div style="background:#162540;border:1px solid rgba(0,149,217,0.2);border-radius:12px;padding:10px;text-align:center"><div style="font-size:16px;font-weight:800">${info.shoes}</div><div style="font-size:10px;color:#8BAFC8">حذاء (${info.shoeQty||0})</div></div>`:''}
+        ${info.car?`<div style="background:#162540;border:1px solid rgba(0,149,217,0.2);border-radius:12px;padding:10px;text-align:center"><div style="font-size:14px;font-weight:800">${info.car}</div><div style="font-size:10px;color:#8BAFC8">رقم السيارة</div></div>`:''}
       </div>
       <button class="btn btn-sec btn-sm" onclick="showPage('forms');switchFormTab('info')" style="margin-top:10px">✏️ تعديل المقاسات</button>
     </div>
   </div>`:`
-  <div style="text-align:center;padding:16px;color:var(--text3);font-size:13px">
+  <div style="text-align:center;padding:16px;color:#5A8099;font-size:13px">
     <span style="font-size:24px;display:block;margin-bottom:6px">👕</span>
     لم تُدخل بيانات المقاسات بعد
     <br><button class="btn btn-primary btn-sm" onclick="showPage('forms');switchFormTab('info')" style="margin-top:10px;width:auto">إدخال البيانات</button>
@@ -2201,7 +2204,7 @@ async function renderShTbl(){
   if(supLblEl) supLblEl.textContent=ms?SHNAMES[ms]||ms:'كل الورديات';
 
   // Show loading
-  tb.innerHTML='<tr><td colspan="20" class="no-data" style="padding:20px"><span style="color:var(--text2)">⏳ جاري التحميل من قاعدة البيانات...</span></td></tr>';
+  tb.innerHTML='<tr><td colspan="20" class="no-data" style="padding:20px"><span style="color:#8BAFC8">⏳ جاري التحميل من قاعدة البيانات...</span></td></tr>';
 
   // استخدام البيانات المحلية (اضغط 🔄 للتحديث)
 
@@ -2227,7 +2230,7 @@ async function renderShTbl(){
       {l:'المنطقة',c:'th-group-info'},{l:'المركز',c:'th-group-info'},
       {l:'إجراءات',c:'th-group-id'}
     ];
-    thead.innerHTML='<tr>'+groups.map(g=>'<th colspan="'+g.n+'" class="'+g.c+'" style="text-align:center;border-left:2px solid var(--border)">'+g.l+'</th>').join('')+'</tr>'
+    thead.innerHTML='<tr>'+groups.map(g=>'<th colspan="'+g.n+'" class="'+g.c+'" style="text-align:center;border-left:2px solid rgba(0,149,217,0.2)">'+g.l+'</th>').join('')+'</tr>'
       +'<tr>'+cols.map(col=>'<th class="'+col.c+'" style="font-size:10px">'+col.l+'</th>').join('')+'</tr>';
   }
 
@@ -2243,13 +2246,13 @@ async function renderShTbl(){
     const eid=String(e.empId);
     const isMe=eid===String(U.empId);
     const shiftOpts=SHIFTS.filter(function(s){return s!==e.shift;}).map(function(s){return '<option value="'+s+'">'+SHNAMES[s]+'</option>';}).join('');
-    const transSel='<select data-eid="'+eid+'" onchange="supTransfer(this,this.dataset.eid)" style="padding:3px 5px;border-radius:8px;background:var(--ibg);border:1px solid var(--border);color:var(--text);font-family:Cairo,sans-serif;font-size:10px;max-width:70px"><option value="">↕️</option>'+shiftOpts+'</select>';
+    const transSel='<select data-eid="'+eid+'" onchange="supTransfer(this,this.dataset.eid)" style="padding:3px 5px;border-radius:8px;background:#0D1F3C;border:1px solid rgba(0,149,217,0.2);color:#E8F4FD;font-family:Cairo,sans-serif;font-size:10px;max-width:70px"><option value="">↕️</option>'+shiftOpts+'</select>';
     const promBtn='<button class="btn btn-sm" style="background:rgba(139,92,246,.15);color:#8B5CF6;border:1px solid rgba(139,92,246,.3);border-radius:20px;padding:3px 8px;font-size:10px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif" onclick="promoteEmp(&quot;'+eid+'&quot;)">⬆️</button>';
     const demBtn='<button class="btn btn-dng btn-sm" style="padding:3px 8px;font-size:10px" onclick="demoteEmp(&quot;'+eid+'&quot;)">⬇️</button>';
     const editBtn='<button class="btn btn-sec btn-sm" style="padding:3px 8px;font-size:11px" onclick="editShEmp(&quot;'+eid+'&quot;)">✏️</button>';
     return '<tr>'
-      +'<td style="min-width:130px;text-align:right"><b>'+e.name+'</b>'+(isMe?' <span style="font-size:9px;color:var(--primary)">(أنت)</span>':'')+'</td>'
-      +'<td style="color:var(--primary)"><b>'+e.empId+'</b></td>'
+      +'<td style="min-width:130px;text-align:right"><b>'+e.name+'</b>'+(isMe?' <span style="font-size:9px;color:#0095D9">(أنت)</span>':'')+'</td>'
+      +'<td style="color:#0095D9"><b>'+e.empId+'</b></td>'
       +'<td dir="ltr">'+e.phone+'</td>'
       +'<td>'+(isSup?'<span class="badge b-sup">⭐ مشرف</span>':'موظف')+'</td>'
       +'<td style="font-size:11px">'+badgeDate(info.badge1)+'</td><td>'+badgeBadge(info.badge1)+'</td>'
@@ -2282,7 +2285,7 @@ async function renderShTbl(){
       {i:'⭐',v:allShiftE.filter(e=>e.role==='مشرف').length,l:'مشرفون',c:'si-o'},
       {i:'🏖️',v:leavesNow.length,l:'في إجازة',c:'si-p'},
       {i:'✅',v:allShiftE.filter(e=>e.status==='نشط').length,l:'نشطون',c:'si-g'}
-    ].map(x=>'<div class="sc" style="padding:12px;flex-direction:column;gap:3px"><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><div class="si '+x.c+'" style="width:30px;height:30px;font-size:13px">'+x.i+'</div><div style="font-size:20px;font-weight:900">'+x.v+'</div></div><div style="font-size:10px;color:var(--text2)">'+x.l+'</div></div>').join('');
+    ].map(x=>'<div class="sc" style="padding:12px;flex-direction:column;gap:3px"><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><div class="si '+x.c+'" style="width:30px;height:30px;font-size:13px">'+x.i+'</div><div style="font-size:20px;font-weight:900">'+x.v+'</div></div><div style="font-size:10px;color:#8BAFC8">'+x.l+'</div></div>').join('');
   }
 }
 
@@ -2387,12 +2390,12 @@ function showProf(){
   if(bEl) bEl.innerHTML=`
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
       <div style="background:rgba(0,200,150,.1);border:1px solid rgba(0,200,150,.25);border-radius:14px;padding:14px;text-align:center">
-        <div style="font-size:28px;font-weight:900;color:var(--success)">${b.annual}</div>
-        <div style="font-size:12px;color:var(--text2);margin-top:3px">رصيد سنوية</div>
+        <div style="font-size:28px;font-weight:900;color:#00C896">${b.annual}</div>
+        <div style="font-size:12px;color:#8BAFC8;margin-top:3px">رصيد سنوية</div>
       </div>
-      <div style="background:rgba(0,149,217,.1);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center">
-        <div style="font-size:28px;font-weight:900;color:var(--primary)">${b.scheduled}</div>
-        <div style="font-size:12px;color:var(--text2);margin-top:3px">رصيد مجدولة</div>
+      <div style="background:rgba(0,149,217,.1);border:1px solid rgba(0,149,217,0.2);border-radius:14px;padding:14px;text-align:center">
+        <div style="font-size:28px;font-weight:900;color:#0095D9">${b.scheduled}</div>
+        <div style="font-size:12px;color:#8BAFC8;margin-top:3px">رصيد مجدولة</div>
       </div>
     </div>`;
 
@@ -2402,11 +2405,11 @@ function showProf(){
     const tod=getShiftStatus(dispU.shift,new Date());
     const icon=tod==='صباح'?'🌅':tod==='مساء'?'🌙':'🏖️';
     const label=tod==='صباح'?'صباح (7ص-7م)':tod==='مساء'?'مساء (7م-7ص)':'إجازة اليوم';
-    const col=tod==='صباح'?'var(--shift-a)':tod==='مساء'?'var(--shift-b)':'var(--success)';
+    const col=tod==='صباح'?'#0095D9':tod==='مساء'?'#8B5CF6':'#00C896';
     tsEl.innerHTML=`<div style="text-align:center;padding:10px">
       <div style="font-size:36px;margin-bottom:6px">${icon}</div>
       <div style="font-size:15px;font-weight:800;color:${col}">${label}</div>
-      <div style="font-size:12px;color:var(--text2);margin-top:4px">${SHNAMES[dispU.shift]}</div>
+      <div style="font-size:12px;color:#8BAFC8;margin-top:4px">${SHNAMES[dispU.shift]}</div>
     </div>`;
   }
 
@@ -2545,7 +2548,7 @@ async function saveProf(){
       sessionStorage.setItem('seU',JSON.stringify(U));
     }
     const ss=document.getElementById('supCodeStatus');
-    if(ss) ss.innerHTML='<span style="color:var(--success);font-weight:700">✅ تم حفظ رمز الإشراف — يُستخدم عند الدخول التالي</span>';
+    if(ss) ss.innerHTML='<span style="color:#00C896;font-weight:700">✅ تم حفظ رمز الإشراف — يُستخدم عند الدخول التالي</span>';
   }
   if(!r.ok){showAl('mProfAl','d',r.error||'خطأ');return;}
 
@@ -2801,7 +2804,7 @@ function goToday() {
             el.scrollBy({top: rect.top - elRect.top - el.clientHeight/2, behavior:'smooth'});
           }
         });
-        todayCell.style.outline = '3px solid var(--danger)';
+        todayCell.style.outline = '3px solid #EF4444';
         todayCell.style.boxShadow = '0 0 16px rgba(239,68,68,.6)';
         setTimeout(function(){ todayCell.style.outline=''; todayCell.style.boxShadow=''; }, 3000);
       }
@@ -2913,7 +2916,7 @@ function renderMonthlyStats(filter, month, year) {
       </span></td>
       <td><b style="color:#0095D9">${morning}</b> يوم</td>
       <td><b style="color:#8B5CF6">${evening}</b> يوم</td>
-      <td><b style="color:var(--success)">${off}</b> يوم</td>
+      <td><b style="color:#00C896">${off}</b> يوم</td>
       <td><b>${total}</b> يوم</td>
     </tr>`;
   });
@@ -3071,10 +3074,10 @@ async function loadBalancesDisplay(empId){
     } else { b=b||{annual:0,scheduled:0}; }
   }
   row.innerHTML=`
-    <span style="background:rgba(0,200,150,.12);color:var(--success);border:1px solid rgba(0,200,150,.25);padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700">
+    <span style="background:rgba(0,200,150,.12);color:#00C896;border:1px solid rgba(0,200,150,.25);padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700">
       📅 سنوية: <b>${b.annual}</b> يوم
     </span>
-    <span style="background:rgba(0,149,217,.12);color:var(--primary);border:1px solid var(--border);padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700">
+    <span style="background:rgba(0,149,217,.12);color:#0095D9;border:1px solid rgba(0,149,217,0.2);padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700">
       📋 مجدولة: <b>${b.scheduled}</b> يوم
     </span>`;
   // Also fill the editor fields if visible
@@ -3115,7 +3118,7 @@ function calcLeaveDays(){
       let msg='',warn=false;
       if(type==='سنوية'){const rem=b.annual-diff;warn=rem<0;msg=`رصيد سنوية: ${b.annual} يوم ← بعد الخصم: ${rem} يوم${warn?' ⚠️ تجاوز الرصيد':''}`;}
       else if(type==='مجدولة'){const rem=b.scheduled-diff;warn=rem<0;msg=`رصيد مجدولة: ${b.scheduled} يوم ← بعد الخصم: ${rem} يوم${warn?' ⚠️ تجاوز الرصيد':''}`;}
-      if(msg){dp.style.display='block';dp.textContent=msg;dp.style.background=warn?'rgba(239,68,68,.08)':'rgba(0,200,150,.08)';dp.style.color=warn?'var(--danger)':'var(--success)';}
+      if(msg){dp.style.display='block';dp.textContent=msg;dp.style.background=warn?'rgba(239,68,68,.08)':'rgba(0,200,150,.08)';dp.style.color=warn?'#EF4444':'#00C896';}
       else dp.style.display='none';
     }
   } else if(fd) fd.value='';
@@ -3141,16 +3144,16 @@ function renderLeavePeriodSchedule(){
     const cls=status==='صباح'?'cs-morning':status==='مساء'?'cs-evening':'cs-off';
     const icon=status==='صباح'?'🌅':status==='مساء'?'🌙':'🏖️';
     const hij=toHijri(new Date(d));
-    cells+=`<div style="text-align:center;border-radius:10px;padding:8px 6px;background:var(--surface2);border:2px solid transparent;min-width:72px">
-      <div style="font-size:9px;color:var(--text3)">${AR_DAYS_FULL[d.getDay()]}</div>
-      <div style="font-size:13px;font-weight:800;color:var(--text)">${d.getDate()}</div>
-      <div style="font-size:9px;color:var(--text3);margin-bottom:4px">${hij.d} ${H_MONTHS[hij.m-1]}</div>
+    cells+=`<div style="text-align:center;border-radius:10px;padding:8px 6px;background:#162540;border:2px solid transparent;min-width:72px">
+      <div style="font-size:9px;color:#5A8099">${AR_DAYS_FULL[d.getDay()]}</div>
+      <div style="font-size:13px;font-weight:800;color:#E8F4FD">${d.getDate()}</div>
+      <div style="font-size:9px;color:#5A8099;margin-bottom:4px">${hij.d} ${H_MONTHS[hij.m-1]}</div>
       <span style="display:block;font-size:10px;font-weight:700;border-radius:6px;padding:2px 4px" class="${cls}">${icon} ${status}</span>
     </div>`;
   }
   el.style.display='block';
-  el.innerHTML=`<div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--rsm);padding:12px;margin-bottom:12px">
-    <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px">📅 جدول الوردية خلال فترة الإجازة - ${SHNAMES[emp.shift]}</div>
+  el.innerHTML=`<div style="background:#0D1F3C;border:1px solid rgba(0,149,217,0.2);border-radius:14px;padding:12px;margin-bottom:12px">
+    <div style="font-size:12px;font-weight:700;color:#8BAFC8;margin-bottom:8px">📅 جدول الوردية خلال فترة الإجازة - ${SHNAMES[emp.shift]}</div>
     <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:4px">${cells}</div>
   </div>`;
 }
@@ -3236,7 +3239,7 @@ async function renderLeaveTable(){
   tb.innerHTML=arr.length?arr.map(l=>{
     // dates: use global fmtAr
     return `<tr data-lid="${l.id}">
-      <td><b>${l.empName}</b>${l.region?'<br><small style="color:var(--text3)">'+l.region+(l.center?' / '+l.center:'')+'</small>':''}</td>
+      <td><b>${l.empName}</b>${l.region?'<br><small style="color:#5A8099">'+l.region+(l.center?' / '+l.center:'')+'</small>':''}</td>
       <td>${l.type}</td>
       <td>${fmtAr(l.start)}</td>
       <td>${fmtAr(l.end)}</td>
@@ -3298,7 +3301,7 @@ async function toggleExtraReceived(id,btn){
   if(gasUrl) gas('اضافي_تعديل_استلام',{id:String(id),received:newVal}).catch(()=>{});
   btn.textContent=newVal?'✅ مُستلم':'⏳ لم يُستلم';
   btn.style.background=newVal?'rgba(0,200,150,.15)':'rgba(239,68,68,.1)';
-  btn.style.color=newVal?'var(--success)':'var(--danger)';
+  btn.style.color=newVal?'#00C896':'#EF4444';
   btn.style.borderColor=newVal?'rgba(0,200,150,.3)':'rgba(239,68,68,.25)';
 }
 async function renderExtraTable(){
@@ -3338,7 +3341,7 @@ async function renderExtraTable(){
   // fmtExtraDate → global fmtAr
   tb.innerHTML=arr.length?arr.map(x=>{
     const rec=x.received||false;
-    const recBtn=`<button class="btn btn-sm" style="border-radius:var(--rp);padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;background:${rec?'rgba(0,200,150,.15)':'rgba(239,68,68,.1)'};color:${rec?'var(--success)':'var(--danger)'};border:1px solid ${rec?'rgba(0,200,150,.3)':'rgba(239,68,68,.25)'}" onclick="toggleExtraReceived('${x.id}',this)">${rec?'✅ مُستلم':'⏳ لم يُستلم'}</button>`;
+    const recBtn=`<button class="btn btn-sm" style="border-radius:50px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;background:${rec?'rgba(0,200,150,.15)':'rgba(239,68,68,.1)'};color:${rec?'#00C896':'#EF4444'};border:1px solid ${rec?'rgba(0,200,150,.3)':'rgba(239,68,68,.25)'}" onclick="toggleExtraReceived('${x.id}',this)">${rec?'✅ مُستلم':'⏳ لم يُستلم'}</button>`;
     return `<tr data-eid="${x.id}">
       <td><b>${x.empName}</b></td>
       <td>${fmtAr(x.date)}</td>
@@ -3632,7 +3635,7 @@ function getDaysLeft(expiryDateStr){
 }
 
 function expiryBadge(daysLeft, label){
-  if(daysLeft === null) return '<span style="color:var(--text3);font-size:11px">—</span>';
+  if(daysLeft === null) return '<span style="color:#5A8099;font-size:11px">—</span>';
   if(daysLeft < 0) return '<span class="exp-soon">منتهي</span>';
   if(daysLeft <= 30) return `<span class="exp-soon">${daysLeft} يوم</span>`;
   if(daysLeft <= 90) return `<span class="exp-warn">${daysLeft} يوم</span>`;
@@ -3706,7 +3709,7 @@ function renderComprehensiveTable(){
   // Row 1: group headers
   let r1 = '<tr>';
   groups.forEach(g => {
-    r1 += `<th colspan="${g.count}" class="${g.cls}" style="text-align:center;font-size:12px;border-left:2px solid var(--border)">${g.label}</th>`;
+    r1 += `<th colspan="${g.count}" class="${g.cls}" style="text-align:center;font-size:12px;border-left:2px solid rgba(0,149,217,0.2)">${g.label}</th>`;
   });
   r1 += '</tr>';
 
@@ -3749,11 +3752,11 @@ function renderComprehensiveTable(){
     const isTransferred = e.transferDate && (now-parseAnyDate(e.transferDate))<7*24*60*60*1000;
 
     const _tOpts=SHIFTS.filter(function(s){return s!==e.shift;}).map(function(s){return '<option value="'+s+'">'+SHNAMES[s]+'</option>';}).join('');
-    const transSel=VR==='مدير'?('<select data-eid="'+e.empId+'" onchange="supTransfer(this,this.getAttribute(\'data-eid\'))" style="padding:3px 6px;border-radius:8px;background:var(--ibg);border:1px solid var(--border);color:var(--text);font-family:Cairo,sans-serif;font-size:10px;cursor:pointer;max-width:70px"><option value="">↕️</option>'+_tOpts+'</select>'):'';
+    const transSel=VR==='مدير'?('<select data-eid="'+e.empId+'" onchange="supTransfer(this,this.getAttribute(\'data-eid\'))" style="padding:3px 6px;border-radius:8px;background:#0D1F3C;border:1px solid rgba(0,149,217,0.2);color:#E8F4FD;font-family:Cairo,sans-serif;font-size:10px;cursor:pointer;max-width:70px"><option value="">↕️</option>'+_tOpts+'</select>'):'';
 
     return '<tr'+(isTransferred?' class="transferred"':'')+'>'
       +'<td style="text-align:right;min-width:130px"><b>'+e.name+'</b></td>'
-      +'<td><b style="color:var(--primary)">'+e.empId+'</b></td>'
+      +'<td><b style="color:#0095D9">'+e.empId+'</b></td>'
       +'<td dir="ltr">'+e.phone+'</td>'
       +'<td>'+shTag(e.shift)+'</td>'
       // بطاقات
@@ -3813,7 +3816,7 @@ function renderComprehensiveTable(){
         <div class="si ${x.c}" style="width:32px;height:32px;font-size:14px">${x.i}</div>
         <div style="font-size:20px;font-weight:900">${x.v}</div>
       </div>
-      <div style="font-size:10px;color:var(--text2)">${x.l}</div>
+      <div style="font-size:10px;color:#8BAFC8">${x.l}</div>
     </div>`).join('');
   }
 
@@ -3835,7 +3838,7 @@ function renderSimpleEmpTbl(){
       <td>${e.role==='مشرف'?'<span class="badge b-sup">⭐ مشرف</span>':'موظف'}</td>
       <td>${stBadge(e.status)}</td>
       <td>
-        ${VR==='مدير'?`<select onchange="if(this.value){transferEmployee('${e.empId}',this.value);this.value=''}" style="padding:4px 6px;border-radius:8px;background:var(--ibg);border:1px solid var(--border);color:var(--text);font-family:Cairo,sans-serif;font-size:10px;cursor:pointer;margin-left:2px"><option value="">↕️ نقل</option>${SHIFTS.map(s=>s!==e.shift?'<option value="'+s+'">'+SHNAMES[s]+'</option>':'').join('')}</select>`:''}
+        ${VR==='مدير'?`<select onchange="if(this.value){transferEmployee('${e.empId}',this.value);this.value=''}" style="padding:4px 6px;border-radius:8px;background:#0D1F3C;border:1px solid rgba(0,149,217,0.2);color:#E8F4FD;font-family:Cairo,sans-serif;font-size:10px;cursor:pointer;margin-left:2px"><option value="">↕️ نقل</option>${SHIFTS.map(s=>s!==e.shift?'<option value="'+s+'">'+SHNAMES[s]+'</option>':'').join('')}</select>`:''}
         <button class="btn btn-sec btn-sm" onclick="editEmp(${i})">✏️</button>
         ${VR==='مدير'?`<button class="btn btn-dng btn-sm" onclick="delEmp(${i})" style="margin-right:4px">🗑️</button>`:''}
       </td>
@@ -3896,7 +3899,7 @@ function buildBottomNav(){
       <span>${cfg.label}</span>
     </div>`;
   });
-  moreList.innerHTML = moreHtml || '<p style="text-align:center;color:var(--text3);font-size:13px">لا يوجد المزيد</p>';
+  moreList.innerHTML = moreHtml || '<p style="text-align:center;color:#5A8099;font-size:13px">لا يوجد المزيد</p>';
 }
 
 function updateBottomNavActive(pg){
@@ -3962,22 +3965,22 @@ function editExtraRow(id){
   const typeOpts=['عادي','عطلة رسمية','في يوم إجازة'].map(t=>`<option ${x.type===t?'selected':''}>${t}</option>`).join('');
   editRow.innerHTML=`<td colspan="7" style="padding:10px 12px">
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:8px">
-      <div><label style="font-size:11px;color:var(--text2);font-weight:700;display:block;margin-bottom:3px">التاريخ</label>
+      <div><label style="font-size:11px;color:#8BAFC8;font-weight:700;display:block;margin-bottom:3px">التاريخ</label>
         <input type="date" id="xe_date_${id}" value="${dateVal}" class="finp" style="padding:8px 10px;width:100%"></div>
-      <div><label style="font-size:11px;color:var(--text2);font-weight:700;display:block;margin-bottom:3px">الساعات</label>
+      <div><label style="font-size:11px;color:#8BAFC8;font-weight:700;display:block;margin-bottom:3px">الساعات</label>
         <input type="text" id="xe_hrs_${id}" value="${x.hrs}" class="finp" style="padding:8px 10px;width:100%"></div>
-      <div><label style="font-size:11px;color:var(--text2);font-weight:700;display:block;margin-bottom:3px">نوع الإضافي</label>
+      <div><label style="font-size:11px;color:#8BAFC8;font-weight:700;display:block;margin-bottom:3px">نوع الإضافي</label>
         <select id="xe_type_${id}" class="finp" style="padding:8px 10px;width:100%">${typeOpts}</select></div>
-      <div><label style="font-size:11px;color:var(--text2);font-weight:700;display:block;margin-bottom:3px">ملاحظات</label>
+      <div><label style="font-size:11px;color:#8BAFC8;font-weight:700;display:block;margin-bottom:3px">ملاحظات</label>
         <input type="text" id="xe_note_${id}" value="${x.note||''}" class="finp" style="padding:8px 10px;width:100%"></div>
-      <div><label style="font-size:11px;color:var(--text2);font-weight:700;display:block;margin-bottom:3px">حالة الاستلام</label>
-        <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--ibg);border:1.5px solid var(--border);border-radius:var(--rsm);width:100%">
-          <input type="checkbox" id="xe_rec_${id}" ${x.received?'checked':''} style="width:16px;height:16px;accent-color:var(--success)">
+      <div><label style="font-size:11px;color:#8BAFC8;font-weight:700;display:block;margin-bottom:3px">حالة الاستلام</label>
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#0D1F3C;border:1.5px solid rgba(0,149,217,0.2);border-radius:14px;width:100%">
+          <input type="checkbox" id="xe_rec_${id}" ${x.received?'checked':''} style="width:16px;height:16px;accent-color:#00C896">
           <label for="xe_rec_${id}" style="font-size:12px;cursor:pointer">تم الاستلام</label>
         </div></div>
     </div>
     <div style="display:flex;gap:7px;flex-wrap:wrap">
-      <button class="btn btn-sm" style="background:var(--primary);color:#fff;border:none;border-radius:var(--rp);padding:7px 16px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif" onclick="saveExtraEdit('${id}')">💾 حفظ التعديل</button>
+      <button class="btn btn-sm" style="background:#0095D9;color:#fff;border:none;border-radius:50px;padding:7px 16px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif" onclick="saveExtraEdit('${id}')">💾 حفظ التعديل</button>
       <button class="btn btn-sec btn-sm" onclick="document.getElementById('xedit_${id}').remove()">إلغاء ✕</button>
     </div>
   </td>`;
@@ -4061,19 +4064,19 @@ function editLeaveRow(id){
   editRow.style.cssText='background:rgba(0,149,217,.07)';
   editRow.innerHTML=`<td colspan="7" style="padding:10px 12px">
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-bottom:8px">
-      <div><label style="font-size:11px;color:var(--text2);font-weight:700;display:block;margin-bottom:3px">نوع الإجازة</label>
+      <div><label style="font-size:11px;color:#8BAFC8;font-weight:700;display:block;margin-bottom:3px">نوع الإجازة</label>
         <select id="le_type_${id}" class="finp" style="padding:8px 10px;width:100%">${typeOpts}</select></div>
-      <div><label style="font-size:11px;color:var(--text2);font-weight:700;display:block;margin-bottom:3px">تاريخ البداية</label>
+      <div><label style="font-size:11px;color:#8BAFC8;font-weight:700;display:block;margin-bottom:3px">تاريخ البداية</label>
         <input type="date" id="le_start_${id}" value="${startVal}" class="finp" style="padding:8px 10px;width:100%" onchange="calcLeaveEditDays('${id}')"></div>
-      <div><label style="font-size:11px;color:var(--text2);font-weight:700;display:block;margin-bottom:3px">تاريخ النهاية</label>
+      <div><label style="font-size:11px;color:#8BAFC8;font-weight:700;display:block;margin-bottom:3px">تاريخ النهاية</label>
         <input type="date" id="le_end_${id}" value="${endVal}" class="finp" style="padding:8px 10px;width:100%" onchange="calcLeaveEditDays('${id}')"></div>
-      <div><label style="font-size:11px;color:var(--text2);font-weight:700;display:block;margin-bottom:3px">الأيام</label>
-        <input type="text" id="le_days_${id}" value="${l.days}" class="finp" style="padding:8px 10px;width:100%;opacity:.7;background:var(--bg2)" readonly></div>
-      <div><label style="font-size:11px;color:var(--text2);font-weight:700;display:block;margin-bottom:3px">ملاحظات</label>
+      <div><label style="font-size:11px;color:#8BAFC8;font-weight:700;display:block;margin-bottom:3px">الأيام</label>
+        <input type="text" id="le_days_${id}" value="${l.days}" class="finp" style="padding:8px 10px;width:100%;opacity:.7;background:#0D1F3C" readonly></div>
+      <div><label style="font-size:11px;color:#8BAFC8;font-weight:700;display:block;margin-bottom:3px">ملاحظات</label>
         <input type="text" id="le_note_${id}" value="${l.note||''}" class="finp" style="padding:8px 10px;width:100%"></div>
     </div>
     <div style="display:flex;gap:7px">
-      <button class="btn btn-sm" style="background:var(--primary);color:#fff;border:none;border-radius:var(--rp);padding:7px 14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif" onclick="saveLeaveEdit('${id}')">💾 حفظ التعديل</button>
+      <button class="btn btn-sm" style="background:#0095D9;color:#fff;border:none;border-radius:50px;padding:7px 14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif" onclick="saveLeaveEdit('${id}')">💾 حفظ التعديل</button>
       <button class="btn btn-sec btn-sm" onclick="document.getElementById('ledit_${id}').remove()">إلغاء ✕</button>
     </div>
   </td>`;
@@ -4160,10 +4163,10 @@ function showLeavesModal(){
     const shSups=shLeaves.filter(l=>{ const e=shEmps.find(x=>String(x.empId)===String(l.empId)); return e&&e.role==='مشرف'; });
     const shEmpL=shLeaves.filter(l=>{ const e=shEmps.find(x=>String(x.empId)===String(l.empId)); return e&&e.role==='موظف'; });
     const col=SHIFT_CARD_C[sh];
-    html+=`<div style="background:rgba(${sh==='أ'?'0,149,217':sh==='ب'?'139,92,246':sh==='ج'?'245,158,11':'239,68,68'},.12);border:1px solid ${col}40;border-radius:var(--rsm);padding:12px">
+    html+=`<div style="background:rgba(${sh==='أ'?'0,149,217':sh==='ب'?'139,92,246':sh==='ج'?'245,158,11':'239,68,68'},.12);border:1px solid ${col}40;border-radius:14px;padding:12px">
       <div style="font-size:13px;font-weight:800;color:${col};margin-bottom:6px">${SHNAMES[sh]}</div>
-      <div style="font-size:12px;color:var(--text2)">⭐ مشرفون: <b style="color:var(--text)">${shSups.length}</b></div>
-      <div style="font-size:12px;color:var(--text2)">👤 موظفون: <b style="color:var(--text)">${shEmpL.length}</b></div>
+      <div style="font-size:12px;color:#8BAFC8">⭐ مشرفون: <b style="color:#E8F4FD">${shSups.length}</b></div>
+      <div style="font-size:12px;color:#8BAFC8">👤 موظفون: <b style="color:#E8F4FD">${shEmpL.length}</b></div>
     </div>`;
   });
   html+='</div>';
@@ -4177,7 +4180,7 @@ function showLeavesModal(){
       html+=`<tr><td><b>${e.name||l.empName}</b></td><td>${shTag(e.shift)}</td>
         <td>${e.role==='مشرف'?'<span class="badge b-sup">⭐ مشرف</span>':'موظف'}</td>
         <td>${l.type}</td><td>${fmtAr(l.start)}</td><td>${fmtAr(l.end)}</td>
-        <td><b style="color:var(--success)">${rem} يوم</b></td></tr>`;
+        <td><b style="color:#00C896">${rem} يوم</b></td></tr>`;
     });
   } else { html+='<tr><td colspan="7" class="no-data">لا يوجد موظفون في إجازة الآن</td></tr>'; }
   html+='</tbody></table></div>';
@@ -4198,10 +4201,10 @@ function showPendingExtrasModal(){
     const shX=allX.filter(x=>{const e=shEmps.find(ee=>String(ee.empId)===String(x.empId));return !!e;});
     const totalHrs=shX.reduce((s,x)=>s+(Number(x.hrs)||0),0);
     const col=SHIFT_CARD_C[sh];
-    html+=`<div style="background:rgba(${sh==='أ'?'0,149,217':sh==='ب'?'139,92,246':sh==='ج'?'245,158,11':'239,68,68'},.12);border:1px solid ${col}40;border-radius:var(--rsm);padding:12px">
+    html+=`<div style="background:rgba(${sh==='أ'?'0,149,217':sh==='ب'?'139,92,246':sh==='ج'?'245,158,11':'239,68,68'},.12);border:1px solid ${col}40;border-radius:14px;padding:12px">
       <div style="font-size:13px;font-weight:800;color:${col};margin-bottom:6px">${SHNAMES[sh]}</div>
-      <div style="font-size:12px;color:var(--text2)">👤 ${shX.length} سجل</div>
-      <div style="font-size:12px;color:var(--text2)">⏰ ${totalHrs} ساعة إجمالي</div>
+      <div style="font-size:12px;color:#8BAFC8">👤 ${shX.length} سجل</div>
+      <div style="font-size:12px;color:#8BAFC8">⏰ ${totalHrs} ساعة إجمالي</div>
     </div>`;
   });
   html+='</div>';
@@ -4217,7 +4220,7 @@ function showPendingExtrasModal(){
   
   Object.keys(byMonth).sort().reverse().forEach(mk=>{
     const [yr,mo]=mk.split('-');
-    html+=`<h4 style="font-size:13px;font-weight:800;margin:12px 0 6px;color:var(--text)">${AR_MONTHS_S[parseInt(mo)-1]} ${yr}</h4>`;
+    html+=`<h4 style="font-size:13px;font-weight:800;margin:12px 0 6px;color:#E8F4FD">${AR_MONTHS_S[parseInt(mo)-1]} ${yr}</h4>`;
     html+='<div class="tw"><table><thead><tr><th>الموظف</th><th>الوردية</th><th>التاريخ</th><th>الساعات</th><th>النوع</th></tr></thead><tbody>';
     byMonth[mk].sort((a,b)=>{
       const sa=emps.find(e=>String(e.empId)===String(a.empId));
@@ -4263,14 +4266,14 @@ function showSupLeavesModal(){
   const shEmpIds=emps.filter(e=>e.shift===ms).map(e=>String(e.empId)); // includes supervisor
   const now=new Date(); now.setHours(0,0,0,0);
   const active=getLeaves().filter(l=>shEmpIds.includes(String(l.empId))&&parseAnyDate(l.start)<=now&&parseAnyDate(l.end)>=now);
-  let html='<h4 style="font-size:13px;font-weight:800;margin-bottom:10px;color:var(--text)">الموظفون في إجازة - '+SHNAMES[ms]+'</h4>';
-  if(!active.length){ html+='<p style="text-align:center;color:var(--text3);padding:20px">لا يوجد موظفون في إجازة الآن</p>'; }
+  let html='<h4 style="font-size:13px;font-weight:800;margin-bottom:10px;color:#E8F4FD">الموظفون في إجازة - '+SHNAMES[ms]+'</h4>';
+  if(!active.length){ html+='<p style="text-align:center;color:#5A8099;padding:20px">لا يوجد موظفون في إجازة الآن</p>'; }
   else {
     html+='<div class="tw"><table><thead><tr><th>الموظف</th><th>الدور</th><th>نوع الإجازة</th><th>من</th><th>إلى</th><th>متبقي</th></tr></thead><tbody>';
     active.forEach(l=>{
       const e=emps.find(x=>String(x.empId)===String(l.empId))||{name:l.empName,role:''};
       const rem=Math.max(0,Math.ceil((parseAnyDate(l.end)-now)/86400000))+1;
-      html+=`<tr><td><b>${e.name||l.empName}</b></td><td>${e.role==='مشرف'?'<span class="badge b-sup">⭐ مشرف</span>':'موظف'}</td><td>${l.type}</td><td>${fmtAr(l.start)}</td><td>${fmtAr(l.end)}</td><td><b style="color:var(--success)">${rem} يوم</b></td></tr>`;
+      html+=`<tr><td><b>${e.name||l.empName}</b></td><td>${e.role==='مشرف'?'<span class="badge b-sup">⭐ مشرف</span>':'موظف'}</td><td>${l.type}</td><td>${fmtAr(l.start)}</td><td>${fmtAr(l.end)}</td><td><b style="color:#00C896">${rem} يوم</b></td></tr>`;
     });
     html+='</tbody></table></div>';
   }
@@ -4282,7 +4285,7 @@ function showSupExtrasModal(){
   const shEmpIds=emps.filter(e=>e.shift===ms).map(e=>String(e.empId)); // includes supervisor
   const pending=getExtras().filter(x=>shEmpIds.includes(String(x.empId))&&!x.received);
   let html='<h4 style="font-size:13px;font-weight:800;margin-bottom:10px">ساعات إضافية غير مُستلمة - '+SHNAMES[ms]+'</h4>';
-  if(!pending.length){ html+='<p style="text-align:center;color:var(--text3);padding:20px">لا يوجد ساعات إضافية غير مستلمة</p>'; }
+  if(!pending.length){ html+='<p style="text-align:center;color:#5A8099;padding:20px">لا يوجد ساعات إضافية غير مستلمة</p>'; }
   else {
     // Group by month
     const byMonth={};
@@ -4295,7 +4298,7 @@ function showSupExtrasModal(){
     Object.keys(byMonth).sort().reverse().forEach(mk=>{
       const [yr,mo]=mk.split('-');
       const total=byMonth[mk].reduce((s,x)=>s+(Number(x.hrs)||0),0);
-      html+=`<h4 style="font-size:13px;font-weight:800;margin:12px 0 6px;color:var(--text)">${AR_MONTHS_S[parseInt(mo)-1]} ${yr} — <span style="color:var(--warning)">${total} ساعة</span></h4>`;
+      html+=`<h4 style="font-size:13px;font-weight:800;margin:12px 0 6px;color:#E8F4FD">${AR_MONTHS_S[parseInt(mo)-1]} ${yr} — <span style="color:#F5A623">${total} ساعة</span></h4>`;
       html+='<div class="tw"><table><thead><tr><th>الموظف</th><th>التاريخ</th><th>الساعات</th><th>النوع</th><th>ملاحظات</th></tr></thead><tbody>';
       byMonth[mk].forEach(x=>{
         const e=emps.find(ee=>String(ee.empId)===String(x.empId))||{name:x.empName};
@@ -4360,10 +4363,10 @@ function addBadgeField(){
   div.className='badge-field-wrap';
   div.setAttribute('data-badge-id',id);
   div.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-    <label style="font-size:12px;font-weight:700;color:var(--text2)" id="fBadgeLabel_${id}">${name.trim()}</label>
+    <label style="font-size:12px;font-weight:700;color:#8BAFC8" id="fBadgeLabel_${id}">${name.trim()}</label>
     <div style="display:flex;gap:4px">
-      <button type="button" onclick="renameBadgeField('${id}')" style="background:none;border:none;color:var(--primary);font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0">✏️</button>
-      <button type="button" onclick="removeBadgeField('${id}')" style="background:none;border:none;color:var(--danger);font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0">✕</button>
+      <button type="button" onclick="renameBadgeField('${id}')" style="background:none;border:none;color:#0095D9;font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0">✏️</button>
+      <button type="button" onclick="removeBadgeField('${id}')" style="background:none;border:none;color:#EF4444;font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0">✕</button>
     </div></div>
     <input type="date" id="fBadge_${id}" class="finp" style="font-size:13px" onchange="previewBadge('${id}')">
     <div id="fBadgePreview_${id}" style="margin-top:4px;min-height:20px;font-size:11px"></div>`;
@@ -4403,10 +4406,10 @@ function loadCustomBadgeFields(){
     div.className='badge-field-wrap';
     div.setAttribute('data-badge-id',id);
     div.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-      <label style="font-size:12px;font-weight:700;color:var(--text2)" id="fBadgeLabel_${id}">${name}</label>
+      <label style="font-size:12px;font-weight:700;color:#8BAFC8" id="fBadgeLabel_${id}">${name}</label>
       <div style="display:flex;gap:4px">
-        <button type="button" onclick="renameBadgeField('${id}')" style="background:none;border:none;color:var(--primary);font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0">✏️</button>
-        <button type="button" onclick="removeBadgeField('${id}')" style="background:none;border:none;color:var(--danger);font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0">✕</button>
+        <button type="button" onclick="renameBadgeField('${id}')" style="background:none;border:none;color:#0095D9;font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0">✏️</button>
+        <button type="button" onclick="removeBadgeField('${id}')" style="background:none;border:none;color:#EF4444;font-size:11px;cursor:pointer;font-family:Cairo,sans-serif;padding:0">✕</button>
       </div></div>
       <input type="date" id="fBadge_${id}" class="finp" style="font-size:13px" onchange="previewBadge('${id}')">
       <div id="fBadgePreview_${id}" style="margin-top:4px;min-height:20px;font-size:11px"></div>`;
@@ -4460,17 +4463,17 @@ function badgeDaysLeft(dateStr){
 
 function badgeBadge(dateStr){
   const d=badgeDaysLeft(dateStr);
-  if(d===null) return '<span style="color:var(--text3);font-size:11px">—</span>';
+  if(d===null) return '<span style="color:#5A8099;font-size:11px">—</span>';
   let cls,icon;
-  if(d<=0){cls='background:rgba(239,68,68,.15);color:var(--danger);border:1px solid rgba(239,68,68,.3)';icon='🔴';}
-  else if(d<=30){cls='background:rgba(239,68,68,.1);color:var(--danger);border:1px solid rgba(239,68,68,.2)';icon='🟠';}
-  else if(d<=60){cls='background:rgba(245,158,11,.12);color:var(--warning);border:1px solid rgba(245,158,11,.25)';icon='🟡';}
-  else{cls='background:rgba(0,200,150,.1);color:var(--success);border:1px solid rgba(0,200,150,.2)';icon='🟢';}
-  return '<span style="'+cls+';border-radius:var(--rp);padding:3px 8px;font-size:11px;font-weight:700;white-space:nowrap">'+icon+' '+(d<=0?'منتهية':d+' يوم')+'</span>';
+  if(d<=0){cls='background:rgba(239,68,68,.15);color:#EF4444;border:1px solid rgba(239,68,68,.3)';icon='🔴';}
+  else if(d<=30){cls='background:rgba(239,68,68,.1);color:#EF4444;border:1px solid rgba(239,68,68,.2)';icon='🟠';}
+  else if(d<=60){cls='background:rgba(245,158,11,.12);color:#F5A623;border:1px solid rgba(245,158,11,.25)';icon='🟡';}
+  else{cls='background:rgba(0,200,150,.1);color:#00C896;border:1px solid rgba(0,200,150,.2)';icon='🟢';}
+  return '<span style="'+cls+';border-radius:50px;padding:3px 8px;font-size:11px;font-weight:700;white-space:nowrap">'+icon+' '+(d<=0?'منتهية':d+' يوم')+'</span>';
 }
 
 function badgeDate(dateStr){
-  if(!dateStr||dateStr==='-') return '<span style="color:var(--text3)">—</span>';
+  if(!dateStr||dateStr==='-') return '<span style="color:#5A8099">—</span>';
   return fmtAr(dateStr);
 }
 
@@ -4977,7 +4980,7 @@ window.onload=()=>{
           <option value="د">وردية د</option>
         </select>
       </div>
-      <p style="font-size:12px;color:var(--text2);margin-bottom:14px">اختر الفترة الزمنية لتصدير بيانات الإجازات والساعات الإضافية.</p>
+      <p style="font-size:12px;color:#8BAFC8;margin-bottom:14px">اختر الفترة الزمنية لتصدير بيانات الإجازات والساعات الإضافية.</p>
       <div class="fgrid" style="grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
         <div class="form-group" style="margin:0">
           <label style="font-size:12px;font-weight:700">من تاريخ</label>
@@ -4990,16 +4993,16 @@ window.onload=()=>{
       </div>
       <!-- أزرار فترة سريعة -->
       <div style="margin-bottom:16px">
-        <p style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:8px">اختيار سريع:</p>
+        <p style="font-size:11px;font-weight:700;color:#8BAFC8;margin-bottom:8px">اختيار سريع:</p>
         <div style="display:flex;flex-wrap:wrap;gap:6px">
           <button class="btn btn-sec btn-sm" onclick="setExportPeriod('thisMonth')">هذا الشهر</button>
           <button class="btn btn-sec btn-sm" onclick="setExportPeriod('lastMonth')">الشهر الماضي</button>
           <button class="btn btn-sec btn-sm" onclick="setExportPeriod('last3')">3 أشهر</button>
           <button class="btn btn-sec btn-sm" onclick="setExportPeriod('thisYear')">هذه السنة</button>
-          <button class="btn btn-sec btn-sm" onclick="setExportPeriod('all')" style="background:rgba(0,149,217,.1);border-color:var(--primary);color:var(--primary)">كل البيانات</button>
+          <button class="btn btn-sec btn-sm" onclick="setExportPeriod('all')" style="background:rgba(0,149,217,.1);border-color:#0095D9;color:#0095D9">كل البيانات</button>
         </div>
       </div>
-      <div id="exportPeriodLabel" style="font-size:12px;color:var(--primary);font-weight:700;margin-bottom:4px"></div>
+      <div id="exportPeriodLabel" style="font-size:12px;color:#0095D9;font-weight:700;margin-bottom:4px"></div>
     </div>
     <div class="m-ft">
       <button class="btn btn-sec" onclick="closeM('mExport')">إلغاء</button>
