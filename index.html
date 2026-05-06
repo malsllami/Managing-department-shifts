@@ -1563,15 +1563,21 @@ async function loginMgr(){
   const id=document.getElementById('mId').value.trim(),pw=document.getElementById('mPw').value.trim();
   if(!id||!pw){showAl('loginAlert','d','يرجى ملء جميع الحقول');return;}
   setLd('mBtn',true);hideAl('loginAlert');
-  const r=await gas('getSettings');
+  // طلب واحد فقط للتحقق
+  const r=await gas('getSettings').catch(()=>({ok:false}));
   if(!r.ok){showAl('loginAlert','d','خطأ في الاتصال');setLd('mBtn',false);return;}
-  if(String(id)!==String(r.data.mgrId)||pw!==r.data.mgrPass){showAl('loginAlert','d','بيانات المدير غير صحيحة');setLd('mBtn',false);return;}
-  const savedMgrEmpId = localStorage.getItem('seMgrEmpId')||'';
-  U={empId:r.data.mgrId,name:r.data.mgrName||'مدير النظام',role:'مدير',viewRole:'مدير',phone:'',dept:'الإدارة',shift:'-',mgrEmpId:savedMgrEmpId};
-  if(savedMgrEmpId) console.log('Manager linked to employee:', savedMgrEmpId);
-  VR='مدير';sessionStorage.setItem('seU',JSON.stringify(U));
-  trackSession(U.empId, U.name, '-');
-  setLd('mBtn',false); startApp();
+  if(String(id)!==String(r.data.mgrId)||pw!==r.data.mgrPass){
+    showAl('loginAlert','d','بيانات المدير غير صحيحة');setLd('mBtn',false);return;
+  }
+  const savedMgrEmpId=localStorage.getItem('seMgrEmpId')||'';
+  U={empId:r.data.mgrId,name:r.data.mgrName||'مدير النظام',role:'مدير',viewRole:'مدير',
+     phone:'',dept:'الإدارة',shift:'-',mgrEmpId:savedMgrEmpId};
+  window._cachedSettings=r.data; window._setsLoaded=true;
+  VR='مدير';
+  sessionStorage.setItem('seU',JSON.stringify(U));
+  trackSession(U.empId,U.name,'-');
+  setLd('mBtn',false);
+  startApp(); // startApp يستدعي loadAll الذي يجلب كل شيء بالتوازي
 }
 
 // APP
@@ -1581,11 +1587,11 @@ function startApp(){
   buildSidebar();
   buildBottomNav();
   updateTop();
-  // أظهر شاشة تحميل أولاً
-  const el=document.getElementById('dContent');
-  if(el) el.innerHTML='<div style="text-align:center;padding:40px;color:#8BAFC8"><div class="spinner" style="margin:0 auto 14px;width:28px;height:28px;border-width:3px;border-color:rgba(0,149,217,.2);border-top-color:#0095D9;animation:spin .7s linear infinite;border-radius:50%"></div><div style="font-size:14px;font-weight:700">جاري تحميل البيانات...</div></div>';
   showPage('db');
-  // جلب البيانات فور الدخول
+  // أظهر spinner ريثما تصل البيانات
+  const _el=document.getElementById('dContent');
+  if(_el) _el.innerHTML='<div style="text-align:center;padding:60px 20px"><div style="display:inline-block;width:36px;height:36px;border:3px solid rgba(0,149,217,.2);border-top-color:#0095D9;border-radius:50%;animation:spin .7s linear infinite;margin-bottom:14px"></div><br><span style="color:#8BAFC8;font-size:14px;font-weight:700">جاري تحميل البيانات...</span></div>';
+  // loadAll يجلب كل شيء بالتوازي ثم يبني اللوحة
   loadAll();
 }
 function buildSidebar(){
@@ -1675,20 +1681,15 @@ async function manualSync(){
 }
 
 async function loadAll(){
-  // جلب الموظفين أولاً لسرعة العرض
-  const er = await gas('getEmployees').catch(()=>({ok:false}));
-  if(er.ok && er.data) emps = er.data;
-  
-  // عرض اللوحة فور وصول الموظفين
-  buildDash();
-  
-  // جلب باقي البيانات بالتوازي
-  const [lr,xr,ir,br] = await Promise.all([
+  // كل الطلبات بالتوازي من البداية = أسرع بكثير
+  const [er,lr,xr,ir,br] = await Promise.all([
+    gas('getEmployees').catch(()=>({ok:false})),
     gas('اجازات_جلب',{}).catch(()=>({ok:false})),
     gas('اضافي_جلب',{}).catch(()=>({ok:false})),
     gas('بيانات_جلب',{}).catch(()=>({ok:false})),
     gas('ارصدة_جلب',{}).catch(()=>({ok:false}))
   ]);
+  if(er.ok && er.data) emps = er.data;
   if(lr.ok && lr.data) allLeaves = lr.data;
   if(xr.ok && xr.data) allExtras = xr.data;
   if(ir.ok && ir.data){
@@ -1700,13 +1701,9 @@ async function loadAll(){
     const ba=Array.isArray(br.data)?br.data:[br.data];
     ba.forEach(b=>{ if(b&&b.empId) allBalances[String(b.empId)]={annual:Number(b.annual)||0,scheduled:Number(b.scheduled)||0}; });
   }
-  
-  // تحديث كامل بعد كل البيانات
   renderEmpTbl(); markTransferredRows();
   if(document.getElementById('page-sh').style.display!=='none') renderShTbl();
   buildDash();
-  
-  // تحديث مؤشر المزامنة
   const _dot=document.getElementById('syncDot');
   const _txt=document.getElementById('syncTxt');
   if(_dot) _dot.style.background='#00C896';
