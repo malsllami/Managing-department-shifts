@@ -1490,7 +1490,10 @@ async function gas(a,p={}){
   if(!effectiveUrl) return demoDB(a,p);
   const action = GAS_ACTIONS[a] || a;
   try{
-    const r=await fetch(effectiveUrl+'?action='+encodeURIComponent(action)+'&payload='+encodeURIComponent(JSON.stringify(p)));
+    const controller = new AbortController();
+    const timeoutId = setTimeout(()=>controller.abort(), 30000); // 30s timeout
+    const r=await fetch(effectiveUrl+'?action='+encodeURIComponent(action)+'&payload='+encodeURIComponent(JSON.stringify(p)), {signal:controller.signal});
+    clearTimeout(timeoutId);
     const data=await r.json();
     // عداد يومي يتصفر منتصف الليل
     const _today = new Date().toDateString();
@@ -1549,8 +1552,8 @@ async function loginEmp(){
   sessionStorage.setItem('seU',JSON.stringify(U));
   trackSession(e.empId, e.name, e.shift);
   setLd('eBtn',false);startApp();
-  // تحميل كل البيانات في الخلفية فور الدخول
-  loadAll();
+  // تحميل البيانات فور الدخول
+  setTimeout(loadAll, 100);
 }
 async function loginMgr(){
   const id=document.getElementById('mId').value.trim(),pw=document.getElementById('mPw').value.trim();
@@ -1751,11 +1754,50 @@ function buildDash(){
   else { el.innerHTML='<div style="text-align:center;padding:30px;color:var(--text2)"><div class="spinner" style="margin:0 auto 10px;border-color:var(--border);border-top-color:var(--primary)"></div>جاري تحميل البيانات...</div>'; empDashAsync(); }
   setTimeout(drawWeekChart,80);
 }
+
+// ── شريط الطلبات اليومية ──
+function buildUsageBar(isMgr){
+  const usage = parseInt(localStorage.getItem('seUsage')||'0');
+  const max = 20000;
+  const pct = Math.min((usage/max)*100,100).toFixed(1);
+  const warn = usage > max*0.5;
+  const color = usage > max*0.8 ? '#EF4444' : usage > max*0.5 ? '#F5A623' : '#00C896';
+  const icon = warn ? '⚠️' : '📡';
+  const weekCards = isMgr ? buildWeekCards() : '';
+  return `<div style="background:#111E35;border:1px solid rgba(0,149,217,.2);border-radius:20px;padding:14px 18px;margin-bottom:14px${warn?';border-color:rgba(245,158,11,.4)':''}">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px">
+      <span style="font-size:13px;font-weight:800;color:#E8F4FD">${icon} طلبات API اليوم</span>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:18px;font-weight:900;color:${color}">${usage.toLocaleString('ar-SA')}</span>
+        <span style="font-size:11px;color:#8BAFC8">/ ${max.toLocaleString('ar-SA')}</span>
+        ${warn?'<span style="background:rgba(245,158,11,.15);color:#F5A623;border:1px solid rgba(245,158,11,.3);border-radius:20px;padding:2px 8px;font-size:11px;font-weight:700">تجاوزت 50%</span>':''}
+      </div>
+    </div>
+    <div style="background:rgba(255,255,255,.08);border-radius:20px;height:8px;overflow:hidden">
+      <div style="width:${pct}%;height:100%;background:${color};border-radius:20px;transition:width .5s ease"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:#5A8099;margin-top:4px">
+      <span>مستخدم: ${pct}%</span>
+      <span>متبقي: ${(max-usage).toLocaleString('ar-SA')} طلب</span>
+    </div>
+    ${weekCards}
+  </div>`;
+}
+
+function buildWeekCards(){
+
+  return `<div style="display:flex;gap:6px;overflow-x:auto;padding:10px 0 2px;margin-top:6px;border-top:1px solid rgba(0,149,217,.1)">
+    ${wkDays.map((d,i)=>`<div style="text-align:center;background:rgba(255,255,255,.04);border-radius:10px;padding:7px 10px;border:1px solid rgba(0,149,217,.1);flex-shrink:0;min-width:58px">
+      <div style="font-size:13px;font-weight:900;color:#0095D9">${wkData[i]}</div>
+      <div style="font-size:9px;color:#5A8099;margin-top:2px;white-space:nowrap">${d}</div>
+    </div>`).join('')}
+  </div>`;
+}
+
 function mgrDash(){
   const tot=emps.length,act=emps.filter(e=>e.status==='نشط').length,sup=emps.filter(e=>e.role==='مشرف').length;
   const ss={};SHIFTS.forEach(s=>{const ex=emps.filter(e=>e.shift===s);ss[s]={t:ex.length,s:ex.filter(e=>e.role==='مشرف').length,e:ex.filter(e=>e.role==='موظف').length,today:getShiftStatus(s,new Date())};});
-  const usage=parseInt(localStorage.getItem('seUsage')||'0');
-  const pct=Math.min((usage/20000)*100,100).toFixed(1);
+  // usage يُحسب في buildUsageBar()
   const leaves=getLeaves().filter(l=>{const t=new Date();return new Date(l.start)<=t&&new Date(l.end)>=t;});
   const extras=getExtras();
   const infos=getInfos();
@@ -1781,8 +1823,7 @@ function mgrDash(){
   const onl=sessions.length>0?sessions.map(s=>({name:s.name,shift:s.shift,empId:s.empId})):emps.slice(0,Math.min(3,emps.length));
   const cols=['#0095D9','#8B5CF6','#00C896','#F59E0B','#EF4444'];
   // Week API chart data
-  const wkData=[481,979,701,619,768,394,354];
-  const wkDays=['السبت','الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
+
 
   return `
   <!-- KPI ROW -->
@@ -1845,24 +1886,8 @@ function mgrDash(){
     </div>
   </div>
 
-  <!-- API USAGE -->
-  <div class="ug-card">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-      <h3 style="font-size:14px;font-weight:800">📡 طلبات API الشهرية</h3>
-      <span style="font-size:12px;color:var(--text2)">${usage.toLocaleString('ar-SA')} / 20,000</span>
-    </div>
-    <div class="ug-bar-w"><div class="ug-bar-f" style="width:${pct}%"></div></div>
-    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:8px">
-      <span>مستخدم: ${pct}%</span><span style="color:${pct>80?'var(--danger)':'var(--success)'}">متبقي: ${(20000-usage).toLocaleString('ar-SA')} طلب ${pct>80?'⚠️':'✅'}</span>
-    </div>
-    <!-- Week cards -->
-    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:4px">
-      ${wkDays.map((d,i)=>`<div style="text-align:center;background:var(--surface2);border-radius:10px;padding:8px 10px;border:1px solid var(--border);flex-shrink:0;min-width:64px">
-        <div style="font-size:14px;font-weight:900;color:var(--primary)">${wkData[i]}</div>
-        <div style="font-size:11px;color:var(--text2);margin-top:2px;white-space:nowrap">${d}</div>
-      </div>`).join('')}
-    </div>
-  </div>`;
+  ${buildUsageBar(true)}
+  `;
 }
 
 function viewCenterEmps(center){
@@ -1907,6 +1932,7 @@ function supDash(){
   const todayStatus=getShiftStatus(ms,new Date());
   const todayIcon=todayStatus==='صباح'?'🌅':todayStatus==='مساء'?'🌙':'🏖️';
   return `
+  ${buildUsageBar(false)}
   <div class="sg">
     <div class="sc"><div class="si si-b">👥</div><div><div class="sv">${allShiftEmps.length}</div><div class="sl">موظفو ${SHNAMES[ms]||ms}</div></div></div>
     <div class="sc"><div class="si si-g">✅</div><div><div class="sv">${allShiftEmps.filter(e=>e.status==='نشط').length}</div><div class="sl">النشطون</div></div></div>
@@ -1993,7 +2019,9 @@ async function empDashAsync(){
   const el=document.getElementById('dContent');
   if(!el) return;
   el.innerHTML = `
-  <!-- Info strip - compact on mobile -->
+  <!-- شريط الطلبات -->
+  ${buildUsageBar(false)}
+  <!-- Info strip -->
   <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center;justify-content:space-between">
     <button onclick="exportComprehensiveExcel()" style="background:rgba(0,200,150,.12);border:1px solid rgba(0,200,150,.4);color:var(--success);border-radius:var(--rp);padding:6px 14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;font-size:12px;flex-shrink:0">📥 تصدير بياناتي</button>
   </div>
