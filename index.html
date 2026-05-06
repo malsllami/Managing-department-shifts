@@ -1742,7 +1742,7 @@ function buildDash(){
     if(U.role==='مدير'&&U.mgrEmpId){const me=emps.find(e=>String(e.empId)===String(U.mgrEmpId));if(me)dispU2=me;}
     const sh=dispU2.shift;
     const bgMap={'أ':'linear-gradient(135deg,#005f8e,#0095D9)','ب':'linear-gradient(135deg,#5b21b6,#8B5CF6)','ج':'linear-gradient(135deg,#92400e,#F59E0B)','د':'linear-gradient(135deg,#991b1b,#EF4444)'};
-    if(dwCard&&sh&&bgMap[sh]) dwCard.querySelector('div[style*="background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)"]') && (dwCard.querySelector('div[style*="background:linear-gradient(135deg,#0095D9 0%,#00C896 100%)"]').style.background=bgMap[sh]);
+    if(dwCard&&sh&&bgMap[sh]){const _bg=dwCard.querySelector('div[style*="background:"]');if(_bg)_bg.style.background=bgMap[sh];}
     // Add shift badge
     if(dShiftBadge&&sh){
       const todS=getShiftStatus(sh,new Date());
@@ -1788,7 +1788,8 @@ function buildUsageBar(isMgr){
 }
 
 function buildWeekCards(){
-
+  const wkData=[481,979,701,619,768,394,354];
+  const wkDays=['السبت','الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
   return `<div style="display:flex;gap:6px;overflow-x:auto;padding:10px 0 2px;margin-top:6px;border-top:1px solid rgba(0,149,217,.1)">
     ${wkDays.map((d,i)=>`<div style="text-align:center;background:rgba(255,255,255,.04);border-radius:10px;padding:7px 10px;border:1px solid rgba(0,149,217,.1);flex-shrink:0;min-width:58px">
       <div style="font-size:13px;font-weight:900;color:#0095D9">${wkData[i]}</div>
